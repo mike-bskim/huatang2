@@ -1,0 +1,124 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:huatang2/src/model/multi_msg.dart';
+
+
+// stless
+class HomePage extends StatefulWidget {
+  final user;
+  final _userInfo;
+  HomePage(this.user, this._userInfo);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  var _multiMsg;
+  var _userTypeMsg;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _multiMsg = MultiMessageHome();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if(widget._userInfo['userLangType'] != null) {
+      _multiMsg.convertDescription(widget._userInfo['userLangType']);
+    }
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
+        title: Text(_multiMsg.strVersion, //'Version 0.2.9',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app, color: Colors.white,),
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              _googleSignIn.signOut();
+            })
+        ],
+      ),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    if(widget._userInfo['userType'] == 'Teacher') {
+      _userTypeMsg = _multiMsg.strTeacher;
+    } else if(widget._userInfo['userType'] == 'Parents') {
+      _userTypeMsg = _multiMsg.strParents;
+    } else if(widget._userInfo['userType'] == 'Student') {
+      _userTypeMsg = _multiMsg.strStudent;
+    } else {
+      _userTypeMsg = _multiMsg.strOther;
+    }
+    return Container(
+//      color: Colors.amber,
+      padding: EdgeInsets.all(24.0),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Welcome to Play',
+                      style: TextStyle(
+                        fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      child: Icon(Icons.local_library, size: 25, color: Colors.black38,),
+                    ),
+                    Text('Study',
+                      style: TextStyle(
+                        fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Padding(padding: EdgeInsets.all(8.0)),
+                Text(_userTypeMsg),
+                Padding(padding: EdgeInsets.all(16.0)),
+                SizedBox(
+                  width: 260.0,
+                  child: Card(
+                    elevation: 5.0,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.all(8.0)),
+                          SizedBox(
+                            width: 80.0,
+                            height: 80.0,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(widget.user.photoURL),
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.all(8.0)),
+                          Text(widget.user.email, style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text(widget.user.displayName),
+                          Padding(padding: EdgeInsets.all(8.0)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ),
+    );
+  }
+
+}
