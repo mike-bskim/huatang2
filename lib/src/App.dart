@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:huatang2/src/pages/login_page.dart';
 import 'package:huatang2/src/pages/tab_page.dart';
@@ -31,15 +28,15 @@ class App extends StatelessWidget {
     List<dynamic> aa = snapshot.data.metadata.toString().split(RegExp(r"[(,)]"));
     print(aa.toString());
 
-    print(snapshot.data.displayName);
-    print(snapshot.data.email);
-    print(snapshot.data.metadata);
-    print(snapshot.data.photoURL);
-    print(snapshot.data.providerData);
-    print(snapshot.data.providerData[0]);
-    print(snapshot.data.refreshToken);
-    print(snapshot.data.tenantId);
-    print(snapshot.data.uid);
+    print('displayName: ' + snapshot.data.displayName.toString());
+    print('email: ' + snapshot.data.email.toString());
+    print('metadata: ' + snapshot.data.metadata.toString());
+    print('photoURL: ' + snapshot.data.photoURL.toString());
+    print('providerData: ' + snapshot.data.providerData.toString());
+    print('providerData[0]: ' + snapshot.data.providerData[0].toString());
+    print('refreshToken: ' + snapshot.data.refreshToken.toString());
+    print('tenantId: ' + snapshot.data.tenantId.toString());
+    print('uid: ' + snapshot.data.uid.toString());
   }
 
 
@@ -53,7 +50,7 @@ class App extends StatelessWidget {
         } else {
           if(snapshot.hasData) {
             print('${snapshot.data.displayName}님 환영합니다');
-            printInfo(snapshot);
+//            printInfo(snapshot);
             return TabPage(snapshot.data);
           }
           return LoginPage();//Center(child: Text('login'));//
