@@ -5,32 +5,12 @@ import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/pages/login_page.dart';
 import 'package:huatang2/src/pages/tab_page.dart';
 
-/*
-User(
-displayName: MIKE BS KIM,
-email: michael.aeon@gmail.com,
-emailVerified: true,
-isAnonymous: false,
-metadata: UserMetadata(
-  creationTime: 2021-06-21 12:33:00.545,
-  lastSignInTime: 2021-06-21 12:33:00.546),
-phoneNumber: ,
-photoURL: https://lh3.googleusercontent.com/a-/AOh14GiPpYLucVLYVTUmefIvyO4HS9bxV4dYPwMjxllIIg=s96-c,
-providerData,
-[UserInfo(displayName: MIKE BS KIM, email: michael.aeon@gmail.com, phoneNumber: , photoURL: https://lh3.googleusercontent.com/a-/AOh14GiPpYLucVLYVTUmefIvyO4HS9bxV4dYPwMjxllIIg=s96-c, providerId: google.com, uid: 115231844533834227546)],
-refreshToken: ,
-tenantId: null,
-uid: f1yzWCqGSSgiXoE3hFxapufUjD23)
-*/
 
 class App extends StatelessWidget {
 
   final UserInfoController _userInfoController = Get.put(UserInfoController());
 
   void printInfo(AsyncSnapshot snapshot) {
-
-    List<dynamic> aa = snapshot.data.metadata.toString().split(RegExp(r"[(,)]"));
-    print(aa.toString());
 
 //    print('displayName: ' + snapshot.data.displayName.toString());
 //    print('email: ' + snapshot.data.email.toString());
@@ -44,13 +24,6 @@ class App extends StatelessWidget {
 //    print('uid: ' + snapshot.data.uid.toString());
   }
 
-//  void mappingUserInfo(AsyncSnapshot snapshot) {
-//    _userInfoController.displayName(snapshot.data.displayName);
-//    _userInfoController.email(snapshot.data.email);
-//    _userInfoController.photoURL(snapshot.data.photoURL);
-//    _userInfoController.uid(snapshot.data.uid);
-//  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -61,30 +34,15 @@ class App extends StatelessWidget {
         } else {
           if(snapshot.hasData) {
             print('${snapshot.data.displayName}님 환영합니다');
-//            printInfo(snapshot);
+            printInfo(snapshot);
             _userInfoController.mappingUserInfo(snapshot);
-            return TabPage(snapshot.data);
-//            return TabPage();
+//            return TabPage(snapshot.data);
+            return TabPage();
           }
           return LoginPage();//Center(child: Text('login'));//
         }
       },
     );
 
-//    return FutureBuilder(
-//      future: Firebase.initializeApp(),
-//      builder: (context, snapshot) {
-//        if(snapshot.connectionState == ConnectionState.waiting) {
-//          return Center(child: CircularProgressIndicator());
-//        } else {
-//          if(snapshot.hasData) {
-//            return TabPage(snapshot.data);
-//          }
-//          return Center(
-//            child: Text('login'),
-//          );
-//        }
-//      }
-//    );
   }
 }

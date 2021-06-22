@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
 
 
 // stless
 class HomePage extends StatefulWidget {
-  final user;
-  final _userInfo;
-  HomePage(this.user, this._userInfo);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -17,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
   var _multiMsg;
   var _userTypeMsg;
 
@@ -29,8 +29,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget._userInfo['userLangType'] != null) {
-      _multiMsg.convertDescription(widget._userInfo['userLangType']);
+    if(_userInfoController.userInfo['userLangType'] != null) {
+      _multiMsg.convertDescription(_userInfoController.userInfo['userLangType']);
     }
     return Scaffold(
       appBar: AppBar(
@@ -54,11 +54,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody() {
-    if(widget._userInfo['userType'] == 'Teacher') {
+    if(_userInfoController.userInfo['userType'] == 'Teacher') {
       _userTypeMsg = _multiMsg.strTeacher;
-    } else if(widget._userInfo['userType'] == 'Parents') {
+    } else if(_userInfoController.userInfo['userType'] == 'Parents') {
       _userTypeMsg = _multiMsg.strParents;
-    } else if(widget._userInfo['userType'] == 'Student') {
+    } else if(_userInfoController.userInfo['userType'] == 'Student') {
       _userTypeMsg = _multiMsg.strStudent;
     } else {
       _userTypeMsg = _multiMsg.strOther;
@@ -103,12 +103,12 @@ class _HomePageState extends State<HomePage> {
                             width: 80.0,
                             height: 80.0,
                             child: CircleAvatar(
-                              backgroundImage: NetworkImage(widget.user.photoURL),
+                              backgroundImage: NetworkImage(_userInfoController.userInfo['photoURL']),
                             ),
                           ),
                           Padding(padding: EdgeInsets.all(8.0)),
-//                          Text(widget.user.email, style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(widget.user.displayName),
+//                          Text(_userInfoController.userInfo['email'], style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text(_userInfoController.userInfo['displayName']),
                           Padding(padding: EdgeInsets.all(8.0)),
                         ],
                       ),

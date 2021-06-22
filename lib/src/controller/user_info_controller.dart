@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 class UserInfoController extends GetxController {
 //  static UserInfoController get to => Get.find();
   Map<String, dynamic> _userInfo = {
-    'displayName' : '',
-    'email' : '',
-    'photoURL' : '',
-    'uid' : '',
-    'userType' : '',
-    'userLangType' : '',
+    'displayName': '',
+    'email': '',
+    'photoURL': '',
+    'uid': '',
+    'userType': '',
+    'userLangType': '',
   };
 
   void mappingUserInfo(AsyncSnapshot snapshot) {
@@ -21,12 +21,14 @@ class UserInfoController extends GetxController {
 
   Map<String, dynamic> get userInfo => _userInfo;
 
-//  void mappingUserType(AsyncSnapshot snapshot) {
-//    _userInfo['userType'] = (snapshot.data.userType);
-//    _userInfo['userLangType'] = (snapshot.data.userLangType);
-//  }
+  void mappingUserType({required String userType, required String userLangType}) {
+    _userInfo['userType'] = userType;
+    _userInfo['userLangType'] = userLangType;
+  }
 
-  void displayName(String str) { _userInfo['displayName'] = (str); }
+  void displayName(String str) {
+    _userInfo['displayName'] = (str);
+  }
 
   @override
   void onInit() {
@@ -36,7 +38,6 @@ class UserInfoController extends GetxController {
     super.onInit();
   }
 }
-
 
 //class UserInfoController extends GetxController {
 //  static UserInfoController get to => Get.find();

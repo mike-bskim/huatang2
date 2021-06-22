@@ -81,18 +81,9 @@ class LoginPage extends StatelessWidget {
                   });
                 },
               ),
-//              ElevatedButton(
-//                child: Text('Logout'),
-//                  onPressed: () {
-//                    _auth.signOut();
-//                    _googleSignIn.signOut();
-//                    _facebookSignIn.logOut();
-//                  },
-//              ),
               Padding(
                 padding: EdgeInsets.all(30.0),
               ),
-
             ],
           ),
         ),
