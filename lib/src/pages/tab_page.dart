@@ -1,6 +1,13 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:huatang2/src/controller/user_info_controller.dart';
+import 'package:huatang2/src/model/multi_msg.dart';
 import 'package:huatang2/src/pages/home_page.dart';
+import 'package:huatang2/src/pages/inform_page.dart';
 //import 'home_page.dart';
 //import 'inform_page.dart';
 //import 'manage_page.dart';
@@ -20,7 +27,9 @@ class TabPage extends StatefulWidget {
 }
 
 class _TabPageState extends State<TabPage> {
-//  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
+
   int _selectedIndex = 0;
   List? _pages;
   Map _userInfo = {
@@ -41,13 +50,13 @@ class _TabPageState extends State<TabPage> {
 //      ManagePage(widget.user, this._userInfo),
 //      TestMainPage(widget.user, this._userInfo),
     ];
-//    _getUserInfo();
+    _getUserInfo();
   }
 
   @override
   Widget build(BuildContext context) {
     print('tabPage build');
-//    print(widget.user);
+//    print(_userInfoController.userInfo);
 
     return Scaffold(
       body: Center(child: _pages![_selectedIndex]),
@@ -81,16 +90,18 @@ class _TabPageState extends State<TabPage> {
     });
   }
 
-/*  void _getUserInfo() {
+  void _getUserInfo() {
+
     FirebaseFirestore.instance
       .collection('user_info')
-      .doc(widget.user.uid)
+      .doc(_userInfoController.userInfo['uid']) // .doc(widget.user.uid)
       .get()
       .then((doc) async {
         if (doc.exists) { // 기 사용자 확인
           var _email = doc.data();
-          this._userInfo['userType'] = _email['user_type'];
+          this._userInfo['userType'] = _email!['user_type'];
           this._userInfo['userLangType'] = _email['language'];
+//          print('old user: ' + _email.toString());
 
           if (_email['language'] == null) { // 추가정보 누락자.
             var result1 = await Navigator.push(context,
@@ -113,6 +124,7 @@ class _TabPageState extends State<TabPage> {
             _saveUserLoginInfo();
           }
         } else { // 신규 사용자 등록시
+          print('new user: ');
           // doc.data() will be undefined in this case
           var result = await Navigator.push(context,
             MaterialPageRoute(builder: (context) => InformPage(widget.user))
@@ -135,9 +147,12 @@ class _TabPageState extends State<TabPage> {
         setState(() {
           _pages = [
             HomePage(widget.user, this._userInfo),
-            StudyPage(widget.user, this._userInfo),
-            ManagePage(widget.user, this._userInfo),
-            TestMainPage(widget.user, this._userInfo),
+            Text('StudyPage'),
+            Text('ManagePage'),
+            Text('TestPage'),
+//            StudyPage(widget.user, this._userInfo),
+//            ManagePage(widget.user, this._userInfo),
+//            TestMainPage(widget.user, this._userInfo),
           ];
         });
       });
@@ -157,5 +172,5 @@ class _TabPageState extends State<TabPage> {
     }).then((onValue) {
     });
   }
-*/
+
 }

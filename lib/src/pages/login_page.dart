@@ -66,8 +66,7 @@ class LoginPage extends StatelessWidget {
                 Buttons.Google,
                 onPressed: () {
                   _handleSignIn().then((user) {
-                    print('-----------------------------');
-                    print('Google: ' + user.toString());
+                    print('Google: login');
                   });
                 },
               ),
@@ -78,8 +77,7 @@ class LoginPage extends StatelessWidget {
                 Buttons.Facebook,
                 onPressed: () {
                   signInWithFacebook().then((user) {
-                    print('-----------------------------');
-                    print('Facebook: ' + user.toString());
+                    print('Facebook: login');
                   });
                 },
               ),
