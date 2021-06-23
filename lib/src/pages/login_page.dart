@@ -26,47 +26,61 @@ class LoginPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Easy',
+                  Text(
+                    'Easy',
                     style: TextStyle(
                         fontSize: 40,
 //                      color: Colors.redAccent,
                         color: Color.fromRGBO(38, 100, 100, 1.0),
-                        fontWeight: FontWeight.bold
-                    ),
+                        fontWeight: FontWeight.bold),
                   ),
                   Container(
-                    child: Icon(Icons.star, size: 50, color: Colors.orangeAccent,),
+                    child: Icon(
+                      Icons.star,
+                      size: 50,
+                      color: Colors.orangeAccent,
+                    ),
                   ),
-                  Text('Funny',
+                  Text(
+                    'Funny',
                     style: TextStyle(
                         fontSize: 40,
 //                      color: Colors.redAccent,
                         color: Color.fromRGBO(38, 100, 100, 1.0),
-                        fontWeight: FontWeight.bold
-                    ),
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              Padding(padding: EdgeInsets.all(10.0),),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Play',
-                    style: TextStyle(
-                        fontSize: 20, color: Colors.black38, fontWeight: FontWeight.bold),
+                  Text(
+                    'Play',
+                    style:
+                        TextStyle(fontSize: 20, color: Colors.black38, fontWeight: FontWeight.bold),
                   ),
                   Container(
-                    child: Icon(Icons.local_library, size: 25, color: Colors.black87,),
+                    child: Icon(
+                      Icons.local_library,
+                      size: 25,
+                      color: Colors.black87,
+                    ),
                   ),
-                  Text('Study',
-                    style: TextStyle(
-                        fontSize: 20, color: Colors.black38, fontWeight: FontWeight.bold),
+                  Text(
+                    'Study',
+                    style:
+                        TextStyle(fontSize: 20, color: Colors.black38, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              Padding(padding: EdgeInsets.all(40.0),),
+              Padding(
+                padding: EdgeInsets.all(40.0),
+              ),
               SignInButton(
-                Buttons.Google,
+                Buttons.GoogleDark,
                 onPressed: () {
                   _handleSignIn().then((user) {
                     print('Google: login');
@@ -84,18 +98,18 @@ class LoginPage extends StatelessWidget {
                   });
                 },
               ),
-              SizedBox(
-                height: 10,
-              ),
-              SignInButton(
-                Buttons.AppleDark,
-                onPressed: () {
-                  print('------- apple ID is not ready');
+//              SizedBox(
+//                height: 10,
+//              ),
+//              SignInButton(
+//                Buttons.AppleDark,
+//                onPressed: () {
+//                  print('------- apple ID is not ready');
 //                  signInWithApple().then((user) {
 //                    print('Apple: login');
 //                  });
-                },
-              ),
+//                },
+//              ),
               SizedBox(
                 height: 10,
               ),
@@ -104,7 +118,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () async {
                   print('------- Email authorization');
                   final result = await Get.to(() => Email()); //widget.user
-                  print('result: ' + result.toString());
+                  print('return result: ' + result.toString());
                 },
               ),
             ],
@@ -131,7 +145,6 @@ class LoginPage extends StatelessWidget {
     return user;
   }
 
-
   // <UserCredential>
   Future signInWithFacebook() async {
     // Trigger the sign-in flow
@@ -152,7 +165,6 @@ class LoginPage extends StatelessWidget {
 
   // <UserCredential>, ios 13 이상인 경우
   Future signInWithApple() async {
-
     // Request credential for the currently signed in Apple account.
     final appleCredential = await SignInWithApple.getAppleIDCredential(
       scopes: [
@@ -175,81 +187,137 @@ class LoginPage extends StatelessWidget {
 
     return user;
   }
-
 }
 
+class Email extends StatefulWidget {
+  @override
+  _EmailState createState() => _EmailState();
+}
 
-class Email extends StatelessWidget {
+class _EmailState extends State<Email> {
+  final _email = TextEditingController();
+  final _passWd = TextEditingController();
 
-  final _textController1 = TextEditingController();
-  final _textController2 = TextEditingController();
+  @override
+  void dispose() {
+    _email.dispose();
+    _passWd.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
-        title: Text('Sign in with Email',
-          style: TextStyle(color: Colors.white)//, fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flexible(
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email', //_multiMsg.strTeacherUid,
-                ),
-                controller: _textController1,
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          title: Text('Sign in with Email',
+              style: TextStyle(color: Colors.white) //, fontWeight: FontWeight.bold),
               ),
-            ),
-            Padding(padding: EdgeInsets.all(16.0)),
-            Flexible(
-              child: TextField(
-                decoration: InputDecoration(
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email', //_multiMsg.strTeacherUid,
+                  ),
+                  controller: _email,
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(16.0)),
+              Flexible(
+                child: TextField(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password', //_multiMsg.strTestCode
+                  ),
+                  controller: _passWd,
+                  obscureText: true,
                 ),
-                controller: _textController2,
               ),
-            ),
-            Padding(padding: EdgeInsets.all(16.0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  width: 120,
-                  height: 40,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                    },
-                    label: Text("Log in"),
-                    icon: Icon(Icons.login),
+              Padding(padding: EdgeInsets.all(16.0)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    width: 120,
+                    height: 40,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        print('Log in --------------');
+                        _login(email: _email.text.trim(), passWord: _passWd.text.trim());
+                      },
+                      label: Text("Log in"),
+                      icon: Icon(Icons.login),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 120,
-                  height: 40,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                    },
-                    label: Text("Sign up"),
-                    icon: Icon(Icons.edit),
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
-      )
+                  SizedBox(
+                    width: 120,
+                    height: 40,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        print('Sign up --------------');
+                        _signUp(email: _email.text.trim(), passWord: _passWd.text.trim());
+                      },
+                      label: Text("Sign up"),
+                      icon: Icon(Icons.edit),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ));
+  }
+
+  void MyDialog({required String msg}) {
+    Get.defaultDialog(
+      title: "Notice",
+      middleText: msg,
+      backgroundColor: Colors.blue,
+      titleStyle: TextStyle(color: Colors.white),
+      middleTextStyle: TextStyle(color: Colors.white),
     );
+  }
+
+  void _signUp({required String email, required String passWord}) async {
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: passWord)
+          .then((value) => Get.back(result: value));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak');
+        MyDialog(msg: 'The password provided is too weak');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email');
+        MyDialog(msg: 'The account already exists for that email');
+      }
+    } catch (e) {
+      print('기타오류' + e.toString());
+      MyDialog(msg: e.toString());
+    }
+//
+  }
+
+  void _login({required String email, required String passWord}) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: passWord)
+          .then((value) => Get.back(result: value));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        print(e.code.toString());
+        MyDialog(msg: "Wrong email or Wrong password");
+      }
+    }
   }
 }

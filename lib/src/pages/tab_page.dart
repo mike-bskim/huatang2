@@ -78,8 +78,8 @@ class _TabPageState extends State<TabPage> {
   }
 
   void _getUserInfo() {
-    print('_getUserInfo:' + _userInfoController.userInfo.toString());
-    print(_userInfoController.userInfo['uid']);
+//    print('_getUserInfo:' + _userInfoController.userInfo.toString());
+//    print(_userInfoController.userInfo['uid']);
 
     FirebaseFirestore.instance
         .collection('user_info')

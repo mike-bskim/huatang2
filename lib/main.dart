@@ -13,7 +13,8 @@ Future<void> main() async {
 //  AdMobManager.initAdMob();
 
   WidgetsFlutterBinding.ensureInitialized();
-  final _initFirebase = await Firebase.initializeApp(); // FutureBuilder 사용해서 선언위치 변경(app.dart)
+  // FutureBuilder 사용해서 선언위치 변경(app.dart), final _initFirebase =
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

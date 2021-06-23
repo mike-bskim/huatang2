@@ -33,8 +33,9 @@ class App extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         } else {
           if(snapshot.hasData) {
-            print('${snapshot.data.displayName}님 환영합니다');
-            printInfo(snapshot);
+//            print('${snapshot.data.displayName}님 환영합니다');
+//            printInfo(snapshot);
+//            print(snapshot.data);
             _userInfoController.mappingUserInfo(snapshot);
 //            return TabPage(snapshot.data);
             return TabPage();

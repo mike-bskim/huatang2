@@ -13,9 +13,14 @@ class UserInfoController extends GetxController {
   };
 
   void mappingUserInfo(AsyncSnapshot snapshot) {
-    _userInfo['displayName'] = (snapshot.data.displayName);
-    _userInfo['email'] = (snapshot.data.email);
-    _userInfo['photoURL'] = (snapshot.data.photoURL);
+    if (_userInfo['displayName'] == null) {_userInfo['displayName'] = ' ';}
+    else {_userInfo['displayName'] = (snapshot.data.displayName);}
+
+    if (_userInfo['email'] == null) {_userInfo['email'] = ' ';}
+    else {_userInfo['email'] = (snapshot.data.email);}
+
+    if (snapshot.data.photoURL==null) { _userInfo['photoURL'] = 'https://placeimg.com/200/200/nature'; }
+    else { _userInfo['photoURL'] = (snapshot.data.photoURL); }
     _userInfo['uid'] = (snapshot.data.uid);
   }
 
