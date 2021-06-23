@@ -100,21 +100,21 @@ class _TabPageState extends State<TabPage> {
 
           try {
             if (result1['complete'] == null) { // 정보입력이 완료되지 않음
-              FirebaseAuth.instance.signOut();
-              _googleSignIn.signOut();
+              await FirebaseAuth.instance.signOut();
+              await _googleSignIn.signOut();
             }
             else { // 정보입력이 완료
               _userInfoController.mappingUserType(
                   userType: result1['user_type'], userLangType: result1['language']);
             }
           } catch (error) { // 정보입력이 완료되지 않음
-            FirebaseAuth.instance.signOut();
-            _googleSignIn.signOut();
+            await FirebaseAuth.instance.signOut();
+            await _googleSignIn.signOut();
           }
         } else {
           _userInfoController.mappingUserType(
               userType: _data['user_type'], userLangType: _data['language']);
-          _saveUserLoginInfo();
+          await _saveUserLoginInfo();
         }
       } else { // 신규 사용자 등록시
         print('new user: ');
@@ -124,16 +124,16 @@ class _TabPageState extends State<TabPage> {
         );
         try {
           if (result['complete'] == null) { // 정보입력이 완료되지 않음
-            FirebaseAuth.instance.signOut();
-            _googleSignIn.signOut();
+            await FirebaseAuth.instance.signOut();
+            await _googleSignIn.signOut();
           }
           else { // 정보입력이 완료
             _userInfoController.mappingUserType(
                 userType: result['user_type'], userLangType: result['language']);
           }
         } catch (error) { // 정보입력이 완료되지 않음
-          FirebaseAuth.instance.signOut();
-          _googleSignIn.signOut();
+          await FirebaseAuth.instance.signOut();
+          await _googleSignIn.signOut();
         }
       }
 
@@ -158,7 +158,7 @@ class _TabPageState extends State<TabPage> {
 
     var _date = DateTime.now();
 
-    _userInfo.update({
+    await _userInfo.update({
       'last_login': _date.toString(),
       'app_version': MultiMessageHome.version,
       'login_cnt': FieldValue.increment(1),

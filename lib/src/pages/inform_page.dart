@@ -16,11 +16,11 @@ class InformPage extends StatefulWidget {
 
 class _InformPageState extends State<InformPage> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
-  final _textController1 = new TextEditingController();
+  final _textController1 = TextEditingController();
   var _userType = ['Teacher', 'Student'];
   var _selectedUserType;
   var _selectedUserTypeForDB;
-  var _langType = ['한글', 'English', '中文'];
+  final _langType = ['한글', 'English', '中文'];
   var _selectedLangType;
   var _selectedLangTypeForDB;
   int? qTotal;
@@ -46,6 +46,10 @@ class _InformPageState extends State<InformPage> {
   Widget _buildBody() {
     _textController1.text = _multiMsg.strAppBarTitle;
     return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pop(true);
+        return Future.value(true);
+      },
       child: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -114,18 +118,16 @@ class _InformPageState extends State<InformPage> {
                   ),
                   Padding(padding: EdgeInsets.all(15.0)),
                   ElevatedButton(
-                    child: Text(_multiMsg.strApply),
-//                    color: Colors.blueAccent,
-//                    textColor: Colors.white,
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blueAccent,
                       onPrimary: Colors.white,
                     ),
                     onPressed: () {
-                      if(this._selectedUserType != null && this._selectedLangType != null) {
+                      if(_selectedUserType != null && _selectedLangType != null) {
                         _saveUserInfo();
                       }
                     },
+                    child: Text(_multiMsg.strApply),
                   ),
                 ],
               )
@@ -133,25 +135,21 @@ class _InformPageState extends State<InformPage> {
           ),
         ),
       ),
-      onWillPop: () {
-        Navigator.of(context).pop(true);
-        return Future.value(true);
-      },
     );
   }
 
   void popupUserTypeSelected(String value) {
     print('popup user: ' + value.toString());
     setState(() {
-      this._selectedUserType = value;
+      _selectedUserType = value;
 
-      if(this._selectedUserType == '선생님' || this._selectedUserType == 'Teacher'
-          || this._selectedUserType == '老师') {
-        this._selectedUserTypeForDB = 'Teacher';
+      if(_selectedUserType == '선생님' || _selectedUserType == 'Teacher'
+          || _selectedUserType == '老师') {
+        _selectedUserTypeForDB = 'Teacher';
       }
-      else if(this._selectedUserType == '학생' || this._selectedUserType == 'Student'
-          || this._selectedUserType == '学生') {
-        this._selectedUserTypeForDB = 'Student';
+      else if(_selectedUserType == '학생' || _selectedUserType == 'Student'
+          || _selectedUserType == '学生') {
+        _selectedUserTypeForDB = 'Student';
       }
     });
   }
@@ -159,25 +157,25 @@ class _InformPageState extends State<InformPage> {
   void popupLangTypeSelected(String value) {
     print('popup lang: ' + value.toString());
     setState(() {
-      this._selectedLangType = value;
+      _selectedLangType = value;
       _selectedUserType = null;
-      if(this._selectedLangType == '한글') {
-        this._selectedLangTypeForDB = 'Korean';
-        _multiMsg.convertDescription(this._selectedLangTypeForDB);
+      if(_selectedLangType == '한글') {
+        _selectedLangTypeForDB = 'Korean';
+        _multiMsg.convertDescription(_selectedLangTypeForDB);
         _userType = ['선생님', '학생'];
       }
-      else if(this._selectedLangType == 'English') {
-        this._selectedLangTypeForDB = 'English';
-        _multiMsg.convertDescription(this._selectedLangTypeForDB);
+      else if(_selectedLangType == 'English') {
+        _selectedLangTypeForDB = 'English';
+        _multiMsg.convertDescription(_selectedLangTypeForDB);
         _userType = ['Teacher', 'Student'];
       }
-      else if(this._selectedLangType == '中文') {
-        this._selectedLangTypeForDB = 'Chinese';
-        _multiMsg.convertDescription(this._selectedLangTypeForDB);
+      else if(_selectedLangType == '中文') {
+        _selectedLangTypeForDB = 'Chinese';
+        _multiMsg.convertDescription(_selectedLangTypeForDB);
         _userType = ['老师', '学生'];
       }
       else {
-        this._selectedLangTypeForDB = 'Other';
+        _selectedLangTypeForDB = 'Other';
       }
     });
   }
@@ -190,21 +188,21 @@ class _InformPageState extends State<InformPage> {
     var _date = DateTime.now();
     var _nextMonth = DateTime(_date.year, _date.month+1, _date.day).toString().split(' ');
 
-    _userInfo.set({
+    await _userInfo.set({
       'datetime' : _date.toString(),
       'id': _userInfo.id,
       'email': _userInfoController.userInfo['email'], // widget.user.email
-      'user_type': this._selectedUserTypeForDB,
+      'user_type': _selectedUserTypeForDB,
       'exp_date': _nextMonth[0],
       'validation': false,
-      'language' : this._selectedLangTypeForDB,
+      'language' : _selectedLangTypeForDB,
       'last_login' : '',
       'app_version': '',
       'login_cnt': 0,
     }).then((onValue) {
       var _mapUserInfo = {
-        'user_type' : this._selectedUserTypeForDB,
-        'language' : this._selectedLangTypeForDB,
+        'user_type' : _selectedUserTypeForDB,
+        'language' : _selectedLangTypeForDB,
         'complete' : 'OK',
       };
 //      Navigator.pop(context, _mapUserInfo);

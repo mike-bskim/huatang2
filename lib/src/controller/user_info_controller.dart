@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class UserInfoController extends GetxController {
 //  static UserInfoController get to => Get.find();
-  Map<String, dynamic> _userInfo = {
+  final Map<String, dynamic> _userInfo = {
     'displayName': '',
     'email': '',
     'photoURL': '',

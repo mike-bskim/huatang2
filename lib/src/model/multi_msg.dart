@@ -15,7 +15,7 @@ class MultiMessageCreateMain {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '새로운 챕터';
@@ -85,7 +85,7 @@ class MultiMessageCreateEx2 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '새로운 질문';
@@ -148,7 +148,7 @@ class MultiMessageCreateEx4 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '새로운 질문';
@@ -218,7 +218,7 @@ class MultiMessageCreateMatch4 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '새로운 질문';
@@ -291,7 +291,7 @@ class MultiMessageCreateMatchText {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '새로운 질문';
@@ -370,7 +370,7 @@ class MultiMessageDetail {
   var strOk = '';
 
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '주제';
@@ -449,7 +449,7 @@ class MultiMessageHome {
   var strOther = '';
   var strVersion = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strTeacher = '당신은 선생님입니다';
@@ -481,7 +481,7 @@ class MultiMessageInform {
   var strUserType = '';
   var strApply = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '사용자 정보 선택';
@@ -520,7 +520,7 @@ class MultiMessageListEx2 {
   var strNoOne = '';
   var strMissMatching = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strModify = '수정';
@@ -587,7 +587,7 @@ class MultiMessageListEx4 {
   var strNoOne = '';
   var strMissMatching = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strModify = '수정';
@@ -648,7 +648,7 @@ class MultiMessageListMatch4 {
   var strNoOne = '';
   var strMissMatching = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strModify = '수정';
@@ -709,7 +709,7 @@ class MultiMessageListMatchText {
   var strNoOne = '';
   var strMissMatching = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strModify = '수정';
@@ -763,7 +763,7 @@ class MultiMessageManage {
   var strQuestions = '';
   var strStudents = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strManagement = '관리';
@@ -799,7 +799,7 @@ class MultiMessageModifyEx2 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '질문 수정';
@@ -855,7 +855,7 @@ class MultiMessageModifyEx4 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '질문 수정';
@@ -915,7 +915,7 @@ class MultiMessageModifyMatch4 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '질문 수정';
@@ -970,7 +970,7 @@ class MultiMessageModifyMatchText {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '질문 수정';
@@ -1020,7 +1020,7 @@ class MultiMessageResultEx2 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strTrue = '진실';
@@ -1056,7 +1056,7 @@ class MultiMessageResultEx4 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strEx = '예시';
@@ -1086,7 +1086,7 @@ class MultiMessageResultMatch4 {
   var strWarnMessage = '';
   var strOk = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strEx = '예시';
@@ -1118,7 +1118,7 @@ class MultiMessageResultMatchText {
   var strTeacher = '';
   var strStudent = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strEx = '예시';
@@ -1164,7 +1164,7 @@ class MultiMessageStudy {
   var strMultiEx4 = '';
   var strTestDate = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '차례';
@@ -1229,7 +1229,7 @@ class MultiMessageTestMain {
   var strOk = '';
   var strNoData = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strAppBarTitle = '테스트 메인 화면';
@@ -1278,7 +1278,7 @@ class MultiMessageTestEx2 {
   var strTrue = '';
   var strFalse = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strSubmit = '제출';
@@ -1323,7 +1323,7 @@ class MultiMessageTestEx4 {
   var strOk = '';
   var strEx = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strSubmit = '제출';
@@ -1367,7 +1367,7 @@ class MultiMessageTestMatch4 {
   var strDragHere = '';
   var strEx = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strSubmit = '제출';
@@ -1417,7 +1417,7 @@ class MultiMessageTestMatchText {
   var strDragHere = '';
   var strEx = '';
 
-  convertDescription(var type) {
+  void convertDescription(var type) {
 //    print('(home page /MultiLangList)languageType: ' + type);
     if (type == 'Korean') {
       strSubmit = '제출';
