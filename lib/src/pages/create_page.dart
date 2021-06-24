@@ -3,35 +3,35 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
+import 'package:huatang2/src/controller/user_info_controller.dart';
+import 'package:huatang2/src/model/multi_msg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
-import 'multi_msg.dart';
 
 
 class CreatePage extends StatefulWidget {
-  final user;
-  final _userInfo;
-  CreatePage(this.user, this._userInfo);
 
   @override
   _CreatePageState createState() => _CreatePageState();
 }
 
 class _CreatePageState extends State<CreatePage> {
-  final _textController0 = new TextEditingController();
-  final _textController1 = new TextEditingController();
-  final _textController2 = new TextEditingController();
-  final _textController3 = new TextEditingController();
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
+  final _textController0 = TextEditingController();
+  final _textController1 = TextEditingController();
+  final _textController2 = TextEditingController();
+  final _textController3 = TextEditingController();
   bool iconColorFlag = true;
   bool _uploadFlag = false;
   var _questionType = '0';
   var _multiMsg;
-  var _questionSelect = ['01. EX4']; // 파라미터 전달때문에 빈 리스트로 하면 안됌
+  final _questionSelect = ['01. EX4']; // 파라미터 전달때문에 빈 리스트로 하면 안됌
   var _selectQuestionSelect;
 
 
-  File _image; // PickedFile
+  File? _image; // PickedFile
 
 @override
   void initState() {
@@ -54,7 +54,7 @@ class _CreatePageState extends State<CreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    _multiMsg.convertDescription(widget._userInfo['userLangType']);
+    _multiMsg.convertDescription(_userInfoController.userInfo['userLangType']);
     _questionSelect.clear();
     _questionSelect.add(_multiMsg.strEx4);
     _questionSelect.add(_multiMsg.strTF);
@@ -75,7 +75,7 @@ class _CreatePageState extends State<CreatePage> {
     );
   }
 
-  Widget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar() {
     return AppBar(
       centerTitle: true,
       backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
@@ -122,7 +122,7 @@ class _CreatePageState extends State<CreatePage> {
             width: 350,
             height: 200,
             child: _image == null ? Center(child: Text(_multiMsg.strNoImage))
-                : Image.file(_image, fit: BoxFit.cover,),
+                : Image.file(_image!, fit: BoxFit.cover,),
           ),
           Padding(padding: EdgeInsets.all(8.0)),
           Container(
@@ -132,7 +132,7 @@ class _CreatePageState extends State<CreatePage> {
               children: <Widget>[
                 Text('${_multiMsg.strQuestionType}  :  '),
                 DropdownButton<String>(
-                  onChanged: popupQuestionTypeSelected,
+                  onChanged: (String? value) => popupQuestionTypeSelected(value!),
                   value: _selectQuestionSelect,
                   style: TextStyle(
                     fontSize: 15.0,
@@ -174,22 +174,22 @@ class _CreatePageState extends State<CreatePage> {
 
   void popupQuestionTypeSelected(String value) {
     setState(() {
-      this._selectQuestionSelect = value;
+      _selectQuestionSelect = value;
 
       if(value.substring(0,2) == '01') {
-        this._questionType = 'ex4';
+        _questionType = 'ex4';
       }
       else if(value.substring(0,2) == '02'){
-        this._questionType = 'ex2';
+        _questionType = 'ex2';
       }
       else if(value.substring(0,2) == '03') {
-        this._questionType = 'matchPicture';
+        _questionType = 'matchPicture';
       }
       else if(value.substring(0,2) == '04') {
-        this._questionType = 'matchText';
+        _questionType = 'matchText';
       }
       else if(value.substring(0,2) == '05') {
-        this._questionType = 'multiEx4';
+        _questionType = 'multiEx4';
       }
     });
   }
@@ -202,15 +202,23 @@ class _CreatePageState extends State<CreatePage> {
     );
 
     if (image != null) {
-      _cropImage(image);
+//      _image = image as File?;
+      await _cropImage(image);
     } else {
       print('No image selected.');
     }
   }
 
 // D:\workspace\Flutter\flutter_firebase\android\app\src\main\AndroidManifest.xml
-  Future _cropImage(PickedFile picked) async {
-    File cropped = await ImageCropper.cropImage(
+  Future _cropImage(PickedFile? picked) async {
+    var cropped = await ImageCropper.cropImage(
+      sourcePath: picked!.path,
+      aspectRatioPresets: [
+//        CropAspectRatioPreset.original,  // no use
+//        CropAspectRatioPreset.square,    // no use
+//        CropAspectRatioPreset.ratio16x9, // no use
+        CropAspectRatioPreset.ratio4x3,
+      ],
       androidUiSettings: AndroidUiSettings(
         statusBarColor: Colors.red,
         toolbarColor: Colors.red,
@@ -219,13 +227,6 @@ class _CreatePageState extends State<CreatePage> {
 //        hideBottomControls: true, // no use
 //        lockAspectRatio: false,   // no use
       ),
-      sourcePath: picked.path,
-      aspectRatioPresets: [
-//        CropAspectRatioPreset.original,  // no use
-//        CropAspectRatioPreset.square,    // no use
-//        CropAspectRatioPreset.ratio16x9, // no use
-        CropAspectRatioPreset.ratio4x3,
-      ],
       maxHeight: 600,
     );
     if (cropped != null) {
@@ -266,10 +267,10 @@ class _CreatePageState extends State<CreatePage> {
             ),
             actions: <Widget>[
               TextButton(
-                child: Text(_multiMsg.strOk),
                 onPressed: () {
                   Navigator.of(context).pop(false);
                 },
+                child: Text(_multiMsg.strOk),
               ),
             ],
           );
@@ -277,7 +278,7 @@ class _CreatePageState extends State<CreatePage> {
       );
     }
     else {
-      _uploadImage();
+      await _uploadImage();
     }
   }
 
@@ -288,16 +289,16 @@ class _CreatePageState extends State<CreatePage> {
       _uploadFlag = true;
     });
 
-    var _email = widget.user.email;
+    var _email = _userInfoController.userInfo['email'];
     _email = _email.split('@');
     var _picName = _email[0] + '_${DateTime.now().millisecondsSinceEpoch}.png';
 
     final firebaseStorageRef = FirebaseStorage.instance; // 스토리지에 먼저 사진 업로드 하는 부분. StorageReference
-    TaskSnapshot task = await firebaseStorageRef
+    var task = await firebaseStorageRef
         .ref() // 시작점
-        .child(widget.user.uid) // 경로, post
+        .child(_userInfoController.userInfo['uid']) // 경로, post
         .child(_picName)
-        .putFile(_image); //^7.0.0
+        .putFile(_image!); //^7.0.0
 //        .onComplete; // ^4.0.1
 
     if (task != null) {
@@ -305,16 +306,16 @@ class _CreatePageState extends State<CreatePage> {
       var downloadUrl = await task.ref.getDownloadURL();
 
       var doc =
-          FirebaseFirestore.instance.collection(widget.user.uid).doc(); // post collection 만들고, 하위에 문서를 만든다
-      doc.set({
+          FirebaseFirestore.instance.collection(_userInfoController.userInfo['uid']).doc(); // post collection 만들고, 하위에 문서를 만든다
+      await doc.set({
         'id': doc.id,
         'datetime' : DateTime.now().toString(),
         'photoUrl': downloadUrl.toString(),
         'contents': _textController0.text,
-        'email': widget.user.email,
-        'teacher_uid': widget.user.uid,
-        'displayName': widget.user.displayName,
-        'userPhotoUrl': widget.user.photoURL,
+        'email': _userInfoController.userInfo['email'],
+        'teacher_uid': _userInfoController.userInfo['uid'],
+        'displayName': _userInfoController.userInfo['displayName'],
+        'userPhotoUrl': _userInfoController.userInfo['photoURL'],
         'description1': _textController1.text,
         'description2': _textController2.text,
         'description3': _textController3.text,

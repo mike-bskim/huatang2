@@ -2,27 +2,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'create_page.dart';
-import 'detail_post_page.dart';
-
-import 'multi_msg.dart';
-import 'result_ex2_page.dart';
-import 'result_ex4_page.dart';
-import 'result_match4_page.dart';
-import 'result_match_text_page.dart';
-import 'result_multi_ex4_page.dart';
+import 'package:get/get.dart';
+import 'package:huatang2/src/controller/chapter_info_controller.dart';
+import 'package:huatang2/src/controller/user_info_controller.dart';
+import 'package:huatang2/src/model/multi_msg.dart';
+import 'package:huatang2/src/pages/create_page.dart';
+//import 'create_page.dart';
+//import 'detail_post_page.dart';
+//
+//import 'multi_msg.dart';
+//import 'result_ex2_page.dart';
+//import 'result_ex4_page.dart';
+//import 'result_match4_page.dart';
+//import 'result_match_text_page.dart';
+//import 'result_multi_ex4_page.dart';
 
 //
 class StudyPage extends StatefulWidget {
-  final user;
-  final _userInfo;
-  StudyPage(this.user, this._userInfo);
 
   @override
   _StudyPageState createState() => _StudyPageState();
 }
 
 class _StudyPageState extends State<StudyPage> {
+  final UserInfoController _userInfoController = Get.put(UserInfoController());
+  final ChapterInfoController _chapterInfoController = Get.put(ChapterInfoController());
   bool _teacherOnly = false;
   var _multiMsg;
 //  bool _clickedFavorite = false;
@@ -31,7 +35,7 @@ class _StudyPageState extends State<StudyPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (widget._userInfo['userType'] == 'Teacher') {
+    if (_userInfoController.userInfo['userType'] == 'Teacher') {
       _teacherOnly = true;
     } else {
       _teacherOnly = false;
@@ -41,7 +45,7 @@ class _StudyPageState extends State<StudyPage> {
 
   @override
   Widget build(BuildContext context) {
-    _multiMsg.convertDescription(widget._userInfo['userLangType']);
+    _multiMsg.convertDescription(_userInfoController.userInfo['userLangType']); // widget._userInfo['userLangType']
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +59,7 @@ class _StudyPageState extends State<StudyPage> {
       floatingActionButton: _teacherOnly ? FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
-            MaterialPageRoute(builder: (context) => CreatePage(widget.user, widget._userInfo)) //TabPage(widget.user)) //CreatePage(widget.user)
+            MaterialPageRoute(builder: (context) => CreatePage())
           );
         },
         backgroundColor: Colors.blue,
@@ -70,7 +74,7 @@ class _StudyPageState extends State<StudyPage> {
 
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-        .collection(widget.user.uid)
+        .collection(_userInfoController.userInfo['uid']) // widget.user.uid
         .orderBy("datetime")
         .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -79,24 +83,24 @@ class _StudyPageState extends State<StudyPage> {
         }
         var items = snapshot.data.docs ?? []; // documents->docs
         if (items.length < 1) {
-          return Text(_multiMsg.strNoData);
+          return Center(child: Text(_multiMsg.strNoData));
         }
 
-        var newItems = [];
+        _chapterInfoController.chapterInfo.clear();
 
         for (var i = 0; i < items.length; i++) {
-            if (items[i]['email'] == widget.user.email) {
-              newItems.add(items[i]);
+            if (items[i]['email'] == _userInfoController.userInfo['email']) { // widget.user.email
+              _chapterInfoController.chapterInfo.add(items[i]);
             }
         }
 
         return ListView.builder(
-          itemCount: newItems.length * 2, //8,
+          itemCount: _chapterInfoController.chapterInfo.length * 2, //8,
           padding: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
           itemBuilder: (context, index) {
             if(index.isOdd) return const Divider(color: Colors.grey);
             var realIndex = index ~/ 2;
-            return _buildListItem(context, newItems[realIndex]);
+            return _buildListItem(context, _chapterInfoController.chapterInfo[realIndex]);
           }
         );
       },
@@ -153,9 +157,9 @@ class _StudyPageState extends State<StudyPage> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () { // teacher case
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return DetailPostPage(document, widget._userInfo); //TabPage(widget.user);
-            }));
+//            Navigator.push(context, MaterialPageRoute(builder: (context) {
+//              return DetailPostPage(document, widget._userInfo); //TabPage(widget.user);
+//            }));
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
@@ -241,8 +245,8 @@ class _StudyPageState extends State<StudyPage> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
         .collection('student')
-        .doc(widget.user.uid)
-        .collection(widget.user.uid)
+        .doc(_userInfoController.userInfo['uid']) // widget.user.uid
+        .collection(_userInfoController.userInfo['uid']) // widget.user.uid
         .orderBy('datetime')
         .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -258,7 +262,7 @@ class _StudyPageState extends State<StudyPage> {
         var newItems = [];
 
         for (var i = 0; i < items.length; i++) {
-          if (items[i]['email'] == widget.user.email) {
+          if (items[i]['email'] == _userInfoController.userInfo['email']) { // widget.user.email
             newItems.add(items[i]);
           }
         }
@@ -308,19 +312,19 @@ class _StudyPageState extends State<StudyPage> {
 
     var _imageTemp = _getImageNetwork(document['chapterPhotoUrl']);
 
-    Map _studentInfo = {};
+    var _studentInfo = {};
 
     _studentInfo['teacherUid'] = document['teacher_uid'];
     _studentInfo['chapterCode'] = document['chapter_code']; //code
     _studentInfo['studentName'] = document['student_name'];
     _studentInfo['studentUid'] = document['student_uid'];
-    _studentInfo['userType'] = widget._userInfo['userType'];
+    _studentInfo['userType'] = _userInfoController.userInfo['userType'];
     _studentInfo['studentEmail'] = document['email'];
     _studentInfo['chapterPhotoUrl'] = document['chapterPhotoUrl'];
     _studentInfo['previous'] = 'study';
 
     var _answerHistory = document['student'];
-    Map<String, dynamic> _favorite = {};
+    var _favorite = <String, dynamic>{};
 
     try{
       if(document['favorite'] != null) { // 정보입력이 완료되지 않음
@@ -338,7 +342,7 @@ class _StudyPageState extends State<StudyPage> {
         onTap: () { // student case
 //          _clickedFavorite = document['favorite'];
 //          print('(document[favorite]' + document['student_uid'] +' / '+ document['chapter_code']+'/'+ _clickedFavorite.toString());
-          return checkStudyResult(document, _answerHistory, _studentInfo, widget._userInfo);
+//          return checkStudyResult(document, _answerHistory, _studentInfo, widget._userInfo);
         },
         child: Material(
           color: Colors.transparent,
@@ -455,13 +459,13 @@ class _StudyPageState extends State<StudyPage> {
         .collection(document['student_uid']) // post
         .doc(document['chapter_code']);
 
-    doc.update({
+    await doc.update({
       'favorite' : _favorite[document['chapter_code']],
     }).then((onValue) {
 //      print('icons updated - students history');
     });
 
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection(document['teacher_uid']) // post
         .doc(document['chapter_code'])
         .get()
@@ -470,11 +474,13 @@ class _StudyPageState extends State<StudyPage> {
               .collection(document['teacher_uid']) // post
               .doc(document['chapter_code']);
 
-          List<dynamic> _tmp = [];
-          Set<dynamic> _set = Set();
+//          List<dynamic> _tmp = [];
+//          Set<dynamic> _set = Set();
+          var _tmp = <dynamic>[];
+          var _set = <dynamic>{};
 
           try{
-            _tmp = doc.data()['favorite'];
+            _tmp = doc.data()!['favorite'];
             if(_tmp != null){
               _set = _tmp.toSet();
               _tmp = _set.toList();
@@ -533,10 +539,10 @@ class _StudyPageState extends State<StudyPage> {
   }
 
   // ignore: missing_return
-  Widget checkStudyResult(document, _answerHistory, Map _studentInfo, _userInfo) {
+  Widget checkStudyResult(document, _answerHistory, Map _studentInfo, _userInfo)  {
 
-    List _questions = [];
-    FirebaseFirestore.instance
+    var _questions = [];
+     FirebaseFirestore.instance
         .collection(document['teacher_uid'])
         .doc(document['chapter_code']) // chapter_code
         .collection('post_sub')
@@ -549,33 +555,34 @@ class _StudyPageState extends State<StudyPage> {
       }),
 
       if(document['question_type'] == 'ex2') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ResultEx2Page(
-              _questions, _answerHistory, _studentInfo, _userInfo);
-        }))
+//        Navigator.push(context, MaterialPageRoute(builder: (context) {
+//          return ResultEx2Page(
+//              _questions, _answerHistory, _studentInfo, _userInfo);
+//        }))
       }
       else if(document['question_type'] == 'ex4') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ResultEx4Page(
-              _questions, _answerHistory, _studentInfo, _userInfo);
-        }))
+//        Navigator.push(context, MaterialPageRoute(builder: (context) {
+//          return ResultEx4Page(
+//              _questions, _answerHistory, _studentInfo, _userInfo);
+//        }))
       }
       else if(document['question_type'] == 'matchPicture') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ResultMatch4Page(_questions, _answerHistory, _studentInfo, 'study', _userInfo);
-        }))
+//        Navigator.push(context, MaterialPageRoute(builder: (context) {
+//          return ResultMatch4Page(_questions, _answerHistory, _studentInfo, 'study', _userInfo);
+//        }))
       }
       else if(document['question_type'] == 'matchText') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ResultMatchTextPage(_questions, _answerHistory, _studentInfo, 'study', _userInfo);
-        }))
+//        Navigator.push(context, MaterialPageRoute(builder: (context) {
+//          return ResultMatchTextPage(_questions, _answerHistory, _studentInfo, 'study', _userInfo);
+//        }))
       }
       else if(document['question_type'] == 'multiEx4') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ResultMultiEx4Page(_questions, _answerHistory, _studentInfo, _userInfo);
-        }))
+//        Navigator.push(context, MaterialPageRoute(builder: (context) {
+//          return ResultMultiEx4Page(_questions, _answerHistory, _studentInfo, _userInfo);
+//        }))
       }
     });
+    return Container();
 
   }
 

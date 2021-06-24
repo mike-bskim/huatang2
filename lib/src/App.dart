@@ -10,19 +10,8 @@ class App extends StatelessWidget {
 
   final UserInfoController _userInfoController = Get.put(UserInfoController());
 
-  void printInfo(AsyncSnapshot snapshot) {
-
-//    print('displayName: ' + snapshot.data.displayName.toString());
-//    print('email: ' + snapshot.data.email.toString());
-    print('metadata: ' + snapshot.data.metadata.toString());
-    print('metadata: ' + snapshot.data.metadata.lastSignInTime.toString());
-//    print('photoURL: ' + snapshot.data.photoURL.toString());
-//    print('providerData: ' + snapshot.data.providerData.toString());
-//    print('providerData[0]: ' + snapshot.data.providerData[0].toString());
-//    print('refreshToken: ' + snapshot.data.refreshToken.toString());
-//    print('tenantId: ' + snapshot.data.tenantId.toString());
-//    print('uid: ' + snapshot.data.uid.toString());
-  }
+//    print('metadata: ' + snapshot.data.metadata.toString());
+//    print('metadata: ' + snapshot.data.metadata.lastSignInTime.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +22,6 @@ class App extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         } else {
           if(snapshot.hasData) {
-//            print('${snapshot.data.displayName}님 환영합니다');
-//            printInfo(snapshot);
 //            print(snapshot.data);
             _userInfoController.mappingUserInfo(snapshot);
 //            return TabPage(snapshot.data);
@@ -45,5 +32,20 @@ class App extends StatelessWidget {
       },
     );
 
+//    return FutureBuilder(
+//      future: Firebase.initializeApp(),
+//      builder: (context, snapshot) {
+//        if(snapshot.connectionState == ConnectionState.waiting) {
+//          return Center(child: CircularProgressIndicator());
+//        } else {
+//          if(snapshot.hasData) {
+//            return TabPage(snapshot.data);
+//          }
+//          return Center(
+//            child: Text('login'),
+//          );
+//        }
+//      }
+//    );
   }
 }

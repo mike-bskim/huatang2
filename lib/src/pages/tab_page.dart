@@ -7,6 +7,7 @@ import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
 import 'package:huatang2/src/pages/home_page.dart';
 import 'package:huatang2/src/pages/inform_page.dart';
+import 'package:huatang2/src/pages/study_page.dart';
 
 
 class TabPage extends StatefulWidget {
@@ -30,7 +31,8 @@ class _TabPageState extends State<TabPage> {
     _pages = [
 //      HomePage(widget.user, this._userInfo),
       HomePage(),
-      Text('StudyPage'),
+      StudyPage(),
+//      Text('StudyPage'),
       Text('ManagePage'),
       Text('TestPage'),
 //      StudyPage(widget.user, this._userInfo),
@@ -140,7 +142,7 @@ class _TabPageState extends State<TabPage> {
       setState(() {
         _pages = [
           HomePage(), // widget.user, this._userInfo
-          Text('StudyPage'),
+          StudyPage(),
           Text('ManagePage'),
           Text('TestPage'),
 //            StudyPage(widget.user, this._userInfo),

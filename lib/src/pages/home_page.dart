@@ -96,25 +96,34 @@ class _HomePageState extends State<HomePage> {
                     elevation: 5.0,
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          Padding(padding: EdgeInsets.all(8.0)),
-                          SizedBox(
-                            width: 80.0,
-                            height: 80.0,
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(_userInfoController.userInfo['photoURL']),
+                      child: Obx(
+                        ()=>Column(
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.all(8.0)),
+                            SizedBox(
+                              width: 80.0,
+                              height: 80.0,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(_userInfoController.userInfo['photoURL']),
+                              ),
                             ),
-                          ),
-                          Padding(padding: EdgeInsets.all(8.0)),
-                          Text(_userInfoController.userInfo['email']?? ' ', style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(_userInfoController.userInfo['displayName']?? ' '),
-                          Padding(padding: EdgeInsets.all(8.0)),
-                        ],
+                            Padding(padding: EdgeInsets.all(8.0)),
+                            Text(_userInfoController.userInfo['email']?? ' ', style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text(_userInfoController.userInfo['displayName']?? ' '),
+                            Padding(padding: EdgeInsets.all(8.0)),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
+//                ElevatedButton(
+//                    onPressed: () {
+//                      _userInfoController.userInfo['displayName'] = 'aa';
+//                      print('변경후 이름: ' + _userInfoController.userInfo['displayName'].toString());
+//                      },
+//                    child: Text('이름변경'),
+//                ),
               ],
             ),
           ),

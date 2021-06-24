@@ -2,25 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserInfoController extends GetxController {
-//  static UserInfoController get to => Get.find();
-  final Map<String, dynamic> _userInfo = {
+  static UserInfoController get to => Get.find();
+
+  final RxMap<String, String> _userInfo = {
     'displayName': '',
     'email': '',
     'photoURL': '',
     'uid': '',
     'userType': '',
     'userLangType': '',
-  };
+  }.obs;
 
   void mappingUserInfo(AsyncSnapshot snapshot) {
-    if (_userInfo['displayName'] == null) {_userInfo['displayName'] = ' ';}
-    else {_userInfo['displayName'] = (snapshot.data.displayName);}
+//    if (_userInfo['displayName'] == null) {_userInfo['displayName'] = ' ';}
+//    else {_userInfo['displayName'] = (snapshot.data.displayName);}
+    _userInfo['displayName'] = snapshot.data.displayName?? ' ';
 
-    if (_userInfo['email'] == null) {_userInfo['email'] = ' ';}
-    else {_userInfo['email'] = (snapshot.data.email);}
+//    if (_userInfo['email'] == null) {_userInfo['email'] = ' ';}
+//    else {_userInfo['email'] = (snapshot.data.email)?? ' ';}
+    _userInfo['email'] = (snapshot.data.email)?? ' ';
 
-    if (snapshot.data.photoURL==null) { _userInfo['photoURL'] = 'https://placeimg.com/200/200/nature'; }
-    else { _userInfo['photoURL'] = (snapshot.data.photoURL); }
+//    if (snapshot.data.photoURL==null) { _userInfo['photoURL'] = 'https://placeimg.com/200/200/nature'; }
+//    else { _userInfo['photoURL'] = (snapshot.data.photoURL); }
+    _userInfo['photoURL'] = (snapshot.data.photoURL)?? 'https://placeimg.com/200/200/nature';
     _userInfo['uid'] = (snapshot.data.uid);
   }
 
