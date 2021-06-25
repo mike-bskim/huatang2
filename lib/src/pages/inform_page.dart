@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:huatang2/src/controller/dropdown_button_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'dart:async';
 
@@ -116,6 +117,8 @@ class _InformPageState extends State<InformPage> {
                       ),
                     ],
                   ),
+                  DropdownButtonLangType(),
+                  DropdownButtonUserType(),
                   Padding(padding: EdgeInsets.all(15.0)),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
