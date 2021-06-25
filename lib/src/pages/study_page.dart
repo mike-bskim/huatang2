@@ -1,21 +1,13 @@
-//import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:huatang2/src/controller/chapter_info_controller.dart';
+import 'package:huatang2/src/controller/study_info_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
-import 'package:huatang2/src/pages/create_page.dart';
-//import 'create_page.dart';
-//import 'detail_post_page.dart';
-//
-//import 'multi_msg.dart';
-//import 'result_ex2_page.dart';
-//import 'result_ex4_page.dart';
-//import 'result_match4_page.dart';
-//import 'result_match_text_page.dart';
-//import 'result_multi_ex4_page.dart';
+import 'package:huatang2/src/pages/create_chapter_page.dart';
+import 'package:huatang2/src/pages/detail_study_page.dart';
+
 
 //
 class StudyPage extends StatefulWidget {
@@ -26,7 +18,7 @@ class StudyPage extends StatefulWidget {
 
 class _StudyPageState extends State<StudyPage> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
-  final ChapterInfoController _chapterInfoController = Get.put(ChapterInfoController());
+  final StudyInfoController _studyInfoController = Get.put(StudyInfoController());
   bool _teacherOnly = false;
   var _multiMsg;
 //  bool _clickedFavorite = false;
@@ -58,9 +50,10 @@ class _StudyPageState extends State<StudyPage> {
       body: _teacherOnly ? _buildBody() : _notTeacher(),
       floatingActionButton: _teacherOnly ? FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-            MaterialPageRoute(builder: (context) => CreatePage())
-          );
+//          Navigator.push(context,
+//            MaterialPageRoute(builder: (context) => CreateChapterPage())
+//          );
+          Get.to(() => CreateChapterPage());
         },
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
@@ -86,52 +79,53 @@ class _StudyPageState extends State<StudyPage> {
           return Center(child: Text(_multiMsg.strNoData));
         }
 
-        _chapterInfoController.chapterInfo.clear();
+        _studyInfoController.chapterInfo.clear();
 
         for (var i = 0; i < items.length; i++) {
             if (items[i]['email'] == _userInfoController.userInfo['email']) { // widget.user.email
-              _chapterInfoController.chapterInfo.add(items[i]);
+              _studyInfoController.chapterInfo.add(items[i]);
             }
         }
 
         return ListView.builder(
-          itemCount: _chapterInfoController.chapterInfo.length * 2, //8,
+          itemCount: _studyInfoController.chapterInfo.length * 2, //8,
           padding: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
           itemBuilder: (context, index) {
             if(index.isOdd) return const Divider(color: Colors.grey);
             var realIndex = index ~/ 2;
-            return _buildListItem(context, _chapterInfoController.chapterInfo[realIndex]);
+            return _buildListItem(context, _studyInfoController.chapterInfo[realIndex]);
           }
         );
       },
     );
   }
 
-  Widget _buildListItem(BuildContext context, document) {
+  Widget _buildListItem(BuildContext context, chapterInfo) {
 
     var _questionType = 'N/A';
-    if(document['question_type'] == 'ex4') {
+    if(chapterInfo['question_type'] == 'ex4') {
       _questionType = _multiMsg.strEx4;
-    } else if(document['question_type'] == 'ex2') {
+    } else if(chapterInfo['question_type'] == 'ex2') {
       _questionType = _multiMsg.strTF;
-    } else if(document['question_type'] == 'matchPicture') {
+    } else if(chapterInfo['question_type'] == 'matchPicture') {
       _questionType = _multiMsg.strMatchPicture;
-    } else if(document['question_type'] == 'matchText') {
+    } else if(chapterInfo['question_type'] == 'matchText') {
       _questionType = _multiMsg.strMatchText;
-    } else if(document['question_type'] == 'multiEx4') {
+    } else if(chapterInfo['question_type'] == 'multiEx4') {
       _questionType = _multiMsg.strMultiEx4;
     }
 
-    var _createdDate = document['datetime'].split(' ');
+    var _createdDate = chapterInfo['datetime'].split(' ');
     var _questionCnt = 0;
-    if (document['question_cnt'] != null) {
-      _questionCnt = document['question_cnt'];
+    if (chapterInfo['question_cnt'] != null) {
+      _questionCnt = chapterInfo['question_cnt'];
     }
 
+    // 좋아요 기능을 나중에 추가해서 예외처리 로직을 추가함.
     var _favoriteCnt = 0;
     try{
-      if (document['favorite'] != null) {
-        _favoriteCnt = document['favorite'].length;
+      if (chapterInfo['favorite'] != null) {
+        _favoriteCnt = chapterInfo['favorite'].length;
       } else {
         _favoriteCnt = 0;
       }
@@ -140,67 +134,65 @@ class _StudyPageState extends State<StudyPage> {
       _favoriteCnt = 0;
     }
 
-
-    var _textLen = document['contents'].toString().length;
-    var _contentsTemp;
-    var _lengthLimit = 10;
-    if(_textLen > _lengthLimit) {
-      _contentsTemp = document['contents'].toString().substring(0, _lengthLimit) + '...';
-    }
-    else {
-      _contentsTemp = document['contents'].toString();
-    }
-
     return Hero(
-      tag: document['photoUrl'],
+      tag: chapterInfo['photoUrl'],
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: () { // teacher case
 //            Navigator.push(context, MaterialPageRoute(builder: (context) {
-//              return DetailPostPage(document, widget._userInfo); //TabPage(widget.user);
+//              return DetailStudyPage(chapterInfo);//, widget._userInfo); //TabPage(widget.user);
 //            }));
+            Get.to(() => DetailStudyPage(chapterInfo));
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
             child: Row(
               children: <Widget>[
-                Flexible(
-                  child: Container(
-                    width: 120,
-                    height: 90,
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          width: 120,
-                          height: 90,
-                          child: Image.network(document['photoUrl'], fit: BoxFit.cover)
-                        ),
-                        Container(
-                          alignment: Alignment.bottomLeft,
+                Container(
+                  width: 120,
+                  height: 90,
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        width: 120,
+                        height: 90,
+                        child: Image.network(chapterInfo['photoUrl'], fit: BoxFit.cover)
+                      ),
+                      Container(
+                        alignment: Alignment.bottomLeft,
+                        child: Container(
+                          alignment: Alignment.center,
+                          color: Colors.black54,
+                          width: 70.0,
+                          height: 20.0,
+                          child: Text('${_multiMsg.strQCnt} : $_questionCnt',
+                            style: TextStyle(fontSize: 10, color: Colors.white),
+                          ),
+                        )
+                      ),
+                      Container(
+                          alignment: Alignment.bottomRight,
                           child: Container(
                             alignment: Alignment.center,
-                            color: Colors.black54,
-                            width: 70.0,
-                            height: 20.0,
-                            child: Text('${_multiMsg.strQCnt} : $_questionCnt',
-                              style: TextStyle(fontSize: 10, color: Colors.white)),
+//                              color: Colors.black54,
+                            width: 30.0,
+                            height: 30.0,
+                            child: Stack(
+                              children: [
+                                Center(
+                                  child: Icon(Icons.favorite, color: Colors.pink,),
+                                ),
+                                Center(
+                                  child: Text('$_favoriteCnt',
+                                    style: TextStyle(fontSize: 9, color: Colors.white),),
+                                ),
+                              ],
+                            ),
                           )
-                        ),
-                        Container(
-                            alignment: Alignment.bottomRight,
-                            child: Container(
-                              alignment: Alignment.center,
-                              color: Colors.black54,
-                              width: 20.0,
-                              height: 20.0,
-                              child: Text('$_favoriteCnt',
-                                  style: TextStyle(fontSize: 10, color: Colors.white)),
-                            )
-                        ),
-                      ]
-                    )
-                  ),
+                      ),
+                    ]
+                  )
                 ),
                 Flexible(
                   flex: 2,
@@ -210,8 +202,10 @@ class _StudyPageState extends State<StudyPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          child: Text('${_multiMsg.strTitle}: ' + _contentsTemp,
+                          child: Text('${_multiMsg.strTitle}: ' + chapterInfo['contents'], //_contentsTemp,
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
                         Padding(padding: const EdgeInsets.only(top: 4.0)),
@@ -219,7 +213,7 @@ class _StudyPageState extends State<StudyPage> {
                           child: Text('${_multiMsg.strQType} : $_questionType', style: TextStyle(fontSize: 13))
                         ),
                         Padding(padding: const EdgeInsets.only(top: 4.0)),
-                        SelectableText('${_multiMsg.strTestCode}: ' + document['id'], style: TextStyle(fontSize: 10)),
+                        SelectableText('${_multiMsg.strTestCode}: ' + chapterInfo['id'], style: TextStyle(fontSize: 10)),
                         Padding(padding: const EdgeInsets.only(top: 4.0)),
                         Text('${_multiMsg.strCreated} : ${_createdDate[0]}', style: TextStyle(fontSize: 10)),
 
@@ -281,63 +275,53 @@ class _StudyPageState extends State<StudyPage> {
   }
 
 
-  Widget _buildStudentTestListItem(BuildContext context, document) {
+  Widget _buildStudentTestListItem(BuildContext context, student_test_result) {
 
     var _questionType = 'N/A';
-    if(document['question_type'] == 'ex4') {
+    if(student_test_result['question_type'] == 'ex4') {
       _questionType = _multiMsg.strEx4;
-    } else if(document['question_type'] == 'ex2') {
+    } else if(student_test_result['question_type'] == 'ex2') {
       _questionType = _multiMsg.strTF;
-    } else if(document['question_type'] == 'matchPicture') {
+    } else if(student_test_result['question_type'] == 'matchPicture') {
       _questionType = _multiMsg.strMatchPicture;
-    } else if(document['question_type'] == 'matchText') {
+    } else if(student_test_result['question_type'] == 'matchText') {
       _questionType = _multiMsg.strMatchText;
     }
 
-    var _createdDate = document['datetime'].split(' ');
+    var _createdDate = student_test_result['datetime'].split(' ');
     var _questionCnt = 0;
-    if (document['question_cnt'] != null) {
-      _questionCnt = document['question_cnt'];
+    if (student_test_result['question_cnt'] != null) {
+      _questionCnt = student_test_result['question_cnt'];
     }
 
-    var _textLen = document['chapter_title'].toString().length;
-    var _contentsTemp;
-    var _lengthLimit = 10;
-    if(_textLen > _lengthLimit) {
-      _contentsTemp = document['chapter_title'].toString().substring(0, _lengthLimit) + '...';
-    }
-    else {
-      _contentsTemp = document['chapter_title'].toString();
-    }
-
-    var _imageTemp = _getImageNetwork(document['chapterPhotoUrl']);
+    var _imageTemp = _getImageNetwork(student_test_result['chapterPhotoUrl']);
 
     var _studentInfo = {};
 
-    _studentInfo['teacherUid'] = document['teacher_uid'];
-    _studentInfo['chapterCode'] = document['chapter_code']; //code
-    _studentInfo['studentName'] = document['student_name'];
-    _studentInfo['studentUid'] = document['student_uid'];
+    _studentInfo['teacherUid'] = student_test_result['teacher_uid'];
+    _studentInfo['chapterCode'] = student_test_result['chapter_code']; //code
+    _studentInfo['studentName'] = student_test_result['student_name'];
+    _studentInfo['studentUid'] = student_test_result['student_uid'];
     _studentInfo['userType'] = _userInfoController.userInfo['userType'];
-    _studentInfo['studentEmail'] = document['email'];
-    _studentInfo['chapterPhotoUrl'] = document['chapterPhotoUrl'];
+    _studentInfo['studentEmail'] = student_test_result['email'];
+    _studentInfo['chapterPhotoUrl'] = student_test_result['chapterPhotoUrl'];
     _studentInfo['previous'] = 'study';
 
-    var _answerHistory = document['student'];
+    var _answerHistory = student_test_result['student'];
     var _favorite = <String, dynamic>{};
 
     try{
-      if(document['favorite'] != null) { // 정보입력이 완료되지 않음
+      if(student_test_result['favorite'] != null) { // 정보입력이 완료되지 않음
 //        _clickedFavorite = document['favorite'];
-        _favorite[document['chapter_code']] = document['favorite'];
+        _favorite[student_test_result['chapter_code']] = student_test_result['favorite'];
       }
     } catch (error) {// 정보입력이 완료되지 않음
 //      _clickedFavorite = false;
-      _favorite[document['chapter_code']] = false;
+      _favorite[student_test_result['chapter_code']] = false;
     }
 
     return Hero(
-      tag: document['chapterPhotoUrl'],
+      tag: student_test_result['chapterPhotoUrl'],
       child: InkWell(
         onTap: () { // student case
 //          _clickedFavorite = document['favorite'];
@@ -381,10 +365,10 @@ class _StudyPageState extends State<StudyPage> {
                                 child: IconButton(
                                   onPressed: (){
 //                                    print('click icons - ' + document['chapter_code'] +' / '+ document['teacher_uid']);
-                                    _toggleFavorite(document, _favorite);
+                                    _toggleFavorite(student_test_result, _favorite);
                                   },
                                   icon: Icon(
-                                    _favorite[document['chapter_code']] ? Icons.favorite : Icons.favorite_border,
+                                    _favorite[student_test_result['chapter_code']] ? Icons.favorite : Icons.favorite_border,
                                     color: Colors.redAccent,
                                   ),
                                 ),
@@ -405,8 +389,9 @@ class _StudyPageState extends State<StudyPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Container(
-                          child: Text('${_multiMsg.strTitle}: ' + _contentsTemp,
+                          child: Text('${_multiMsg.strTitle}: ' + student_test_result['chapter_title'],
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Padding(padding: const EdgeInsets.only(top: 8.0)),
@@ -481,6 +466,7 @@ class _StudyPageState extends State<StudyPage> {
 
           try{
             _tmp = doc.data()!['favorite'];
+            // 이미 다른 학생에게서 하트를 받은 경우.
             if(_tmp != null){
               _set = _tmp.toSet();
               _tmp = _set.toList();
@@ -498,6 +484,7 @@ class _StudyPageState extends State<StudyPage> {
                 setState(() {});
               });
             } else {
+              // 처음으로 하트 받을때 처리 로직
 //              print('>>> else: 에서 처리함');
               doc1.update({
                 'favorite' : [document['student_uid'],],
@@ -507,6 +494,7 @@ class _StudyPageState extends State<StudyPage> {
             }
           } catch (error) {// 정보입력이 완료되지 않음
 //            print('>>> error: ' + error.toString());
+            // 처음으로 하트 받을때와 동일하게 처리
             doc1.update({
               'favorite' : [document['student_uid'],],
             }).then((onValue) {
@@ -517,18 +505,6 @@ class _StudyPageState extends State<StudyPage> {
 
     //  history on the teachers question
   }
-
-//  void _readFavorite(document) {
-//    FirebaseFirestore.instance
-//        .collection(widget.user.uid)
-//        .where('email', isEqualTo: widget.user.email)
-//        .get()
-//        .then((snapShot) {
-//      setState(() {
-//
-//      });
-//    });
-//  }
 
   dynamic _getImageNetwork(String url) {
     try {
@@ -559,6 +535,7 @@ class _StudyPageState extends State<StudyPage> {
 //          return ResultEx2Page(
 //              _questions, _answerHistory, _studentInfo, _userInfo);
 //        }))
+//         Get.to(() => ResultEx2Page(_questions, _answerHistory, _studentInfo, _userInfo));
       }
       else if(document['question_type'] == 'ex4') {
 //        Navigator.push(context, MaterialPageRoute(builder: (context) {

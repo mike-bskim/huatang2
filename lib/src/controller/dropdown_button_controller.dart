@@ -4,52 +4,69 @@ import 'package:get/get.dart';
 class DropdownButtonController extends GetxController {
   RxString langTypeIndex = 'English'.obs;
   RxString userTypeIndex = 'Student'.obs;
+  RxMap multiMsg = {
+    'strAppBarTitle': 'User Information',
+    'strLang': 'User Lang',
+    'strUserType': 'User Type',
+    'strApply': 'Apply',
+  }.obs;
+
   var langType = ['한글', 'English', '中文'];
   RxList userType = ['Teacher', 'Student'].obs;
-//  var selectedUserType;
-  var selectedUserTypeForDB;
-//  var selectedLangType;
-  var selectedLangTypeForDB;
+  var _selectedUserTypeForDB;
+  var _selectedLangTypeForDB;
+
 
   void changeLangTypeIndex(String index) {
     langTypeIndex(index);
-    print('change LangType: ${index.toString()}');
 
     if(langTypeIndex.value == '한글') {
       userType = ['선생님', '학생'].obs;
+      multiMsg['strAppBarTitle'] = '사용자 정보 선택';
+      multiMsg['strLang'] = '사용자 언어';
+      multiMsg['strUserType'] = '사용자 유형';
+      multiMsg['strApply'] = '적용';
+      _selectedLangTypeForDB = 'Korean';
       changeUserTypeIndex('학생');
-      selectedLangTypeForDB = 'Korean';
     }
     else if(langTypeIndex.value == 'English') {
       userType = ['Teacher', 'Student'].obs;
+      multiMsg['strAppBarTitle'] = 'User Information';
+      multiMsg['strLang'] = 'User Lang';
+      multiMsg['strUserType'] = 'User Type';
+      multiMsg['strApply'] = 'Apply';
+      _selectedLangTypeForDB = 'English';
       changeUserTypeIndex('Student');
-      selectedLangTypeForDB = 'English';
     }
     else if(langTypeIndex.value == '中文') {
       userType = ['老师', '学生'].obs;
+      multiMsg['strAppBarTitle'] = '用户信息';
+      multiMsg['strLang'] = '语言';
+      multiMsg['strUserType'] = '种类';
+      multiMsg['strApply'] = '应用';
+      _selectedLangTypeForDB = 'Chinese';
       changeUserTypeIndex('学生');
-      selectedLangTypeForDB = 'Chinese';
     }
     else {
-      selectedLangTypeForDB = 'Other';
+      _selectedLangTypeForDB = 'Other';
     }
-    print('userType: ${userType.toString()}');
   }
 
   void changeUserTypeIndex(String index) {
-    userTypeIndex(index);
-    print('change UserType: ${index.toString()}');
+    userTypeIndex(index); //userTypeIndex.value
+
+    if(userTypeIndex.value == '선생님' || userTypeIndex.value == 'Teacher'
+        || userTypeIndex.value == '老师') {
+      _selectedUserTypeForDB = 'Teacher';
+    }
+    else if(userTypeIndex.value == '학생' || userTypeIndex.value == 'Student'
+        || userTypeIndex.value == '学生') {
+      _selectedUserTypeForDB = 'Student';
+    }
   }
 
-  void changeLTypeIndex(String index) {
-    userTypeIndex(index);
-    print('change UserType: ${index.toString()}');
-  }
-
-  void changeUserType(List msg) {
-    userType(msg);
-  }
-
+  String get selectedUserTypeForDB => _selectedUserTypeForDB;
+  String get selectedLangTypeForDB => _selectedLangTypeForDB;
 }
 
 class DropdownButtonLangType extends StatelessWidget {

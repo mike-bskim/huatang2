@@ -22,9 +22,9 @@ class App extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         } else {
           if(snapshot.hasData) {
-//            print(snapshot.data);
             _userInfoController.mappingUserInfo(snapshot);
-//            return TabPage(snapshot.data);
+//            print(snapshot.data);
+//            print('providerData: ' + snapshot.data.providerData[0].email.toString());
             return TabPage();
           }
           return LoginPage();//Center(child: Text('login'));//

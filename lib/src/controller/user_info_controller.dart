@@ -9,23 +9,19 @@ class UserInfoController extends GetxController {
     'email': '',
     'photoURL': '',
     'uid': '',
+    'providerId': '',
+    's_uid': '',
     'userType': '',
     'userLangType': '',
   }.obs;
 
   void mappingUserInfo(AsyncSnapshot snapshot) {
-//    if (_userInfo['displayName'] == null) {_userInfo['displayName'] = ' ';}
-//    else {_userInfo['displayName'] = (snapshot.data.displayName);}
     _userInfo['displayName'] = snapshot.data.displayName?? ' ';
-
-//    if (_userInfo['email'] == null) {_userInfo['email'] = ' ';}
-//    else {_userInfo['email'] = (snapshot.data.email)?? ' ';}
-    _userInfo['email'] = (snapshot.data.email)?? ' ';
-
-//    if (snapshot.data.photoURL==null) { _userInfo['photoURL'] = 'https://placeimg.com/200/200/nature'; }
-//    else { _userInfo['photoURL'] = (snapshot.data.photoURL); }
+    _userInfo['email'] = (snapshot.data.email)?? (snapshot.data.providerData[0].email);
     _userInfo['photoURL'] = (snapshot.data.photoURL)?? 'https://placeimg.com/200/200/nature';
     _userInfo['uid'] = (snapshot.data.uid);
+    _userInfo['providerId'] = (snapshot.data.providerData[0].providerId);
+    _userInfo['s_uid'] = (snapshot.data.providerData[0].uid);
   }
 
   Map<String, dynamic> get userInfo => _userInfo;
@@ -33,10 +29,6 @@ class UserInfoController extends GetxController {
   void mappingUserType({required String userType, required String userLangType}) {
     _userInfo['userType'] = userType;
     _userInfo['userLangType'] = userLangType;
-  }
-
-  void displayName(String str) {
-    _userInfo['displayName'] = (str);
   }
 
   @override
@@ -47,29 +39,3 @@ class UserInfoController extends GetxController {
     super.onInit();
   }
 }
-
-//class UserInfoController extends GetxController {
-//  static UserInfoController get to => Get.find();
-//  RxString _displayName = '' as RxString;
-//  RxString _email = '' as RxString;
-//  RxString _photoURL = '' as RxString;
-//  RxString _uid = '' as RxString;
-//
-//  RxString _userType = '' as RxString;
-//  RxString _userLangType = '' as RxString;
-//
-//  void displayName(String str) => _displayName(str);
-//  void email(String str) => _email(str);
-//  void photoURL(String str) => _photoURL(str);
-//  void uid(String str) => _uid(str);
-//  void userType(String str) => _userType(str);
-//  void userLangType(String str) => _userLangType(str);
-//
-//
-//
-//  @override
-//  void onInit() {
-//    // TODO: implement onInit
-//    super.onInit();
-//  }
-//}

@@ -44,7 +44,7 @@ class _TabPageState extends State<TabPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('tabPage build');
+    print('tabPage >> build');
 
     return Scaffold(
       body: Center(child: _pages![_selectedIndex]),
@@ -97,7 +97,7 @@ class _TabPageState extends State<TabPage> {
 //              MaterialPageRoute(builder: (context) => InformPage(widget.user))
 //            );
           print('old user: ' + _data.toString());
-          final result1 = await Get.to(InformPage()); //widget.user
+          final result1 = await Get.to(() => InformPage()); //widget.user
           print('result1: ' + result1.toString());
 
           try {
@@ -108,6 +108,7 @@ class _TabPageState extends State<TabPage> {
             else { // 정보입력이 완료
               _userInfoController.mappingUserType(
                   userType: result1['user_type'], userLangType: result1['language']);
+              await _saveUserLoginInfo();
             }
           } catch (error) { // 정보입력이 완료되지 않음
             await FirebaseAuth.instance.signOut();
@@ -121,9 +122,10 @@ class _TabPageState extends State<TabPage> {
       } else { // 신규 사용자 등록시
         print('new user: ');
         // doc.data() will be undefined in this case
-        var result = await Navigator.push(context,
-            MaterialPageRoute(builder: (context) => InformPage()) // widget.user
-        );
+//        var result = await Navigator.push(context,
+//            MaterialPageRoute(builder: (context) => InformPage()) // widget.user
+//        );
+        final result = await Get.to(() => InformPage()); //widget.user
         try {
           if (result['complete'] == null) { // 정보입력이 완료되지 않음
             await FirebaseAuth.instance.signOut();
@@ -132,6 +134,7 @@ class _TabPageState extends State<TabPage> {
           else { // 정보입력이 완료
             _userInfoController.mappingUserType(
                 userType: result['user_type'], userLangType: result['language']);
+            await _saveUserLoginInfo();
           }
         } catch (error) { // 정보입력이 완료되지 않음
           await FirebaseAuth.instance.signOut();

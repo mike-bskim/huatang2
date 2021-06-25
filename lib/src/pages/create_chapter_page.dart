@@ -11,13 +11,13 @@ import 'package:image_cropper/image_cropper.dart';
 
 
 
-class CreatePage extends StatefulWidget {
+class CreateChapterPage extends StatefulWidget {
 
   @override
-  _CreatePageState createState() => _CreatePageState();
+  _CreateChapterPageState createState() => _CreateChapterPageState();
 }
 
-class _CreatePageState extends State<CreatePage> {
+class _CreateChapterPageState extends State<CreateChapterPage> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
   final _textController0 = TextEditingController();
   final _textController1 = TextEditingController();
@@ -301,7 +301,7 @@ class _CreatePageState extends State<CreatePage> {
         .putFile(_image!); //^7.0.0
 //        .onComplete; // ^4.0.1
 
-    if (task != null) {
+//    if (task != null) {
       // 업로드 완료되면 데이터의 주소를 얻을수 있음, future object
       var downloadUrl = await task.ref.getDownloadURL();
 
@@ -324,9 +324,10 @@ class _CreatePageState extends State<CreatePage> {
         'question_cnt': 0,
         'favorite': [],
       }).then((onValue) {
-        Navigator.pop(context);
+//        Navigator.pop(context);
+        Get.back();
       });
-    }
+//    }
   }
 
 }

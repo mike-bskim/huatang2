@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
 
-class ChapterInfoController extends GetxController {
-  static ChapterInfoController get to => Get.find();
+class StudyInfoController extends GetxController {
+  static StudyInfoController get to => Get.find();
 
+  // each chapter information, List()
   final RxList _chapterInfo = [].obs;
 
   List<dynamic> get chapterInfo => _chapterInfo;

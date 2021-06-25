@@ -117,8 +117,9 @@ class LoginPage extends StatelessWidget {
                 Buttons.Email,
                 onPressed: () async {
                   print('------- Email authorization');
-                  final result = await Get.to(() => Email()); //widget.user
-                  print('return result: ' + result.toString());
+//                  final result = await Get.to(() => Email()); //widget.user
+                  await Get.to(() => Email()); //widget.user
+//                  print('return result: ' + result.toString());
                 },
               ),
             ],
