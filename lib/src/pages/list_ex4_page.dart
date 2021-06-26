@@ -103,21 +103,21 @@ class _ListEx4PageState extends State<ListEx4Page> {
     );
   }
 
-//
-  Widget _buildBody() {
+
+  Widget _buildBody()  {
     return WillPopScope(
       onWillPop: () {
 //        Navigator.of(context).pop(true);
         Get.back(result: true);
         return Future.value(true);
       },
-      child: StreamBuilder(
-        stream: FirebaseFirestore.instance
+      child: FutureBuilder<QuerySnapshot>(
+        future: FirebaseFirestore.instance
             .collection(widget.teacherUid) //post
             .doc(widget.code)
             .collection('post_sub')
             .orderBy('datetime')
-            .snapshots(),
+            .get(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
@@ -142,6 +142,46 @@ class _ListEx4PageState extends State<ListEx4Page> {
       ),
     );
   }
+
+//  Widget _buildBody() {
+//    return WillPopScope(
+//      onWillPop: () {
+////        Navigator.of(context).pop(true);
+//        Get.back(result: true);
+//        return Future.value(true);
+//      },
+//      child: StreamBuilder(
+//        stream: FirebaseFirestore.instance
+//            .collection(widget.teacherUid) //post
+//            .doc(widget.code)
+//            .collection('post_sub')
+//            .orderBy('datetime')
+//            .snapshots(),
+//        builder: (BuildContext context, AsyncSnapshot snapshot) {
+//          if (!snapshot.hasData) {
+//            return Center(child: CircularProgressIndicator());
+//          }
+//          if (snapshot.data != null && !snapshot.hasError) {
+//            var items = snapshot.data.docs ?? [];
+//
+//            newItems.clear();
+//
+//            if (items.length < 1) {
+//              return Text(_multiMsg.strNoData);
+//            }
+//
+//            for (var i = 0; i < items.length; i++) {
+//              newItems.add(items[i]);
+//            }
+//
+//            return _buildCarouselSlider(newItems);
+//          }
+//          return Text(_multiMsg.strNoList);
+//        },
+//      ),
+//    );
+//  }
+
 
   void deleteData(idParent, idChild) {
     var _deletePhotoUrl;

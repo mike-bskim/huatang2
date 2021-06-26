@@ -1,14 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-//import 'create_sub_ex2_page.dart';
-//import 'create_sub_ex4_page.dart';
-//import 'create_sub_match4_page.dart';
-//import 'create_sub_match_text_page.dart';
-//import 'create_sub_multi_ex4_page.dart';
-//import 'list_ex2_page.dart';
-//import 'list_ex4_page.dart';
-//import 'list_match4_page.dart';
+
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,13 +10,10 @@ import 'package:huatang2/src/model/multi_msg.dart';
 import 'package:huatang2/src/pages/create_sub_ex4_page.dart';
 
 import 'list_ex4_page.dart';
-//import 'list_match_text_page.dart';
-//import 'list_multi_ex4_page.dart';
-//
-//import 'multi_msg.dart';
 
 class DetailStudyPage extends StatefulWidget {
   final dynamic chapterInfo;
+
   DetailStudyPage(this.chapterInfo); //, this.userInfo
 
   @override
@@ -45,7 +35,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
     // TODO: implement initState
     super.initState();
     _loadTestResult();
-    _getSubCnt();
+    _getSubQuestionCnt();
   }
 
   @override
@@ -55,14 +45,15 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
-        title: Text(_multiMsg.strAppBarTitle,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+          centerTitle: true,
+          backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          title: Text(
+            _multiMsg.strAppBarTitle,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
           actions: <Widget>[
             PopupMenuButton<int>(
               icon: Icon(Icons.sort),
@@ -94,8 +85,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
                 ];
               },
             )
-        ]
-      ),
+          ]),
       body: _buildBody(),
     );
   }
@@ -106,45 +96,40 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 
     print('_addQuestion: ${widget.chapterInfo['question_type'].toString()}');
 
-    if (_testResultCntStudent > 0 ) {
+    if (_testResultCntStudent > 0) {
       _msg = _multiMsg.strWarnAdd;
-      var _dialogResult = await warningDialog(
-        context, _multiMsg.strWarnMessage, _msg);
+      var _dialogResult = await warningDialog(context, _multiMsg.strWarnMessage, _msg);
       if (_dialogResult.toString() == 'true') {
         //call setState here to rebuild your state.
       }
-    }
-    else {
-      if(widget.chapterInfo['question_type'] == 'ex2') {
+    } else {
+      if (widget.chapterInfo['question_type'] == 'ex2') {
 //        _resultAdd = await Navigator.push(
 //          context,
 //          MaterialPageRoute(builder: (context) =>
 //              CreateSubEx2Page(widget.document, widget.userInfo)),
 //        );
-      }
-      else if (widget.chapterInfo['question_type'] == 'ex4') { // ex4
+      } else if (widget.chapterInfo['question_type'] == 'ex4') {
+        // ex4
 //        _resultAdd = await Navigator.push(
 //          context,
 //          MaterialPageRoute(builder: (context) =>
 //              CreateSubEx4Page(widget.document, widget.userInfo)),
 //        );
         _resultAdd = await Get.to(() => CreateSubEx4Page(widget.chapterInfo)); //widget.user
-      }
-      else if (widget.chapterInfo['question_type'] == 'matchPicture') {
+      } else if (widget.chapterInfo['question_type'] == 'matchPicture') {
 //        _resultAdd = await Navigator.push(
 //          context,
 //          MaterialPageRoute(builder: (context) =>
 //              CreateSubMatch4Page(widget.document, widget.userInfo)),
 //        );
-      }
-      else if (widget.chapterInfo['question_type'] == 'matchText') {
+      } else if (widget.chapterInfo['question_type'] == 'matchText') {
 //        _resultAdd = await Navigator.push(
 //          context,
 //          MaterialPageRoute(builder: (context) =>
 //              CreateSubMatchTextPage(widget.document, widget.userInfo)),
 //        );
-      }
-      else if (widget.chapterInfo['question_type'] == 'multiEx4') {
+      } else if (widget.chapterInfo['question_type'] == 'multiEx4') {
 //        _resultAdd = await Navigator.push(
 //          context,
 //          MaterialPageRoute(builder: (context) =>
@@ -152,15 +137,15 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //        );
       }
       if (_resultAdd) {
-        _getSubCnt();
+        _getSubQuestionCnt();
       }
     }
   }
 
   Future _showQuestion() async {
-    var _resultShow = false;
+    var _resultShow;
 
-    if(widget.chapterInfo['question_type'] == 'ex2') {
+    if (widget.chapterInfo['question_type'] == 'ex2') {
 //      _resultShow = await Navigator.push(
 //        context,
 //        MaterialPageRoute(
@@ -168,8 +153,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //            ListEx2Page(widget.document['teacher_uid'], widget.document['id'],
 //              this._testResultCntStudent, widget.userInfo)),
 //      );
-    }
-    else if(widget.chapterInfo['question_type'] == 'ex4') {
+    } else if (widget.chapterInfo['question_type'] == 'ex4') {
 //      _resultShow = await Navigator.push(
 //        context,
 //        MaterialPageRoute(
@@ -177,9 +161,9 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //                ListEx4Page(widget.chapterInfo['teacher_uid'], widget.chapterInfo['id'],
 //                    _testResultCntStudent)),// , widget.userInfo
 //      );
-      _resultShow = Get.to(() => ListEx4Page(widget.chapterInfo['teacher_uid'], widget.chapterInfo['id'],_testResultCntStudent)) as bool;
-    }
-    else if(widget.chapterInfo['question_type'] == 'matchPicture') {
+      _resultShow = await Get.to(() => ListEx4Page(
+          widget.chapterInfo['teacher_uid'], widget.chapterInfo['id'], _testResultCntStudent));
+    } else if (widget.chapterInfo['question_type'] == 'matchPicture') {
 //      _resultShow = await Navigator.push(
 //        context,
 //        MaterialPageRoute(
@@ -187,8 +171,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //                ListMatch4Page(widget.document['teacher_uid'], widget.document['id'],
 //                    this._testResultCntStudent, widget.userInfo)),
 //      );
-    }
-    else if(widget.chapterInfo['question_type'] == 'matchText') {
+    } else if (widget.chapterInfo['question_type'] == 'matchText') {
 //      _resultShow = await Navigator.push(
 //        context,
 //        MaterialPageRoute(
@@ -196,8 +179,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //                ListMatchTextPage(widget.document['teacher_uid'], widget.document['id'],
 //                    this._testResultCntStudent, widget.userInfo)),
 //      );
-    }
-    else if(widget.chapterInfo['question_type'] == 'multiEx4') {
+    } else if (widget.chapterInfo['question_type'] == 'multiEx4') {
 //      _resultShow = await Navigator.push(
 //        context,
 //        MaterialPageRoute(
@@ -208,21 +190,21 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
     }
 
     if (_resultShow) {
-      _getSubCnt();
+      _getSubQuestionCnt();
     }
   }
 
   Widget _buildBody() {
     var _questionType = 'N/A';
-    if(widget.chapterInfo['question_type'] == 'ex4') {
+    if (widget.chapterInfo['question_type'] == 'ex4') {
       _questionType = _multiMsg.strEx4;
-    } else if(widget.chapterInfo['question_type'] == 'ex2') {
+    } else if (widget.chapterInfo['question_type'] == 'ex2') {
       _questionType = _multiMsg.strTF;
-    } else if(widget.chapterInfo['question_type'] == 'matchPicture') {
+    } else if (widget.chapterInfo['question_type'] == 'matchPicture') {
       _questionType = _multiMsg.strMatchPicture;
-    } else if(widget.chapterInfo['question_type'] == 'matchText') {
+    } else if (widget.chapterInfo['question_type'] == 'matchText') {
       _questionType = _multiMsg.strMatchText;
-    } else if(widget.chapterInfo['question_type'] == 'multiEx4') {
+    } else if (widget.chapterInfo['question_type'] == 'multiEx4') {
       _questionType = _multiMsg.strMultiEx4;
     }
 
@@ -248,13 +230,12 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-              width: 500,
-              child: Divider(
-                color: Colors.black,
-                thickness: 1,
-              )
-            ),
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                width: 500,
+                child: Divider(
+                  color: Colors.black,
+                  thickness: 1,
+                )),
             Padding(padding: EdgeInsets.all(4.0)),
             Hero(
               tag: widget.chapterInfo['photoUrl'],
@@ -262,35 +243,34 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
                 padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                 width: 350,
                 height: 240,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
+                child: Stack(children: <Widget>[
+                  Container(
                       width: 350,
                       height: 240,
                       child: Material(
                         child: InkWell(
-                            onTap: () { _showQuestion();
+                            onTap: () {
+                              _showQuestion();
                             },
-                            child: Image.network(widget.chapterInfo['photoUrl'], fit: _boxFit,)
-                        ),
-                      )
-                    ),
-                    Container(
+                            child: Image.network(
+                              widget.chapterInfo['photoUrl'],
+                              fit: _boxFit,
+                            )),
+                      )),
+                  Container(
                     alignment: Alignment.bottomRight,
-                      child: Container(
-                        width: 120.0,
-                        height: 20.0,
-                        alignment: Alignment.center,
-                        color: Colors.black54,
-                        child: Text(
-                          '${_multiMsg.strQCnt}: ' + qTotal.toString(),
-                          style: TextStyle(fontSize: 15, color: Colors.white),
-                        ),
+                    child: Container(
+                      width: 120.0,
+                      height: 20.0,
+                      alignment: Alignment.center,
+                      color: Colors.black54,
+                      child: Text(
+                        '${_multiMsg.strQCnt}: ' + qTotal.toString(),
+                        style: TextStyle(fontSize: 15, color: Colors.white),
                       ),
-
                     ),
-                  ]
-                ),
+                  ),
+                ]),
               ),
             ),
             Padding(padding: EdgeInsets.all(8.0)),
@@ -300,18 +280,18 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
             ),
             Padding(padding: EdgeInsets.all(4.0)),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                   primary: Colors.blueAccent,
                   onPrimary: Colors.white,
                 ),
-              onPressed: () {
-                var _textCopy = "${_multiMsg.strTeacherUid}: ${widget.chapterInfo['teacher_uid']}";
-                _textCopy += "\n";
-                _textCopy += "${_multiMsg.strTestCode}: ${widget.chapterInfo['id']}";
-                Clipboard.setData(ClipboardData(text: _textCopy));
-              },
-              child: Text(_multiMsg.strCopy)
-            ),
+                onPressed: () {
+                  var _textCopy =
+                      "${_multiMsg.strTeacherUid}: ${widget.chapterInfo['teacher_uid']}";
+                  _textCopy += "\n";
+                  _textCopy += "${_multiMsg.strTestCode}: ${widget.chapterInfo['id']}";
+                  Clipboard.setData(ClipboardData(text: _textCopy));
+                },
+                child: Text(_multiMsg.strCopy)),
             Padding(padding: EdgeInsets.all(8.0)),
             Container(
               padding: const EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 0.0),
@@ -324,7 +304,9 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
                       maxLines: 3,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(12.0),
-                        border: OutlineInputBorder(), ),//hintText: 'Please input the description', labelText: 'Description',
+                        border: OutlineInputBorder(),
+                      ),
+                      //hintText: 'Please input the description', labelText: 'Description',
                       controller: _textController1,
                     ),
                   ),
@@ -337,7 +319,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
     );
   }
 
-  void _getSubCnt() {
+  void _getSubQuestionCnt() {
     FirebaseFirestore.instance
         .collection(widget.chapterInfo['teacher_uid'])
         .doc(widget.chapterInfo['id'])
@@ -353,55 +335,53 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
   // ignore: always_declare_return_types
   deleteData(docId) {
     FirebaseFirestore.instance
-      .collection(widget.chapterInfo['teacher_uid'])
-      .doc(docId)
-      .collection('post_sub')
-      .get()
-      .then((snapshot) async {
-        for (DocumentSnapshot ds in snapshot.docs) {
-          await ds.reference.delete();
-          if(ds['question_type'] == 'matchPicture') {
-            final ref1 = FirebaseStorage.instance.refFromURL(ds['photoUrl_1']);
-            await ref1.delete(); //delete sub questions' pictures
-            final ref2 = FirebaseStorage.instance.refFromURL(ds['photoUrl_2']);
-            await ref2.delete(); //delete sub questions' pictures
-            final ref3 = FirebaseStorage.instance.refFromURL(ds['photoUrl_3']);
-            await ref3.delete(); //delete sub questions' pictures
-            final ref4 = FirebaseStorage.instance.refFromURL(ds['photoUrl_4']);
-            await ref4.delete(); //delete sub questions' pictures
-          }
-          else if(ds['question_type'] == 'matchText') {
-            print('There is no Image(matchText)');
-          }
-          else {
-            if(ds['photoUrl'] == 'NoImage') {
-              print('There is no Image');
-            } else {
-              final ref = FirebaseStorage.instance.refFromURL(ds['photoUrl']);
-              await ref.delete(); //delete sub questions' pictures
-            }
+        .collection(widget.chapterInfo['teacher_uid'])
+        .doc(docId)
+        .collection('post_sub')
+        .get()
+        .then((snapshot) async {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        await ds.reference.delete();
+        if (ds['question_type'] == 'matchPicture') {
+          final ref1 = FirebaseStorage.instance.refFromURL(ds['photoUrl_1']);
+          await ref1.delete(); //delete sub questions' pictures
+          final ref2 = FirebaseStorage.instance.refFromURL(ds['photoUrl_2']);
+          await ref2.delete(); //delete sub questions' pictures
+          final ref3 = FirebaseStorage.instance.refFromURL(ds['photoUrl_3']);
+          await ref3.delete(); //delete sub questions' pictures
+          final ref4 = FirebaseStorage.instance.refFromURL(ds['photoUrl_4']);
+          await ref4.delete(); //delete sub questions' pictures
+        } else if (ds['question_type'] == 'matchText') {
+          print('There is no Image(matchText)');
+        } else {
+          if (ds['photoUrl'] == 'NoImage') {
+            print('There is no Image');
+          } else {
+            final ref = FirebaseStorage.instance.refFromURL(ds['photoUrl']);
+            await ref.delete(); //delete sub questions' pictures
           }
         }
-      });
+      }
+    });
 
     FirebaseFirestore.instance
-      .collection(widget.chapterInfo['teacher_uid'])
-      .doc(docId)
-      .collection('student')
-      .get()
-      .then((snapshot) {
+        .collection(widget.chapterInfo['teacher_uid'])
+        .doc(docId)
+        .collection('student')
+        .get()
+        .then((snapshot) {
       for (DocumentSnapshot ds in snapshot.docs) {
         ds.reference.delete();
       }
     });
 
     FirebaseFirestore.instance
-      .collection(widget.chapterInfo['teacher_uid'])
-      .doc(docId)
-      .delete()
-      .catchError((e) {
+        .collection(widget.chapterInfo['teacher_uid'])
+        .doc(docId)
+        .delete()
+        .catchError((e) {
       print(e);
-    }).then((onValue) async{
+    }).then((onValue) async {
       final ref = FirebaseStorage.instance.refFromURL(widget.chapterInfo['photoUrl']);
       await ref.delete(); //delete main chapter's pictures
 //      Navigator.pop(context);
@@ -413,15 +393,13 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
   deleteChapter() async {
     //handleClear, deleteChapter
     var _msg;
-    if (_testResultCntStudent > 0 ) {
+    if (_testResultCntStudent > 0) {
       _msg = _multiMsg.strWarnAdd;
-      var _dialogResult = await warningDialog(
-          context, _multiMsg.strWarnMessage, _msg);
+      var _dialogResult = await warningDialog(context, _multiMsg.strWarnMessage, _msg);
       if (_dialogResult.toString() == 'true') {
         //call setState here to rebuild your state.
       }
-    }
-    else {
+    } else {
       try {
         var delete = await deleteLoanWarning(
           context,
@@ -436,7 +414,6 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
         print('error clearing notifications' + error.toString());
       }
     }
-
   }
 
   Future<bool> deleteLoanWarning(BuildContext context, String title, String msg) async {
@@ -475,7 +452,8 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
                 ),
               ),
             ],
-          ), context: context,
+          ),
+          context: context,
         ) ??
         false;
   }
@@ -486,54 +464,55 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 
 //    var result = await FirebaseFirestore.instance
     await FirebaseFirestore.instance
-      .collection(widget.chapterInfo['teacher_uid']) //
-      .doc(widget.chapterInfo['id']) // chapter_code
-      .collection('student')
-      .get()
-      .then((QuerySnapshot querySnapshot) => {
-      querySnapshot.docs.forEach((doc) {
-        _testResult.add(doc.data());
-      })
-    });
+        .collection(widget.chapterInfo['teacher_uid']) //
+        .doc(widget.chapterInfo['id']) // chapter_code
+        .collection('student')
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                _testResult.add(doc.data());
+              })
+            });
 
 //    if (result.toString() != null) {
-      _testResultCntStudent = 0;
-      for (var i = 0; i < _testResult.length; i++) {
-        if(_testResult[i]['user_type'] == 'Student') {
-          _testResultCntStudent += 1;
-        }
+    _testResultCntStudent = 0;
+    for (var i = 0; i < _testResult.length; i++) {
+      if (_testResult[i]['user_type'] == 'Student') {
+        _testResultCntStudent += 1;
       }
+    }
 //    }
   }
 
   Future<bool> warningDialog(BuildContext context, String title, String msg) async {
     return await showDialog<bool>(
-      builder: (context) => AlertDialog(
-        title: Text(
-          title,
+          builder: (context) => AlertDialog(
+            title: Text(
+              title,
 //          style: new TextStyle(fontWeight: fontWeight, color: CustomColors.continueButton),
-          textAlign: TextAlign.center,
-        ),
-        content: Text(
-          msg,
-//          textAlign: TextAlign.justify,
-        ),
-        actions: <Widget>[
-          Container(
-            decoration: BoxDecoration(),
-            child: MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(
-                _multiMsg.strOk,
-              ),
+              textAlign: TextAlign.center,
             ),
+            content: Text(
+              msg,
+//          textAlign: TextAlign.justify,
+            ),
+            actions: <Widget>[
+              Container(
+                decoration: BoxDecoration(),
+                child: MaterialButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    _multiMsg.strOk,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ), context: context,
-    ) ??
-      false;
+          context: context,
+        ) ??
+        false;
   }
 
 //    .collection(widget.document['teacher_uid']) //
@@ -544,22 +523,21 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 
 //    var result = await FirebaseFirestore.instance
     await FirebaseFirestore.instance
-      .collection(widget.chapterInfo['teacher_uid'])
-      .doc(widget.chapterInfo['id']) // chapter_code
-      .collection('post_sub')
-      .get()
-      .then((QuerySnapshot querySnapshot1) => {
-        _questionCount = (querySnapshot1.docs.length),
-    });
+        .collection(widget.chapterInfo['teacher_uid'])
+        .doc(widget.chapterInfo['id']) // chapter_code
+        .collection('post_sub')
+        .get()
+        .then((QuerySnapshot querySnapshot1) => {
+              _questionCount = (querySnapshot1.docs.length),
+            });
 //    if(result.toString() != null) {
-      var doc = FirebaseFirestore.instance
+    var doc = FirebaseFirestore.instance
         .collection(widget.chapterInfo['teacher_uid']) // teacher uid
         .doc(widget.chapterInfo['id']); // chapter_code
 
-      await doc.update({
-        'question_cnt': _questionCount,
-      });
+    await doc.update({
+      'question_cnt': _questionCount,
+    });
 //    }
   }
-
 }

@@ -87,7 +87,8 @@ class _CreateChapterPageState extends State<CreateChapterPage> {
       ),
       actions: [
         IconButton(
-          icon: iconColorFlag ? Icon(Icons.file_upload, color: Colors.white,)
+          icon: iconColorFlag
+            ? Icon(Icons.file_upload, color: Colors.white,)
             : Icon(Icons.file_upload, color: Color.fromRGBO(38, 100, 100, 1.0)),
           tooltip: 'upload Image',
           onPressed: iconColorFlag ? _checkUploadDialog : null, //_uploadImage,
@@ -176,7 +177,7 @@ class _CreateChapterPageState extends State<CreateChapterPage> {
     setState(() {
       _selectQuestionSelect = value;
 
-      if(value.substring(0,2) == '01') {
+      if(value.substring(0,2) == '01') { // 01. EX4, so check only 2 bytes to compare
         _questionType = 'ex4';
       }
       else if(value.substring(0,2) == '02'){
@@ -240,18 +241,18 @@ class _CreateChapterPageState extends State<CreateChapterPage> {
     var _errorFlag = false;
     var _msg;
 
-    if(_textController0.text.trim() == '') {
+    if(_textController0.text.trim() == '') { // checking the title
       _errorFlag = true;
       _msg = _multiMsg.strWarnTitle;
-    } else if(_image == null) {
+    } else if(_image == null) { // image
       _errorFlag = true;
       _msg = _multiMsg.strWarnImage;
-    } else if(_questionType == '0') {
+    } else if(_questionType == '0') { // question type
       _errorFlag = true;
       _msg = _multiMsg.strWarnType;
     }
 
-    if(_errorFlag == true) {
+    if(_errorFlag == true) { // any missing message -> warning dialog
       return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -277,7 +278,7 @@ class _CreateChapterPageState extends State<CreateChapterPage> {
         },
       );
     }
-    else {
+    else { // all input is available
       await _uploadImage();
     }
   }
@@ -289,6 +290,7 @@ class _CreateChapterPageState extends State<CreateChapterPage> {
       _uploadFlag = true;
     });
 
+    // _picName = email + datetime
     var _email = _userInfoController.userInfo['email'];
     _email = _email.split('@');
     var _picName = _email[0] + '_${DateTime.now().millisecondsSinceEpoch}.png';
