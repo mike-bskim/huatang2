@@ -44,51 +44,57 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
     _textController1.text = widget.chapterInfo['description1'];
 
     return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          title: Text(
-            _multiMsg.strAppBarTitle,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          actions: <Widget>[
-            PopupMenuButton<int>(
-              icon: Icon(Icons.sort),
-              onSelected: (value) {
-                if (value == 0) {
-                  _addQuestion();
-                } else if (value == 1) {
-                  _showQuestion();
-                } else {
-                  deleteChapter();
-                }
-              },
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    value: 0,
-                    enabled: _testResultCntStudent > 0 ? false : true,
-                    child: Text(_multiMsg.strAddSub),
-                  ),
-                  PopupMenuItem(
-                    value: 1,
-                    child: Text(_multiMsg.strListSub),
-                  ),
-                  PopupMenuItem(
-                    value: 2,
-                    enabled: _testResultCntStudent > 0 ? false : true,
-                    child: Text(_multiMsg.strDelete),
-                  )
-                ];
-              },
-            )
-          ]),
+      appBar: _buildAppBar() as PreferredSizeWidget,
       body: _buildBody(),
     );
   }
+
+  Widget _buildAppBar() {
+    return AppBar(
+        centerTitle: true,
+        backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        title: Text(
+          _multiMsg.strAppBarTitle,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        actions: <Widget>[
+          PopupMenuButton<int>(
+            icon: Icon(Icons.sort),
+            onSelected: (value) {
+              if (value == 0) {
+                _addQuestion();
+              } else if (value == 1) {
+                _showQuestion();
+              } else {
+                deleteChapter();
+              }
+            },
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: 0,
+                  enabled: _testResultCntStudent > 0 ? false : true,
+                  child: Text(_multiMsg.strAddSub),
+                ),
+                PopupMenuItem(
+                  value: 1,
+                  child: Text(_multiMsg.strListSub),
+                ),
+                PopupMenuItem(
+                  value: 2,
+                  enabled: _testResultCntStudent > 0 ? false : true,
+                  child: Text(_multiMsg.strDelete),
+                )
+              ];
+            },
+          )
+        ],
+    );
+  }
+
 
   Future _addQuestion() async {
     var _resultAdd = false;

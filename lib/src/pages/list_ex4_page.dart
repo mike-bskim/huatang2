@@ -3,6 +3,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:huatang2/src/component/ex4_component.dart';
+import 'package:huatang2/src/controller/ex4_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 //import 'modify_sub_ex4_page.dart';
 import 'dart:async';
@@ -26,14 +28,15 @@ class ListEx4Page extends StatefulWidget {
 
 class _ListEx4PageState extends State<ListEx4Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
+  final SelectExampleController _selectExampleController = Get.put(SelectExampleController());
   final _textController1 = TextEditingController();
   final _textController2 = TextEditingController();
   final _textController3 = TextEditingController();
   final _textController4 = TextEditingController();
-  var _checkboxValue1 = false;
-  var _checkboxValue2 = false;
-  var _checkboxValue3 = false;
-  var _checkboxValue4 = false;
+//  var _checkboxValue1 = false;
+//  var _checkboxValue2 = false;
+//  var _checkboxValue3 = false;
+//  var _checkboxValue4 = false;
 
   bool questionFlag = false;
   bool _deleteFlag = false;
@@ -366,30 +369,31 @@ class _ListEx4PageState extends State<ListEx4Page> {
     _textController2.text = newItems[_currentPage]['ex2'];
     _textController3.text = newItems[_currentPage]['ex3'];
     _textController4.text = newItems[_currentPage]['ex4'];
-    _checkboxValue1 = newItems[_currentPage]['correct1'];
-    _checkboxValue2 = newItems[_currentPage]['correct2'];
-    _checkboxValue3 = newItems[_currentPage]['correct3'];
-    _checkboxValue4 = newItems[_currentPage]['correct4'];
+//    _checkboxValue1 = newItems[_currentPage]['correct1'];
+//    _checkboxValue2 = newItems[_currentPage]['correct2'];
+//    _checkboxValue3 = newItems[_currentPage]['correct3'];
+//    _checkboxValue4 = newItems[_currentPage]['correct4'];
+    _selectExampleController.checkValue1.value = newItems[_currentPage]['correct1'];
+    _selectExampleController.checkValue2.value = newItems[_currentPage]['correct2'];
+    _selectExampleController.checkValue3.value = newItems[_currentPage]['correct3'];
+    _selectExampleController.checkValue4.value = newItems[_currentPage]['correct4'];
 
     return SingleChildScrollView(
       child: Container(
         child: Column(
           children: [
             Padding(padding: EdgeInsets.all(8.0)),
-            Container(
+            Padding(
               padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-              child: Text(
-                newItems[_currentPage]['contents'],
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+              child: QuestionTitleReadOnly(title: newItems[_currentPage]['contents'],),
             ),
             Container(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                width: 500,
-                child: Divider(
-                  color: Colors.black,
-                  thickness: 1,
-                )),
+              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+              width: 500,
+              child: Divider(
+                color: Colors.black,
+                thickness: 1, )
+            ),
             Padding(padding: EdgeInsets.all(4.0)),
             CarouselSlider.builder(
               itemCount: newItems.length,
@@ -403,125 +407,14 @@ class _ListEx4PageState extends State<ListEx4Page> {
 //                  color: Colors.pinkAccent,
                   child: Column(
                     children: <Widget>[
-                      Container(
-//                        decoration: BoxDecoration(
-//                            border: Border.all(color: Colors.redAccent)
-//                        ),
-                        child: newItems[index]['photoUrl'] == 'NoImage' ?
-                        Container(
-                            width: 350,
-                            height: 20,
-                            child: null
-                        ) :
-                        Container(
-                            width: 350,
-                            height: 200,
-                            child: Image.network(newItems[index]['photoUrl'],
-                                fit: BoxFit.cover) //, width: 1000)
-                        ),
-                      ),
+                      QuestionImageReadOnly(photoUrl: newItems[index]['photoUrl'],),
                       Padding(padding: EdgeInsets.all(8.0)),
                       Container(
+//                        color: Colors.grey,
                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              width: 45,
-                              child: Checkbox(
-                                value: _checkboxValue1,
-                                onChanged: null, //(bool value) {},
-                              ),
-                            ),
-                            Flexible(
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.all(12.0),
-                                    border: OutlineInputBorder(),
-                                    labelText: '${_multiMsg.strEx}1)'),
-                                controller: _textController1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(4.0)),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              width: 45,
-                              child: Checkbox(
-                                value: _checkboxValue2,
-                                onChanged: null, //(bool value) {},
-                              ),
-                            ),
-                            Flexible(
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.all(12.0),
-                                    border: OutlineInputBorder(),
-                                    labelText: '${_multiMsg.strEx}2)'),
-                                controller: _textController2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(4.0)),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              width: 45,
-                              child: Checkbox(
-                                value: _checkboxValue3,
-                                onChanged: null, //(bool value) {},
-                              ),
-                            ),
-                            Flexible(
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.all(12.0),
-                                    border: OutlineInputBorder(),
-                                    labelText: '${_multiMsg.strEx}3)'),
-                                controller: _textController3,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(4.0)),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              width: 45,
-                              child: Checkbox(
-                                value: _checkboxValue4,
-                                onChanged: null, //(bool value) {},
-                              ),
-                            ),
-                            Flexible(
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.all(12.0),
-                                    border: OutlineInputBorder(),
-                                    labelText: '${_multiMsg.strEx}4)'),
-                                controller: _textController4,
-                              ),
-                            ),
-                          ],
+                        child: SelectExample(labelText: _multiMsg.strEx, enable: false,
+                          controller1: _textController1, controller2: _textController2,
+                          controller3: _textController3, controller4: _textController4,
                         ),
                       ),
                       Padding(padding: EdgeInsets.all(8.0)),
