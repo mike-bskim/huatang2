@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:huatang2/src/component/dialog_component.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
 import 'package:huatang2/src/pages/create_sub_ex4_page.dart';
@@ -424,44 +425,9 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 
   Future<bool> deleteLoanWarning(BuildContext context, String title, String msg) async {
     return await showDialog<bool>(
-          builder: (context) => AlertDialog(
-            title: Text(
-              title,
-//          style: new TextStyle(fontWeight: fontWeight, color: CustomColors.continueButton),
-              textAlign: TextAlign.center,
-            ),
-            content: Text(
-              msg,
-//          textAlign: TextAlign.justify,
-            ),
-            actions: <Widget>[
-              Container(
-                decoration: BoxDecoration(),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: Text(
-                    _multiMsg.strNo,
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text(
-                    _multiMsg.strYes,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          context: context,
-        ) ??
-        false;
+      context: context,
+      builder: (context) => WarningYesNo(title: title, msg: msg, YesMsg: _multiMsg.strYes, NoMsg: _multiMsg.strNo,),
+    ) ?? false;
   }
 
   //widget.document['teacher_uid'], widget.document['id']

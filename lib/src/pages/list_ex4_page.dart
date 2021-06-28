@@ -4,23 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:huatang2/src/component/ex4_component.dart';
+import 'package:huatang2/src/component/dialog_component.dart';
 import 'package:huatang2/src/controller/ex4_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
-//import 'modify_sub_ex4_page.dart';
 import 'dart:async';
 
 import 'package:huatang2/src/model/multi_msg.dart';
-
+import 'package:huatang2/src/pages/modify_sub_ex4_page.dart';
 
 //
 class ListEx4Page extends StatefulWidget {
   final teacherUid;
   final code;
   final testResultCntStudent;
-//  final userInfo;
 
-  ListEx4Page(
-      this.teacherUid, this.code, this.testResultCntStudent); //
+  ListEx4Page(this.teacherUid, this.code, this.testResultCntStudent); //
 
   @override
   _ListEx4PageState createState() => _ListEx4PageState();
@@ -33,13 +31,9 @@ class _ListEx4PageState extends State<ListEx4Page> {
   final _textController2 = TextEditingController();
   final _textController3 = TextEditingController();
   final _textController4 = TextEditingController();
-//  var _checkboxValue1 = false;
-//  var _checkboxValue2 = false;
-//  var _checkboxValue3 = false;
-//  var _checkboxValue4 = false;
 
-  bool questionFlag = false;
-  bool _deleteFlag = false;
+  bool questionFlag = false; // 질문이 있으면 popup 매뉴 보이고, 제목표시(문제인덱스/문항수)
+  bool _deleteFlag = false; // 삭제발생시, 슬라이드를 1번으로 자동 이동.
   int _currentPage = 0;
   var qTotal = 0;
   final _multiMsg = MultiMessageListEx4();
@@ -77,29 +71,29 @@ class _ListEx4PageState extends State<ListEx4Page> {
           color: Colors.white,
         ),
         actions: (!questionFlag || widget.testResultCntStudent > 0) ? null :
-          <Widget>[
-            PopupMenuButton<int>(
-              icon: Icon(Icons.sort),
-              onSelected: (value) {
-                if (value == 0) {
-//                  _modifyQuestion();
-                } else {
-                  deleteQuestion();
-                }
-              },
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(value: 0, child: Text(_multiMsg.strModify)),
-                  PopupMenuItem(value: 1, child: Text(_multiMsg.strDelete))
-                ];
-              },
-            )
-          ],
+        <Widget>[
+          PopupMenuButton<int>(
+            icon: Icon(Icons.sort),
+            onSelected: (value) {
+              if (value == 0) {
+                _modifyQuestion();
+              } else {
+                deleteQuestion();
+              }
+            },
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(value: 0, child: Text(_multiMsg.strModify)),
+                PopupMenuItem(value: 1, child: Text(_multiMsg.strDelete))
+              ];
+            },
+          )
+        ],
         title: questionFlag
             ? Text(
-                (_currentPage + 1).toString() + ' / ' + qTotal.toString(),
-                style: TextStyle(color: Colors.white54),
-              )
+          (_currentPage + 1).toString() + ' / ' + qTotal.toString(),
+          style: TextStyle(color: Colors.white54),
+        )
             : Text(''),
       ),
       body: _buildBody(),
@@ -107,7 +101,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
   }
 
 
-  Widget _buildBody()  {
+  Widget _buildBody() {
     return WillPopScope(
       onWillPop: () {
 //        Navigator.of(context).pop(true);
@@ -146,45 +140,6 @@ class _ListEx4PageState extends State<ListEx4Page> {
     );
   }
 
-//  Widget _buildBody() {
-//    return WillPopScope(
-//      onWillPop: () {
-////        Navigator.of(context).pop(true);
-//        Get.back(result: true);
-//        return Future.value(true);
-//      },
-//      child: StreamBuilder(
-//        stream: FirebaseFirestore.instance
-//            .collection(widget.teacherUid) //post
-//            .doc(widget.code)
-//            .collection('post_sub')
-//            .orderBy('datetime')
-//            .snapshots(),
-//        builder: (BuildContext context, AsyncSnapshot snapshot) {
-//          if (!snapshot.hasData) {
-//            return Center(child: CircularProgressIndicator());
-//          }
-//          if (snapshot.data != null && !snapshot.hasError) {
-//            var items = snapshot.data.docs ?? [];
-//
-//            newItems.clear();
-//
-//            if (items.length < 1) {
-//              return Text(_multiMsg.strNoData);
-//            }
-//
-//            for (var i = 0; i < items.length; i++) {
-//              newItems.add(items[i]);
-//            }
-//
-//            return _buildCarouselSlider(newItems);
-//          }
-//          return Text(_multiMsg.strNoList);
-//        },
-//      ),
-//    );
-//  }
-
 
   void deleteData(idParent, idChild) {
     var _deletePhotoUrl;
@@ -199,7 +154,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
         .catchError((e) {
       print(e);
     }).then((onValue) async {
-      if(_deletePhotoUrl == 'NoImage') {
+      if (_deletePhotoUrl == 'NoImage') {
         print('There is no Image');
       } else {
         final ref = FirebaseStorage.instance.refFromURL(_deletePhotoUrl);
@@ -219,11 +174,12 @@ class _ListEx4PageState extends State<ListEx4Page> {
   deleteQuestion() async {
     //handleClear, deleteChapter
     try {
-      var delete = await deleteLoanWarning(
+      var delete = await deleteWarningDialog(
         context,
         _multiMsg.strWarnMessage,
         _multiMsg.strWarnDelete,
       );
+
       if (delete.toString() == 'true') {
         //call setState here to rebuild your state.
         deleteData(newItems[_currentPage]['id_parent'],
@@ -234,46 +190,12 @@ class _ListEx4PageState extends State<ListEx4Page> {
     }
   }
 
-  Future<bool> deleteLoanWarning(
-      BuildContext context, String title, String msg) async {
+  Future<bool> deleteWarningDialog(BuildContext context, String title, String msg) async {
     return await showDialog<bool>(
-          builder: (context) => AlertDialog(
-            title: Text(
-              title,
-//          style: new TextStyle(fontWeight: fontWeight, color: CustomColors.continueButton),
-              textAlign: TextAlign.center,
-            ),
-            content: Text(
-              msg,
-//          textAlign: TextAlign.justify,
-            ),
-            actions: <Widget>[
-              Container(
-                decoration: BoxDecoration(),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: Text(
-                    _multiMsg.strNo,
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text(
-                    _multiMsg.strYes,
-                  ),
-                ),
-              ),
-            ],
-          ), context: context,
-        ) ??
-        false;
+      context: context,
+      builder: (context) =>
+          WarningYesNo(title: title, msg: msg, YesMsg: _multiMsg.strYes, NoMsg: _multiMsg.strNo,),
+    ) ?? false;
   }
 
   void _getSubCnt() {
@@ -294,19 +216,20 @@ class _ListEx4PageState extends State<ListEx4Page> {
     });
   }
 
-//  Future _modifyQuestion() async {
-//
+  Future _modifyQuestion() async {
 //    final result = await Navigator.push(
 //      context,
 //      MaterialPageRoute(
 //          builder: (context) => ModifySubEx4Page(
 //              document: newItems[_currentPage], userInfo: _userInfoController.userInfo)),
 //    );
-//    if (result) {
-//      setState(() {
-//      });
-//    }
-//  }
+    final result = await Get.to(() =>
+        ModifySubEx4Page(document: newItems[_currentPage]));
+    if (result == true) {
+      setState(() {
+      });
+    }
+  }
 
   Future _loadTestResult() async {
     _testResult.clear();
@@ -317,11 +240,12 @@ class _ListEx4PageState extends State<ListEx4Page> {
         .doc(widget.code) // chapter_code
         .collection('student')
         .get()
-        .then((QuerySnapshot querySnapshot) => {
-          querySnapshot.docs.forEach((doc) {
-            _testResult.add(doc.data());
-          })
-        });
+        .then((QuerySnapshot querySnapshot) =>
+    {
+      querySnapshot.docs.forEach((doc) {
+        _testResult.add(doc.data());
+      })
+    });
 //    if (result.toString() != null) {
 //    }
   }
@@ -383,18 +307,21 @@ class _ListEx4PageState extends State<ListEx4Page> {
         child: Column(
           children: [
             Padding(padding: EdgeInsets.all(8.0)),
+// QuestionTitle
             Padding(
               padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
               child: QuestionTitleReadOnly(title: newItems[_currentPage]['contents'],),
             ),
+// Divider
             Container(
-              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-              width: 500,
-              child: Divider(
-                color: Colors.black,
-                thickness: 1, )
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                width: 500,
+                child: Divider(
+                  color: Colors.black,
+                  thickness: 1,)
             ),
             Padding(padding: EdgeInsets.all(4.0)),
+// image & select example
             CarouselSlider.builder(
               itemCount: newItems.length,
               itemBuilder: (context, index, realIdx) {
@@ -404,17 +331,20 @@ class _ListEx4PageState extends State<ListEx4Page> {
                 }
                 return Container(
                   padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-//                  color: Colors.pinkAccent,
                   child: Column(
                     children: <Widget>[
+// image
                       QuestionImageReadOnly(photoUrl: newItems[index]['photoUrl'],),
                       Padding(padding: EdgeInsets.all(8.0)),
+// select example
                       Container(
-//                        color: Colors.grey,
                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
-                        child: SelectExample(labelText: _multiMsg.strEx, enable: false,
-                          controller1: _textController1, controller2: _textController2,
-                          controller3: _textController3, controller4: _textController4,
+                        child: SelectExample(labelText: _multiMsg.strEx,
+                          enable: false,
+                          controller1: _textController1,
+                          controller2: _textController2,
+                          controller3: _textController3,
+                          controller4: _textController4,
                         ),
                       ),
                       Padding(padding: EdgeInsets.all(8.0)),
@@ -444,3 +374,43 @@ class _ListEx4PageState extends State<ListEx4Page> {
   }
 
 }
+
+
+//  Widget _buildBody() {
+//    return WillPopScope(
+//      onWillPop: () {
+////        Navigator.of(context).pop(true);
+//        Get.back(result: true);
+//        return Future.value(true);
+//      },
+//      child: StreamBuilder(
+//        stream: FirebaseFirestore.instance
+//            .collection(widget.teacherUid) //post
+//            .doc(widget.code)
+//            .collection('post_sub')
+//            .orderBy('datetime')
+//            .snapshots(),
+//        builder: (BuildContext context, AsyncSnapshot snapshot) {
+//          if (!snapshot.hasData) {
+//            return Center(child: CircularProgressIndicator());
+//          }
+//          if (snapshot.data != null && !snapshot.hasError) {
+//            var items = snapshot.data.docs ?? [];
+//
+//            newItems.clear();
+//
+//            if (items.length < 1) {
+//              return Text(_multiMsg.strNoData);
+//            }
+//
+//            for (var i = 0; i < items.length; i++) {
+//              newItems.add(items[i]);
+//            }
+//
+//            return _buildCarouselSlider(newItems);
+//          }
+//          return Text(_multiMsg.strNoList);
+//        },
+//      ),
+//    );
+//  }
