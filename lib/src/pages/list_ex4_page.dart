@@ -61,6 +61,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
 
   @override
   Widget build(BuildContext context) {
+//    print('list ex4 >> build');
     _multiMsg.convertDescription(_userInfoController.userInfo['userLangType']);
 
     return Scaffold(
@@ -100,6 +101,14 @@ class _ListEx4PageState extends State<ListEx4Page> {
     );
   }
 
+//      child: StreamBuilder(
+//        stream: FirebaseFirestore.instance
+//            .snapshots(),
+
+//      child: FutureBuilder(
+//        future: FirebaseFirestore.instance
+//            .snapshots(),
+
 
   Widget _buildBody() {
     return WillPopScope(
@@ -108,17 +117,19 @@ class _ListEx4PageState extends State<ListEx4Page> {
         Get.back(result: true);
         return Future.value(true);
       },
-      child: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance
+      child: StreamBuilder<QuerySnapshot>( // StreamBuilder FutureBuilder
+        stream: FirebaseFirestore.instance // stream future
             .collection(widget.teacherUid) //post
             .doc(widget.code)
             .collection('post_sub')
             .orderBy('datetime')
-            .get(),
+            .snapshots(), // FutureBuilder
+//            .get(), // StreamBuilder
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
+
           if (snapshot.data != null && !snapshot.hasError) {
             var items = snapshot.data.docs ?? [];
 
@@ -131,7 +142,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
             for (var i = 0; i < items.length; i++) {
               newItems.add(items[i]);
             }
-
+//            print('StreamBuilder >> _buildCarouselSlider');
             return _buildCarouselSlider(newItems);
           }
           return Text(_multiMsg.strNoList);
@@ -180,7 +191,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
         _multiMsg.strWarnDelete,
       );
 
-      if (delete.toString() == 'true') {
+      if (delete == true) {
         //call setState here to rebuild your state.
         deleteData(newItems[_currentPage]['id_parent'],
             newItems[_currentPage]['id_child']);
@@ -217,18 +228,15 @@ class _ListEx4PageState extends State<ListEx4Page> {
   }
 
   Future _modifyQuestion() async {
-//    final result = await Navigator.push(
-//      context,
-//      MaterialPageRoute(
-//          builder: (context) => ModifySubEx4Page(
-//              document: newItems[_currentPage], userInfo: _userInfoController.userInfo)),
-//    );
-    final result = await Get.to(() =>
+    // streamBuilder 라서 데이터 수정후 자동으로 리로드함. setState 필요없음
+    await Get.to(() =>
         ModifySubEx4Page(document: newItems[_currentPage]));
-    if (result == true) {
-      setState(() {
-      });
-    }
+
+//    if (result == true) {
+//      setState(() {
+//        print('<List Ex4> return from _modifyQuestion()');
+//      });
+//    }
   }
 
   Future _loadTestResult() async {
@@ -340,7 +348,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
                       Container(
                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
                         child: SelectExample(labelText: _multiMsg.strEx,
-                          enable: false,
+                          editable: false,
                           controller1: _textController1,
                           controller2: _textController2,
                           controller3: _textController3,
@@ -374,43 +382,3 @@ class _ListEx4PageState extends State<ListEx4Page> {
   }
 
 }
-
-
-//  Widget _buildBody() {
-//    return WillPopScope(
-//      onWillPop: () {
-////        Navigator.of(context).pop(true);
-//        Get.back(result: true);
-//        return Future.value(true);
-//      },
-//      child: StreamBuilder(
-//        stream: FirebaseFirestore.instance
-//            .collection(widget.teacherUid) //post
-//            .doc(widget.code)
-//            .collection('post_sub')
-//            .orderBy('datetime')
-//            .snapshots(),
-//        builder: (BuildContext context, AsyncSnapshot snapshot) {
-//          if (!snapshot.hasData) {
-//            return Center(child: CircularProgressIndicator());
-//          }
-//          if (snapshot.data != null && !snapshot.hasError) {
-//            var items = snapshot.data.docs ?? [];
-//
-//            newItems.clear();
-//
-//            if (items.length < 1) {
-//              return Text(_multiMsg.strNoData);
-//            }
-//
-//            for (var i = 0; i < items.length; i++) {
-//              newItems.add(items[i]);
-//            }
-//
-//            return _buildCarouselSlider(newItems);
-//          }
-//          return Text(_multiMsg.strNoList);
-//        },
-//      ),
-//    );
-//  }

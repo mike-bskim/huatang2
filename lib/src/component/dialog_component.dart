@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class WarningYesNo extends StatelessWidget {
   final title;
@@ -10,13 +11,11 @@ class WarningYesNo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        title,
+      title: Text(title,
 //          style: new TextStyle(fontWeight: fontWeight, color: CustomColors.continueButton),
         textAlign: TextAlign.center,
       ),
-      content: Text(
-        msg,
+      content: Text(msg,
 //          textAlign: TextAlign.justify,
       ),
       actions: <Widget>[
@@ -41,47 +40,35 @@ class WarningYesNo extends StatelessWidget {
       ],
     );
   }
+}
 
 
+class WarningNotice extends StatelessWidget {
+  final title;
+  final msg;
+  final btnMsg;
 
+  WarningNotice({required this.title, required this.msg, required this.btnMsg});
 
-  Future<bool> deleteLoanWarning(
-      BuildContext context, String title, String msg) async {
-    return await showDialog<bool>(
-      builder: (context) => AlertDialog(
-        title: Text(
-          title,
-//          style: new TextStyle(fontWeight: fontWeight, color: CustomColors.continueButton),
-          textAlign: TextAlign.center,
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text(msg),
+          ],
         ),
-        content: Text(
-          msg,
-//          textAlign: TextAlign.justify,
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Get.back(result: false);
+          },
+          child: Text(btnMsg),
         ),
-        actions: <Widget>[
-          Container(
-            decoration: BoxDecoration(),
-            child: MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text('No'
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(),
-            child: MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text('Yes'
-              ),
-            ),
-          ),
-        ],
-      ), context: context,
-    ) ??
-        false;
+      ],
+    );
   }
 }

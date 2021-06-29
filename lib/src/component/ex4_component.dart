@@ -118,43 +118,36 @@ class SelectExample extends StatelessWidget {
   final SelectExampleController _selectExampleController = Get.put(SelectExampleController());
   final labelText;
   final hintText;
+  final editable;
   final TextEditingController controller1;
   final TextEditingController controller2;
   final TextEditingController controller3;
   final TextEditingController controller4;
-  final enable;
 
 
   SelectExample(
-      {this.labelText, this.hintText, this.enable=true,
+      {this.labelText, this.hintText, this.editable=true,
         required this.controller1, required this.controller2,
         required this.controller3, required this.controller4,
       });
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=>Column(
+    return Column(
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(
               width: 45,
-              child: Checkbox(
+              child: Obx(()=>Checkbox(
                 value: _selectExampleController.checkValue1.value,
-                onChanged: (bool? value) => enable ? _selectExampleController.setCheckBox(1) : null,
-//                onChanged: (bool? value) {
-//                  _selectExampleController.checkValue1.value = true;
-//                  _selectExampleController.checkValue2.value = false;
-//                  _selectExampleController.checkValue3.value = false;
-//                  _selectExampleController.checkValue4.value = false;
-//                  _selectExampleController.teacherAnswer.value = 1;
-//                },
-              ),
+                onChanged: (bool? value) => editable ? _selectExampleController.setCheckBox(1) : null,
+              )),
             ),
             Flexible(
               child: TextField(
-                enabled: enable,
+                enabled: editable,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(12.0),
                     border: OutlineInputBorder(),
@@ -171,21 +164,14 @@ class SelectExample extends StatelessWidget {
           children: <Widget>[
             SizedBox(
               width: 45,
-              child: Checkbox(
+              child: Obx(()=>Checkbox(
                 value: _selectExampleController.checkValue2.value,
-                onChanged: (bool? value) => enable ? _selectExampleController.setCheckBox(2) : null,
-//                onChanged: (bool? value) {
-//                    _selectExampleController.checkValue1.value = false;
-//                    _selectExampleController.checkValue2.value = true;
-//                    _selectExampleController.checkValue3.value = false;
-//                    _selectExampleController.checkValue4.value = false;
-//                    _selectExampleController.teacherAnswer.value = 2;
-//                },
-              ),
+                onChanged: (bool? value) => editable ? _selectExampleController.setCheckBox(2) : null,
+              )),
             ),
             Flexible(
               child: TextField(
-                enabled: enable,
+                enabled: editable,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(12.0),
                     border: OutlineInputBorder(),
@@ -202,21 +188,14 @@ class SelectExample extends StatelessWidget {
           children: <Widget>[
             SizedBox(
               width: 45,
-              child: Checkbox(
+              child: Obx(()=>Checkbox(
                 value: _selectExampleController.checkValue3.value,
-                onChanged: (bool? value) => enable ? _selectExampleController.setCheckBox(3) : null,
-//                onChanged: (bool? value) {
-//                    _selectExampleController.checkValue1.value = false;
-//                    _selectExampleController.checkValue2.value = false;
-//                    _selectExampleController.checkValue3.value = true;
-//                    _selectExampleController.checkValue4.value = false;
-//                    _selectExampleController.teacherAnswer.value = 3;
-//                },
-              ),
+                onChanged: (bool? value) => editable ? _selectExampleController.setCheckBox(3) : null,
+              )),
             ),
             Flexible(
               child: TextField(
-                enabled: enable,
+                enabled: editable,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(12.0),
                     border: OutlineInputBorder(),
@@ -233,21 +212,14 @@ class SelectExample extends StatelessWidget {
           children: <Widget>[
             SizedBox(
               width: 45,
-              child: Checkbox(
+              child: Obx(()=>Checkbox(
                 value: _selectExampleController.checkValue4.value,
-                onChanged: (bool? value) => enable ? _selectExampleController.setCheckBox(4) : null,
-//                onChanged: (bool? value) {
-//                  _selectExampleController.checkValue1.value = false;
-//                  _selectExampleController.checkValue2.value = false;
-//                  _selectExampleController.checkValue3.value = false;
-//                  _selectExampleController.checkValue4.value = true;
-//                  _selectExampleController.teacherAnswer.value = 4;
-//                },
-              ),
+                onChanged: (bool? value) => editable ? _selectExampleController.setCheckBox(4) : null,
+              )),
             ),
             Flexible(
               child: TextField(
-                enabled: enable,
+                enabled: editable,
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(12.0),
                     border: OutlineInputBorder(),
@@ -259,7 +231,7 @@ class SelectExample extends StatelessWidget {
           ],
         ),
       ],
-    ),);
+    );
   }
 }
 

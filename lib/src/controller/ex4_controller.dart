@@ -9,7 +9,8 @@ class SelectExampleController extends GetxController {
   final RxBool checkValue4 = false.obs;
   final RxInt teacherAnswer = 0.obs;
 
-//  List<dynamic> get chapterInfo => _chapterInfo;
+  final RxBool iconFlag = true.obs;
+
 
   @override
   void onInit() {
@@ -19,13 +20,12 @@ class SelectExampleController extends GetxController {
     super.onInit();
   }
 
-  void check3() {
-    checkValue1(false);
-    checkValue2(false);
-    checkValue3(true);
-    checkValue4(false);
-    teacherAnswer(3);
+  void setIconFlag(bool flag) {
+    iconFlag(flag);
   }
+
+//  bool get iconFlag => iconFlag as bool;
+
   void setCheckBox(int index) {
     if (index == 1) {
       checkValue1(true);

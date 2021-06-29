@@ -112,10 +112,13 @@ class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+// QuestionTitle
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
+//              padding: const EdgeInsets.all(16.0),
               child: QuestionTitle(titleHint: _multiMsg.strHintTitle, controller: _textController0, editable: true,),
             ),
+// image
             Container(
               padding: EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 0.0),
 //              decoration: BoxDecoration(border: Border.all(color: Colors.black12)),
