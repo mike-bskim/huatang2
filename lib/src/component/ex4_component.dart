@@ -115,7 +115,7 @@ class QuestionImageReadOnly extends StatelessWidget {
 
 
 class SelectExample extends StatelessWidget {
-  final SelectExampleController _selectExampleController = Get.put(SelectExampleController());
+  final Ex4Controller _selectExampleController = Get.put(Ex4Controller());
   final labelText;
   final hintText;
   final editable;

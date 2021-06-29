@@ -5,12 +5,11 @@ import 'package:get/get.dart';
 import 'dart:async';
 
 import 'package:huatang2/src/App.dart';
-
-//import 'admob_flutter_ads.dart';
+import 'package:huatang2/src/model/admob_flutter_ads.dart';
 /*     return Admob.initialize();
  */
 Future<void> main() async {
-//  AdMobManager.initAdMob();
+  AdMobManager.initAdMob();
 
   WidgetsFlutterBinding.ensureInitialized();
   // FutureBuilder 사용해서 선언위치 변경(app.dart), final _initFirebase =

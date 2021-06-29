@@ -25,7 +25,7 @@ class CreateSubEx4Page extends StatefulWidget {
 
 class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
-  final SelectExampleController _selectExampleController = Get.put(SelectExampleController());
+  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
   final _textController0 = TextEditingController();
   final _textController1 = TextEditingController();
   final _textController2 = TextEditingController();
@@ -197,7 +197,7 @@ class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
     } else if (_textController4.text.trim() == '') {
       _errorFlag = true;
       _msg = _multiMsg.strWarnEx4;
-    } else if (_selectExampleController.teacherAnswer.value == 0) {
+    } else if (_ex4Controller.teacherAnswer.value == 0) {
       _errorFlag = true;
       _msg = _multiMsg.strWarnSelectAnswer;
     }
@@ -263,13 +263,13 @@ class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
         'ex3': _textController3.text,
         'ex4': _textController4.text,
 //        'correct1': _checkboxValue1,//_selectExampleController
-        'correct1': _selectExampleController.checkValue1.value,//
-        'correct2': _selectExampleController.checkValue2.value,//
-        'correct3': _selectExampleController.checkValue3.value,//
-        'correct4': _selectExampleController.checkValue4.value,//
+        'correct1': _ex4Controller.checkValue1.value,//
+        'correct2': _ex4Controller.checkValue2.value,//
+        'correct3': _ex4Controller.checkValue3.value,//
+        'correct4': _ex4Controller.checkValue4.value,//
         'question_type': widget.document['question_type'],
         'idx': 0,
-        'teacher_answer': _selectExampleController.teacherAnswer.value,//
+        'teacher_answer': _ex4Controller.teacherAnswer.value,//
         'teacher_uid': widget.document['teacher_uid'],
         'student_answer': 0,
       }).then((onValue) {
@@ -312,14 +312,14 @@ class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
 //        'correct2': _checkboxValue2,
 //        'correct3': _checkboxValue3,
 //        'correct4': _checkboxValue4,
-        'correct1': _selectExampleController.checkValue1.value,//
-        'correct2': _selectExampleController.checkValue2.value,//
-        'correct3': _selectExampleController.checkValue3.value,//
-        'correct4': _selectExampleController.checkValue4.value,//
+        'correct1': _ex4Controller.checkValue1.value,//
+        'correct2': _ex4Controller.checkValue2.value,//
+        'correct3': _ex4Controller.checkValue3.value,//
+        'correct4': _ex4Controller.checkValue4.value,//
         'question_type': widget.document['question_type'],
         'idx': 0,
 //        'teacher_answer': _teacherAnswer,
-        'teacher_answer': _selectExampleController.teacherAnswer.value,//
+        'teacher_answer': _ex4Controller.teacherAnswer.value,//
         'teacher_uid': widget.document['teacher_uid'],
         'student_answer': 0,
       }).then((onValue) {

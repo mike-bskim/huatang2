@@ -467,7 +467,7 @@ class _StudyPageState extends State<StudyPage> {
           try{
             _tmp = doc.data()!['favorite'];
             // 이미 다른 학생에게서 하트를 받은 경우.
-            if(_tmp != null){
+//            if(_tmp != null){
               _set = _tmp.toSet();
               _tmp = _set.toList();
               if (_favorite[document['chapter_code']]){
@@ -483,15 +483,15 @@ class _StudyPageState extends State<StudyPage> {
               }).then((onValue) {
                 setState(() {});
               });
-            } else {
-              // 처음으로 하트 받을때 처리 로직
-//              print('>>> else: 에서 처리함');
-              doc1.update({
-                'favorite' : [document['student_uid'],],
-              }).then((onValue) {
-                setState(() {});
-              });
-            }
+//            } else {
+//              // 처음으로 하트 받을때 처리 로직
+////              print('>>> else: 에서 처리함');
+//              doc1.update({
+//                'favorite' : [document['student_uid'],],
+//              }).then((onValue) {
+//                setState(() {});
+//              });
+//            }
           } catch (error) {// 정보입력이 완료되지 않음
 //            print('>>> error: ' + error.toString());
             // 처음으로 하트 받을때와 동일하게 처리

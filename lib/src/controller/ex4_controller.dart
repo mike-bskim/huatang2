@@ -1,15 +1,17 @@
+//import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SelectExampleController extends GetxController {
-  static SelectExampleController get to => Get.find();
+class Ex4Controller extends GetxController {
+  static Ex4Controller get to => Get.find();
 
   final RxBool checkValue1 = false.obs;
   final RxBool checkValue2 = false.obs;
   final RxBool checkValue3 = false.obs;
   final RxBool checkValue4 = false.obs;
   final RxInt teacherAnswer = 0.obs;
-
   final RxBool iconFlag = true.obs;
+  RxList<dynamic> questions = [].obs;
+  Map question = {};
 
 
   @override
@@ -19,6 +21,32 @@ class SelectExampleController extends GetxController {
 //    ever(_chapterInfo, (_) => print(_chapterInfo.length));
     super.onInit();
   }
+
+  void questionsClear(){
+    questions.clear();
+  }
+
+  void mappingQuestions(List items) {
+//    print('LIST: ' + items.length.toString());
+    question.clear();
+    questions.clear();
+    if(items.isNotEmpty) {
+      for (var i=0; i<items.length; i++) {
+        question['title'] = items[i]['contents'];
+        question['correct1'] = items[i]['correct1'];
+//        questions[i] = question;
+        questions.add(question);
+        print('length: ${items.length.toString()}');
+        print(question.toString());
+        print('many: ' + questions.toString());
+      }
+
+      print(items[0]['contents']);
+      print(items[1]['contents']);
+    }
+  }
+
+  RxList<dynamic> get getQuestions => questions;
 
   void setIconFlag(bool flag) {
     iconFlag(flag);

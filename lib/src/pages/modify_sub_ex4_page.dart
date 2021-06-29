@@ -20,7 +20,7 @@ class ModifySubEx4Page extends StatefulWidget {
 
 class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
-  final SelectExampleController _selectExampleController = Get.put(SelectExampleController());
+  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
   final _textController0 = TextEditingController();
   final _textController1 = TextEditingController();
   final _textController2 = TextEditingController();
@@ -39,11 +39,12 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
     _textController2.text = widget.document['ex2'];
     _textController3.text = widget.document['ex3'];
     _textController4.text = widget.document['ex4'];
-    _selectExampleController.checkValue1.value = widget.document['correct1'];
-    _selectExampleController.checkValue2.value = widget.document['correct2'];
-    _selectExampleController.checkValue3.value = widget.document['correct3'];
-    _selectExampleController.checkValue4.value = widget.document['correct4'];
-    _selectExampleController.teacherAnswer.value = widget.document['teacher_answer'];
+    _ex4Controller.checkValue1.value = widget.document['correct1'];
+    _ex4Controller.checkValue2.value = widget.document['correct2'];
+    _ex4Controller.checkValue3.value = widget.document['correct3'];
+    _ex4Controller.checkValue4.value = widget.document['correct4'];
+    _ex4Controller.teacherAnswer.value = widget.document['teacher_answer'];
+    _ex4Controller.setIconFlag(true);
   }
 
   @override
@@ -79,7 +80,7 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
       ),
       actions: [
         Obx(()=>IconButton(
-          icon: _selectExampleController.iconFlag.value
+          icon: _ex4Controller.iconFlag.value
               ? Icon(
                   Icons.file_upload,
                   color: Colors.white,
@@ -90,7 +91,7 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
                 ),
           tooltip: 'upload Image',
           onPressed: () {
-            _selectExampleController.iconFlag.value ? _checkUploadDialog() : null;
+            _ex4Controller.iconFlag.value ? _checkUploadDialog() : null;
           } , //_uploadImage,
         ),)
       ],
@@ -153,7 +154,7 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
     } else if(_textController4.text.trim() == '') {
       _errorFlag = true;
       _msg = _multiMsg.strWarnEx4;
-    } else if(_selectExampleController.teacherAnswer.value == 0) {
+    } else if(_ex4Controller.teacherAnswer.value == 0) {
       _errorFlag = true;
       _msg = _multiMsg.strWarnSelectAnswer;
     }
@@ -173,7 +174,7 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
   }
 
   Future _uploadImage() async {
-    _selectExampleController.setIconFlag(false);
+    _ex4Controller.setIconFlag(false);
 
     var doc = FirebaseFirestore.instance
         .collection(widget.document['teacher_uid']) // post
@@ -193,12 +194,12 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
       'ex2': _textController2.text,
       'ex3': _textController3.text,
       'ex4': _textController4.text,
-      'correct1': _selectExampleController.checkValue1.value,
-      'correct2': _selectExampleController.checkValue2.value,
-      'correct3': _selectExampleController.checkValue3.value,
-      'correct4': _selectExampleController.checkValue4.value,
+      'correct1': _ex4Controller.checkValue1.value,
+      'correct2': _ex4Controller.checkValue2.value,
+      'correct3': _ex4Controller.checkValue3.value,
+      'correct4': _ex4Controller.checkValue4.value,
       'idx': 0,
-      'teacher_answer' : _selectExampleController.teacherAnswer.value,
+      'teacher_answer' : _ex4Controller.teacherAnswer.value,
     }).then((onValue) {
 //      print('수정완료후 상위로 이동 modify->list');
       Get.back(result: true);

@@ -26,7 +26,7 @@ class ListEx4Page extends StatefulWidget {
 
 class _ListEx4PageState extends State<ListEx4Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
-  final SelectExampleController _selectExampleController = Get.put(SelectExampleController());
+  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
   final _textController1 = TextEditingController();
   final _textController2 = TextEditingController();
   final _textController3 = TextEditingController();
@@ -108,7 +108,10 @@ class _ListEx4PageState extends State<ListEx4Page> {
 //      child: FutureBuilder(
 //        future: FirebaseFirestore.instance
 //            .snapshots(),
-
+//  if (snapshot.connectionState == ConnectionState.done) {
+//  Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+//  return Text("Full Name: ${data['full_name']} ${data['last_name']}");
+//  }
 
   Widget _buildBody() {
     return WillPopScope(
@@ -142,13 +145,25 @@ class _ListEx4PageState extends State<ListEx4Page> {
             for (var i = 0; i < items.length; i++) {
               newItems.add(items[i]);
             }
-//            print('StreamBuilder >> _buildCarouselSlider');
             return _buildCarouselSlider(newItems);
           }
           return Text(_multiMsg.strNoList);
         },
       ),
     );
+  }
+
+  Future _modifyQuestion() async {
+    // streamBuilder 라서 데이터 수정후 자동으로 리로드함. setState 필요없음
+    await Get.to(() =>
+        ModifySubEx4Page(document: newItems[_currentPage]))!
+        .then((value) => {
+//      Future.delayed(Duration(milliseconds: 300), () {
+//        setState(() {
+//          print('<List Ex4> return from _modifyQuestion()');
+//        });
+//      }),
+    });
   }
 
 
@@ -227,18 +242,6 @@ class _ListEx4PageState extends State<ListEx4Page> {
     });
   }
 
-  Future _modifyQuestion() async {
-    // streamBuilder 라서 데이터 수정후 자동으로 리로드함. setState 필요없음
-    await Get.to(() =>
-        ModifySubEx4Page(document: newItems[_currentPage]));
-
-//    if (result == true) {
-//      setState(() {
-//        print('<List Ex4> return from _modifyQuestion()');
-//      });
-//    }
-  }
-
   Future _loadTestResult() async {
     _testResult.clear();
 
@@ -259,6 +262,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
   }
 
   Widget _buildCarouselSlider(List newItems) {
+//    print(newItems[_currentPage]);
     var _num1 = 0.0;
     var _num2 = 0.0;
     var _num3 = 0.0;
@@ -305,10 +309,10 @@ class _ListEx4PageState extends State<ListEx4Page> {
 //    _checkboxValue2 = newItems[_currentPage]['correct2'];
 //    _checkboxValue3 = newItems[_currentPage]['correct3'];
 //    _checkboxValue4 = newItems[_currentPage]['correct4'];
-    _selectExampleController.checkValue1.value = newItems[_currentPage]['correct1'];
-    _selectExampleController.checkValue2.value = newItems[_currentPage]['correct2'];
-    _selectExampleController.checkValue3.value = newItems[_currentPage]['correct3'];
-    _selectExampleController.checkValue4.value = newItems[_currentPage]['correct4'];
+    _ex4Controller.checkValue1.value = newItems[_currentPage]['correct1'];
+    _ex4Controller.checkValue2.value = newItems[_currentPage]['correct2'];
+    _ex4Controller.checkValue3.value = newItems[_currentPage]['correct3'];
+    _ex4Controller.checkValue4.value = newItems[_currentPage]['correct4'];
 
     return SingleChildScrollView(
       child: Container(
