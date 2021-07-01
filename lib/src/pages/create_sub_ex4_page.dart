@@ -115,19 +115,18 @@ class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
 // QuestionTitle
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-//              padding: const EdgeInsets.all(16.0),
               child: QuestionTitle(titleHint: _multiMsg.strHintTitle, controller: _textController0, editable: true,),
             ),
+            Padding(padding: EdgeInsets.all(4.0)),
 // image
             Container(
               padding: EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 0.0),
-//              decoration: BoxDecoration(border: Border.all(color: Colors.black12)),
               child: QuestionImage(image: _image, msg: _multiMsg.strNoImage),
             ),
             Padding(padding: EdgeInsets.all(8.0)),
             Container(
               padding: EdgeInsets.fromLTRB(16.0, 0.0, 32.0, 0.0),
-              child: SelectExample(labelText: _multiMsg.strEx, hintText: _multiMsg.strHintInputEx,
+              child: CheckBoxExample(labelText: _multiMsg.strEx, hintText: _multiMsg.strHintInputEx,
                         controller1: _textController1, controller2: _textController2,
                         controller3: _textController3, controller4: _textController4,
               ),
@@ -296,32 +295,28 @@ class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
           .collection('post_sub')
           .doc(); // post collection 만들고, 하위에 문서를 만든다
       await doc.set({
-        'id_parent': widget.document['id'],
-        'id_child': doc.id,
-        'datetime': DateTime.now().toString(),
-        'photoUrl': downloadUrl.toString(),
         'chapter_title': widget.document['contents'],
         'contents': _textController0.text,
-        'email': widget.document['email'],
-        'displayName': widget.document['displayName'],
-        'ex1': _textController1.text,
-        'ex2': _textController2.text,
-        'ex3': _textController3.text,
-        'ex4': _textController4.text,
-//        'correct1': _checkboxValue1,
-//        'correct2': _checkboxValue2,
-//        'correct3': _checkboxValue3,
-//        'correct4': _checkboxValue4,
         'correct1': _ex4Controller.checkValue1.value,//
         'correct2': _ex4Controller.checkValue2.value,//
         'correct3': _ex4Controller.checkValue3.value,//
         'correct4': _ex4Controller.checkValue4.value,//
-        'question_type': widget.document['question_type'],
+        'datetime': DateTime.now().toString(),
+        'displayName': widget.document['displayName'],
+        'email': widget.document['email'],
+        'ex1': _textController1.text,
+        'ex2': _textController2.text,
+        'ex3': _textController3.text,
+        'ex4': _textController4.text,
+        'id_child': doc.id,
+        'id_parent': widget.document['id'],
         'idx': 0,
-//        'teacher_answer': _teacherAnswer,
+        'photoUrl': downloadUrl.toString(),
+        'question_type': widget.document['question_type'],
+        'student_answer': 0,
         'teacher_answer': _ex4Controller.teacherAnswer.value,//
         'teacher_uid': widget.document['teacher_uid'],
-        'student_answer': 0,
+        'update_time': DateTime.now().toString(),
       }).then((onValue) {
 //          Navigator.pop(context, true);
         Get.back(result: true);

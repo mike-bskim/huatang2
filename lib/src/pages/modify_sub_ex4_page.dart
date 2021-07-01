@@ -110,7 +110,6 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
           children: <Widget>[
 // QuestionTitle
             Padding(
-//              padding: const EdgeInsets.all(16.0),
               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
               child: QuestionTitle(titleHint: _multiMsg.strHintTitle, controller: _textController0, editable: true,),
             ),
@@ -124,7 +123,7 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
 // select example
             Container(
               padding: EdgeInsets.fromLTRB(16.0, 0.0, 32.0, 0.0),
-              child: SelectExample(labelText: _multiMsg.strEx, hintText: _multiMsg.strHintInputEx,
+              child: CheckBoxExample(labelText: _multiMsg.strEx, hintText: _multiMsg.strHintInputEx,
                 controller1: _textController1, controller2: _textController2,
                 controller3: _textController3, controller4: _textController4,
               ),

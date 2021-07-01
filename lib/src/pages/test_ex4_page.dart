@@ -5,16 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:huatang2/src/component/dialog_component.dart';
+import 'package:huatang2/src/component/ex4_component.dart';
+import 'package:huatang2/src/controller/ex4_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/admob_flutter_ads.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
 
-enum studentSelect { one, two, three, four }
-
-//
 class TestEx4Page extends StatefulWidget {
   final _testUserInfo;
-//  final userInfo;
   TestEx4Page(this._testUserInfo); // , this.userInfo
 
   @override
@@ -23,24 +21,28 @@ class TestEx4Page extends StatefulWidget {
 
 class _TestEx4PageState extends State<TestEx4Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
+  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
   int _currentPage = 0;
   final Map _answerHistory = {};
   final Map _studentInfo = {};
   var newItems = [];
   var qTotal = 0;
   var _multiMsg;
+  final _textController0 = TextEditingController();
   final _textController1 = TextEditingController();
   final _textController2 = TextEditingController();
   final _textController3 = TextEditingController();
   final _textController4 = TextEditingController();
 
-  studentSelect? _studentSelect;
+//  studentSelect? _studentSelect;
 
   /* ********************* adMob ********************* */
   late AdMobManager _adMobManager;
   late AdmobInterstitial _adMobInterstitial;
+
 //  String _appId;
   late String _adUnitId;
+
   /* ********************* adMob ********************* */
 
   @override
@@ -55,6 +57,9 @@ class _TestEx4PageState extends State<TestEx4Page> {
     _studentInfo['studentEmail'] = widget._testUserInfo['studentEmail'];
     _studentInfo['chapterPhotoUrl'] = widget._testUserInfo['chapterPhotoUrl'];
     _studentInfo['previous'] = widget._testUserInfo['previous'];
+    _ex4Controller.answerHistory.clear();
+    _ex4Controller.currentPage = 0;
+
     /* ********************* adMob ********************* */
     _adMobManager = AdMobManager();
 //    _appId = _adMobManager.getAppId();
@@ -66,6 +71,7 @@ class _TestEx4PageState extends State<TestEx4Page> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _textController0.dispose();
     _textController1.dispose();
     _textController2.dispose();
     _textController3.dispose();
@@ -74,79 +80,84 @@ class _TestEx4PageState extends State<TestEx4Page> {
   }
 
   /* ********************* adMob ********************* */
-  AdmobInterstitial createInterstitial() { // 전면광고 testID(ca-app-pub-3940256099942544/1033173712)
-    return AdmobInterstitial(adUnitId: _adUnitId,
+  AdmobInterstitial createInterstitial() {
+    // 전면광고 testID(ca-app-pub-3940256099942544/1033173712)
+    return AdmobInterstitial(
+      adUnitId: _adUnitId,
       listener: (AdmobAdEvent event, Map<String, dynamic>? args) {
-        if(event == AdmobAdEvent.loaded) {
-          print('****************************************_adUnitId(loaded): ' + _adUnitId.toString());
+        if (event == AdmobAdEvent.loaded) {
+          print(
+              '****************************************_adUnitId(loaded): ' + _adUnitId.toString());
           print('****************************************_adUnitId(event): ' + event.toString());
           _adMobInterstitial.show();
-        }
-        else if(event == AdmobAdEvent.closed) {
-          print('****************************************_adUnitId(closed): ' + _adUnitId.toString());
+        } else if (event == AdmobAdEvent.closed) {
+          print(
+              '****************************************_adUnitId(closed): ' + _adUnitId.toString());
           print('****************************************_adUnitId(event): ' + event.toString());
           _adMobInterstitial.dispose();
         }
       },
     );
   }
+
   /* ********************* adMob ********************* */
 
   @override
   Widget build(BuildContext context) {
     _multiMsg.convertDescription(_userInfoController.userInfo['userLangType']);
 
-    if (_answerHistory.isNotEmpty) {
-      if (_answerHistory[_currentPage] == 1) {
-        _studentSelect = studentSelect.one;
-      } else if (_answerHistory[_currentPage] == 2) {
-        _studentSelect = studentSelect.two;
-      } else if (_answerHistory[_currentPage] == 3) {
-        _studentSelect = studentSelect.three;
-      } else if (_answerHistory[_currentPage] == 4) {
-        _studentSelect = studentSelect.four;
+    if (_ex4Controller.answerHistory.isNotEmpty) {
+      if (_ex4Controller.answerHistory[_currentPage] == 1) {
+        _ex4Controller.studentSelect.value = StudentSelect.one;
+      } else if (_ex4Controller.answerHistory[_currentPage] == 2) {
+        _ex4Controller.studentSelect.value = StudentSelect.two;
+      } else if (_ex4Controller.answerHistory[_currentPage] == 3) {
+        _ex4Controller.studentSelect.value = StudentSelect.three;
+      } else if (_ex4Controller.answerHistory[_currentPage] == 4) {
+        _ex4Controller.studentSelect.value = StudentSelect.four;
       } else {
-        _studentSelect = null;
+        _ex4Controller.studentSelect.value = StudentSelect.zero;
       }
     }
+
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-          backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-        actions: <Widget>[
-        PopupMenuButton<int>(
-          icon: Icon(Icons.sort),
-          onSelected: (value) {
-            if (value == 0) {
-              _checkResultDialog(); //_showResult();
-            }
-          },
-          itemBuilder: (context) {
-            return [
-              PopupMenuItem(value: 0, child: Text(_multiMsg.strSubmit)),
-            ];
-          },
-        )
-        ],
-        title: Text((_currentPage + 1).toString() + ' / ' + qTotal.toString(),
-               style: TextStyle(color: Colors.white54),
-        )
-      ),
-      body: _buildBody());
+        appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
+            iconTheme: IconThemeData(
+              color: Colors.white,
+            ),
+            actions: <Widget>[
+              PopupMenuButton<int>(
+                icon: Icon(Icons.sort),
+                onSelected: (value) {
+                  if (value == 0) {
+                    _checkResultDialog(); //_showResult();
+                  }
+                },
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(value: 0, child: Text(_multiMsg.strSubmit)),
+                  ];
+                },
+              )
+            ],
+            title: Text(
+              (_currentPage + 1).toString() + ' / ' + qTotal.toString(),
+              style: TextStyle(color: Colors.white54),
+            )),
+        body: _buildBody());
   }
 
 //.whereEqualTo("email", widget.user.email)
   Widget _buildBody() {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-        .collection(widget._testUserInfo['teacherUid']) // post, teacher
-        .doc(widget._testUserInfo['chapterCode']) // question id
-        .collection('post_sub')
-        .orderBy('datetime')
-        .snapshots(),
+          .collection(widget._testUserInfo['teacherUid']) // post, teacher
+          .doc(widget._testUserInfo['chapterCode']) // question id
+          .collection('post_sub')
+          .orderBy('datetime')
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
@@ -171,29 +182,13 @@ class _TestEx4PageState extends State<TestEx4Page> {
     );
   }
 
-  void radioChanged(studentSelect? value) {
-    setState(() {
-      _studentSelect = value;
-      _answerHistory.putIfAbsent(_currentPage, () => 0);
-      if (_studentSelect == studentSelect.one) {
-        _answerHistory[_currentPage] = 1;
-      } else if (_studentSelect == studentSelect.two) {
-        _answerHistory[_currentPage] = 2;
-      } else if (_studentSelect == studentSelect.three) {
-        _answerHistory[_currentPage] = 3;
-      } else {
-        _answerHistory[_currentPage] = 4;
-      }
-    });
-  }
-
   void _getSubCnt() {
     FirebaseFirestore.instance
-      .collection(widget._testUserInfo['teacherUid']) // post
-      .doc(widget._testUserInfo['chapterCode'])
-      .collection('post_sub')
-      .get()
-      .then((snapShot) {
+        .collection(widget._testUserInfo['teacherUid']) // post
+        .doc(widget._testUserInfo['chapterCode'])
+        .collection('post_sub')
+        .get()
+        .then((snapShot) {
       setState(() {
         qTotal = snapShot.docs.length;
       });
@@ -215,25 +210,11 @@ class _TestEx4PageState extends State<TestEx4Page> {
         context: context,
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) {
-          return WarningNotice(title: _multiMsg.strWarnMessage, msg: _msg, btnMsg: _multiMsg.strOk,);
-//          return AlertDialog(
-//            title: Text(_multiMsg.strWarnMessage),
-//            content: SingleChildScrollView(
-//              child: ListBody(
-//                children: <Widget>[
-//                  Text(_msg),
-//                ],
-//              ),
-//            ),
-//            actions: <Widget>[
-//              TextButton(
-//                onPressed: () {
-//                  Navigator.of(context).pop(false);
-//                },
-//                child: Text(_multiMsg.strOk),
-//              ),
-//            ],
-//          );
+          return WarningNotice(
+            title: _multiMsg.strWarnMessage,
+            msg: _msg,
+            btnMsg: _multiMsg.strOk,
+          );
         },
       );
     } else {
@@ -245,7 +226,6 @@ class _TestEx4PageState extends State<TestEx4Page> {
   }
 
   Future _showResult() async {
-
 //    final result = await Navigator.push(
 //      context,
 //      MaterialPageRoute(
@@ -258,159 +238,53 @@ class _TestEx4PageState extends State<TestEx4Page> {
   }
 
   Widget _buildCarouselSlider(List newItems) {
-
+    _textController0.text = newItems[_currentPage]['contents'];
     _textController1.text = newItems[_currentPage]['ex1'];
     _textController2.text = newItems[_currentPage]['ex2'];
     _textController3.text = newItems[_currentPage]['ex3'];
     _textController4.text = newItems[_currentPage]['ex4'];
 
+//    print('_currentPage: ' + _currentPage.toString());
+//    print('answerHistory: ' + _ex4Controller.answerHistory.toString());
+
     return SingleChildScrollView(
       child: Container(
-        child: Column(
-          children: <Widget>[
-            Padding(padding: EdgeInsets.all(8.0)),
-            Container(
-              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-              child: Text(
-                newItems[_currentPage]['contents'],
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                width: 500,
-                child: Divider(
-                  color: Colors.black,
-                  thickness: 1,
-                )
-            ),
-            Padding(padding: EdgeInsets.all(4.0)),
-            CarouselSlider.builder(
-              itemCount: newItems.length,
-              itemBuilder: (context, index, realIdx) {
-                return Container(
-                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: newItems[index]['photoUrl'] == 'NoImage' ?
-                        Container(
-                            width: 350,
-                            height: 20,
-                            child: null
-                        ) :
-                        Container(
-                            width: 350,
-                            height: 200,
-                            child: Image.network(newItems[index]['photoUrl'],
-                                fit: BoxFit.cover) //(, width: 1000)
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(8.0)),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 45,
-                                  child: Radio(
-                                      value: studentSelect.one,
-                                      groupValue: _studentSelect,
-                                      onChanged: radioChanged),
-                                ),
-                                Flexible(
-                                  child: TextField(
-                                    enabled: false,
-                                    decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.all(12.0),
-                                        border: OutlineInputBorder(),
-                                        labelText: '${_multiMsg.strEx}1)'),
-                                    controller: _textController1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.all(4.0)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 45,
-                                  child: Radio(
-                                      value: studentSelect.two,
-                                      groupValue: _studentSelect,
-                                      onChanged: radioChanged),
-                                ),
-                                Flexible(
-                                  child: TextField(
-                                    enabled: false,
-                                    decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.all(12.0),
-                                        border: OutlineInputBorder(),
-                                        labelText: '${_multiMsg.strEx}2)'),
-                                    controller: _textController2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.all(4.0)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 45,
-                                  child: Radio(
-                                      value: studentSelect.three,
-                                      groupValue: _studentSelect,
-                                      onChanged: radioChanged),
-                                ),
-                                Flexible(
-                                  child: TextField(
-                                    enabled: false,
-                                    decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.all(12.0),
-                                        border: OutlineInputBorder(),
-                                        labelText: '${_multiMsg.strEx}3)'),
-                                    controller: _textController3,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.all(4.0)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 45,
-                                  child: Radio(
-                                      value: studentSelect.four,
-                                      groupValue: _studentSelect,
-                                      onChanged: radioChanged),
-                                ),
-                                Flexible(
-                                  child: TextField(
-                                    enabled: false,
-                                    decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.all(12.0),
-                                        border: OutlineInputBorder(),
-                                        labelText: '${_multiMsg.strEx}4)'),
-                                    controller: _textController4,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+        child: Column(children: <Widget>[
+// QuestionTitle
+          Container(
+            padding: EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
+            child: QuestionTitle(controller: _textController0,),
+          ),
 
-                    ],
-                  ),
-                );
-              },
-              options: CarouselOptions(
+          Padding(padding: EdgeInsets.all(4.0)),
+// image & select example
+          CarouselSlider.builder(
+            itemCount: newItems.length,
+            itemBuilder: (context, index, realIdx) {
+              return Container(
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                child: Column(
+                  children: <Widget>[
+// image
+                    QuestionImageReadOnly(photoUrl: newItems[index]['photoUrl'],),
+                    Padding(padding: EdgeInsets.all(8.0)),
+// select example radio box
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
+                      child: RadioBoxExample(
+                        labelText: _multiMsg.strEx,
+                        controller1: _textController1,
+                        controller2: _textController2,
+                        controller3: _textController3,
+                        controller4: _textController4,
+                        index1: _currentPage,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            options: CarouselOptions(
                 height: 500,
                 viewportFraction: 1.0,
                 enlargeCenterPage: false,
@@ -418,11 +292,12 @@ class _TestEx4PageState extends State<TestEx4Page> {
                 onPageChanged: (index, reason) {
                   setState(() {
                     _currentPage = index;
+                    _ex4Controller.currentPage = index;
                   });
-                }),
+                }
             ),
-          ]
-        ),
+          ),
+        ]),
       ),
     );
   }

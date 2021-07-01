@@ -42,13 +42,23 @@ class QuestionTitle extends StatelessWidget {
   final TextEditingController? controller;
   final editable;
 
-  QuestionTitle({required this.titleHint, required this.controller, this.editable = false});
+  QuestionTitle({this.titleHint, this.controller, this.editable = false});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      textAlign: TextAlign.center,
+      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
       enabled: editable,
-      decoration: InputDecoration(hintText: titleHint),
+      decoration: InputDecoration(
+        hintText: titleHint,
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black)
+        ),
+        disabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black)
+        ),
+      ),
       controller: controller,
     );
   }
@@ -114,8 +124,8 @@ class QuestionImageReadOnly extends StatelessWidget {
 }
 
 
-class SelectExample extends StatelessWidget {
-  final Ex4Controller _selectExampleController = Get.put(Ex4Controller());
+class CheckBoxExample extends StatelessWidget {
+  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
   final labelText;
   final hintText;
   final editable;
@@ -125,7 +135,7 @@ class SelectExample extends StatelessWidget {
   final TextEditingController controller4;
 
 
-  SelectExample(
+  CheckBoxExample(
       {this.labelText, this.hintText, this.editable=true,
         required this.controller1, required this.controller2,
         required this.controller3, required this.controller4,
@@ -141,8 +151,8 @@ class SelectExample extends StatelessWidget {
             SizedBox(
               width: 45,
               child: Obx(()=>Checkbox(
-                value: _selectExampleController.checkValue1.value,
-                onChanged: (bool? value) => editable ? _selectExampleController.setCheckBox(1) : null,
+                value: _ex4Controller.checkValue1.value,
+                onChanged: (bool? value) => editable ? _ex4Controller.setCheckBox(1) : null,
               )),
             ),
             Flexible(
@@ -165,8 +175,8 @@ class SelectExample extends StatelessWidget {
             SizedBox(
               width: 45,
               child: Obx(()=>Checkbox(
-                value: _selectExampleController.checkValue2.value,
-                onChanged: (bool? value) => editable ? _selectExampleController.setCheckBox(2) : null,
+                value: _ex4Controller.checkValue2.value,
+                onChanged: (bool? value) => editable ? _ex4Controller.setCheckBox(2) : null,
               )),
             ),
             Flexible(
@@ -189,8 +199,8 @@ class SelectExample extends StatelessWidget {
             SizedBox(
               width: 45,
               child: Obx(()=>Checkbox(
-                value: _selectExampleController.checkValue3.value,
-                onChanged: (bool? value) => editable ? _selectExampleController.setCheckBox(3) : null,
+                value: _ex4Controller.checkValue3.value,
+                onChanged: (bool? value) => editable ? _ex4Controller.setCheckBox(3) : null,
               )),
             ),
             Flexible(
@@ -213,8 +223,8 @@ class SelectExample extends StatelessWidget {
             SizedBox(
               width: 45,
               child: Obx(()=>Checkbox(
-                value: _selectExampleController.checkValue4.value,
-                onChanged: (bool? value) => editable ? _selectExampleController.setCheckBox(4) : null,
+                value: _ex4Controller.checkValue4.value,
+                onChanged: (bool? value) => editable ? _ex4Controller.setCheckBox(4) : null,
               )),
             ),
             Flexible(
@@ -234,6 +244,129 @@ class SelectExample extends StatelessWidget {
     );
   }
 }
+
+
+class RadioBoxExample extends StatelessWidget {
+  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
+  final labelText;
+//  final hintText;
+  final editable;
+  final int index1;
+  final TextEditingController controller1;
+  final TextEditingController controller2;
+  final TextEditingController controller3;
+  final TextEditingController controller4;
+//  final VoidCallback? callBack;
+
+
+  RadioBoxExample(
+      {this.labelText, this.editable=true,
+        required this.controller1, required this.controller2,
+        required this.controller3, required this.controller4,
+        required this.index1,
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Obx(()=>SizedBox(
+              width: 45,
+              child: Radio(
+                  value: StudentSelect.one,
+                  groupValue: _ex4Controller.studentSelect.value,
+                  onChanged: _ex4Controller.radioChanged),
+            )),
+            Flexible(
+              child: TextField(
+                enabled: false,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    labelText: '${labelText}1)'),
+                controller: controller1,
+              ),
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.all(4.0)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+          Obx(()=>SizedBox(
+              width: 45,
+              child: Radio(
+                  value: StudentSelect.two,
+                  groupValue: _ex4Controller.studentSelect.value,
+                  onChanged: _ex4Controller.radioChanged),
+            )),
+            Flexible(
+              child: TextField(
+                enabled: false,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    labelText: '${labelText}2)'),
+                controller: controller2,
+              ),
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.all(4.0)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Obx(()=>SizedBox(
+              width: 45,
+              child: Radio(
+                  value: StudentSelect.three,
+                  groupValue: _ex4Controller.studentSelect.value,
+                  onChanged: _ex4Controller.radioChanged),
+            )),
+            Flexible(
+              child: TextField(
+                enabled: false,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    labelText: '${labelText}3)'),
+                controller: controller3,
+              ),
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.all(4.0)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Obx(()=>SizedBox(
+              width: 45,
+              child: Radio(
+                  value: StudentSelect.four,
+                  groupValue: _ex4Controller.studentSelect.value,
+                  onChanged: _ex4Controller.radioChanged),
+            )),
+            Flexible(
+              child: TextField(
+                enabled: false,
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    labelText: '${labelText}4)'),
+                controller: controller4,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+}
+
 
 
 //class SelectExampleReadOnly extends StatelessWidget {

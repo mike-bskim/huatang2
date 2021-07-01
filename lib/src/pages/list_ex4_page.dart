@@ -27,6 +27,7 @@ class ListEx4Page extends StatefulWidget {
 class _ListEx4PageState extends State<ListEx4Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
   final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
+  final _textController0 = TextEditingController();
   final _textController1 = TextEditingController();
   final _textController2 = TextEditingController();
   final _textController3 = TextEditingController();
@@ -52,6 +53,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _textController0.dispose();
     _textController1.dispose();
     _textController2.dispose();
     _textController3.dispose();
@@ -301,6 +303,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
       _score += '  #4(' + _num4.toStringAsFixed(0) + '%)';
     }
 
+    _textController0.text = newItems[_currentPage]['contents'];
     _textController1.text = newItems[_currentPage]['ex1'];
     _textController2.text = newItems[_currentPage]['ex2'];
     _textController3.text = newItems[_currentPage]['ex3'];
@@ -318,19 +321,10 @@ class _ListEx4PageState extends State<ListEx4Page> {
       child: Container(
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.all(8.0)),
 // QuestionTitle
             Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-              child: QuestionTitleReadOnly(title: newItems[_currentPage]['contents'],),
-            ),
-// Divider
-            Container(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                width: 500,
-                child: Divider(
-                  color: Colors.black,
-                  thickness: 1,)
+              padding: EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
+              child: QuestionTitle(controller: _textController0,),
             ),
             Padding(padding: EdgeInsets.all(4.0)),
 // image & select example
@@ -351,7 +345,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
 // select example
                       Container(
                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
-                        child: SelectExample(labelText: _multiMsg.strEx,
+                        child: CheckBoxExample(labelText: _multiMsg.strEx,
                           editable: false,
                           controller1: _textController1,
                           controller2: _textController2,
