@@ -17,6 +17,7 @@ class Ex4Controller extends GetxController {
   Map question = {};
 
   Rx<StudentSelect> studentSelect = (StudentSelect.zero).obs;
+  late StudentSelect studentSelectReadOnly;
   Map answerHistory = {};
   int currentPage = 0;
 

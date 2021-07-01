@@ -251,7 +251,6 @@ class RadioBoxExample extends StatelessWidget {
   final labelText;
 //  final hintText;
   final editable;
-  final int index1;
   final TextEditingController controller1;
   final TextEditingController controller2;
   final TextEditingController controller3;
@@ -263,7 +262,6 @@ class RadioBoxExample extends StatelessWidget {
       {this.labelText, this.editable=true,
         required this.controller1, required this.controller2,
         required this.controller3, required this.controller4,
-        required this.index1,
       });
 
   @override
@@ -296,7 +294,7 @@ class RadioBoxExample extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-          Obx(()=>SizedBox(
+            Obx(()=>SizedBox(
               width: 45,
               child: Radio(
                   value: StudentSelect.two,
@@ -353,6 +351,140 @@ class RadioBoxExample extends StatelessWidget {
               child: TextField(
                 enabled: false,
                 decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    labelText: '${labelText}4)'),
+                controller: controller4,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+}
+
+class RadioBoxExampleReadOnly extends StatelessWidget {
+  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
+  final labelText;
+//  final hintText;
+  final editable;
+  final TextEditingController controller1;
+  final TextEditingController controller2;
+  final TextEditingController controller3;
+  final TextEditingController controller4;
+  final boxColor1;
+  final boxColor2;
+  final boxColor3;
+  final boxColor4;
+
+//  final VoidCallback? callBack;
+
+
+  RadioBoxExampleReadOnly(
+      {this.labelText, this.editable=true,
+        required this.controller1, required this.controller2,
+        required this.controller3, required this.controller4,
+        required this.boxColor1, required this.boxColor2,
+        required this.boxColor3, required this.boxColor4,
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              width: 45,
+              child: Radio(
+                  value: StudentSelect.one,
+                  groupValue: _ex4Controller.studentSelectReadOnly,
+                  onChanged: null),
+            ),
+            Flexible(
+              child: TextField(
+                enabled: false,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: boxColor1,
+                    contentPadding: const EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    labelText: '${labelText}1)'),
+                controller: controller1,
+              ),
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.all(4.0)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+          SizedBox(
+              width: 45,
+              child: Radio(
+                  value: StudentSelect.two,
+                  groupValue: _ex4Controller.studentSelectReadOnly,
+                  onChanged: null),
+            ),
+            Flexible(
+              child: TextField(
+                enabled: false,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: boxColor2,
+                    contentPadding: const EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    labelText: '${labelText}2)'),
+                controller: controller2,
+              ),
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.all(4.0)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 45,
+              child: Radio(
+                  value: StudentSelect.three,
+                  groupValue: _ex4Controller.studentSelectReadOnly,
+                  onChanged: null),
+            ),
+            Flexible(
+              child: TextField(
+                enabled: false,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: boxColor3,
+                    contentPadding: const EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    labelText: '${labelText}3)'),
+                controller: controller3,
+              ),
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.all(4.0)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 45,
+              child: Radio(
+                  value: StudentSelect.four,
+                  groupValue: _ex4Controller.studentSelectReadOnly,
+                  onChanged: null),
+            ),
+            Flexible(
+              child: TextField(
+                enabled: false,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: boxColor4,
                     contentPadding: const EdgeInsets.all(12.0),
                     border: OutlineInputBorder(),
                     labelText: '${labelText}4)'),

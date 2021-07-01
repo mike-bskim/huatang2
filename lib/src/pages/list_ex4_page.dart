@@ -128,8 +128,8 @@ class _ListEx4PageState extends State<ListEx4Page> {
             .doc(widget.code)
             .collection('post_sub')
             .orderBy('datetime')
-            .snapshots(), // FutureBuilder
-//            .get(), // StreamBuilder
+            .snapshots(), // StreamBuilder
+//            .get(), // FutureBuilder
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());

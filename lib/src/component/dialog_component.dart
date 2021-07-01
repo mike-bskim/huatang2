@@ -23,7 +23,8 @@ class WarningYesNo extends StatelessWidget {
           decoration: BoxDecoration(),
           child: MaterialButton(
             onPressed: () {
-              Navigator.of(context).pop(false);
+//              Navigator.of(context).pop(false);
+              Get.back(result: false);
             },
             child: Text(NoMsg),
           ),
@@ -32,7 +33,8 @@ class WarningYesNo extends StatelessWidget {
           decoration: BoxDecoration(),
           child: MaterialButton(
             onPressed: () {
-              Navigator.of(context).pop(true);
+//              Navigator.of(context).pop(true);
+              Get.back(result: false);
             },
             child: Text(YesMsg),
           ),
@@ -64,7 +66,7 @@ class WarningNotice extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Get.back(result: false);
+            Get.back(result: true);
           },
           child: Text(btnMsg),
         ),

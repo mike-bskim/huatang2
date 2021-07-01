@@ -10,6 +10,7 @@ import 'package:huatang2/src/controller/ex4_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/admob_flutter_ads.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
+import 'package:huatang2/src/pages/result_ex4_page.dart';
 
 class TestEx4Page extends StatefulWidget {
   final _testUserInfo;
@@ -23,7 +24,7 @@ class _TestEx4PageState extends State<TestEx4Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
   final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
   int _currentPage = 0;
-  final Map _answerHistory = {};
+//  final Map _answerHistory = {};
   final Map _studentInfo = {};
   var newItems = [];
   var qTotal = 0;
@@ -151,13 +152,14 @@ class _TestEx4PageState extends State<TestEx4Page> {
 
 //.whereEqualTo("email", widget.user.email)
   Widget _buildBody() {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance
+    return FutureBuilder( // StreamBuilder FutureBuilder
+      future: FirebaseFirestore.instance // stream future
           .collection(widget._testUserInfo['teacherUid']) // post, teacher
           .doc(widget._testUserInfo['chapterCode']) // question id
           .collection('post_sub')
           .orderBy('datetime')
-          .snapshots(),
+//          .snapshots(), // StreamBuilder
+          .get(), // FutureBuilder
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
@@ -198,7 +200,8 @@ class _TestEx4PageState extends State<TestEx4Page> {
   Future<void> _checkResultDialog() async {
     var _errorFlag = false;
     var _msg;
-    var _answerCnt = _answerHistory.length;
+//    var _answerCnt = _answerHistory.length;
+    var _answerCnt = _ex4Controller.answerHistory.length;
 
     if (qTotal != _answerCnt) {
       _errorFlag = true;
@@ -232,6 +235,7 @@ class _TestEx4PageState extends State<TestEx4Page> {
 //        builder: (context) => ResultEx4Page(newItems, _answerHistory, _studentInfo, widget.userInfo),
 //      ),
 //    );
+    await Get.to(()=> ResultEx4Page(newItems, _studentInfo));
 //    if (result) {
 //      setState(() {});
 //    }
@@ -249,7 +253,8 @@ class _TestEx4PageState extends State<TestEx4Page> {
 
     return SingleChildScrollView(
       child: Container(
-        child: Column(children: <Widget>[
+        child: Column(
+          children: <Widget>[
 // QuestionTitle
           Container(
             padding: EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
@@ -277,7 +282,6 @@ class _TestEx4PageState extends State<TestEx4Page> {
                         controller2: _textController2,
                         controller3: _textController3,
                         controller4: _textController4,
-                        index1: _currentPage,
                       ),
                     ),
                   ],

@@ -458,33 +458,36 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 
   Future<bool> warningDialog(BuildContext context, String title, String msg) async {
     return await showDialog<bool>(
-          builder: (context) => AlertDialog(
-            title: Text(
-              title,
-//          style: new TextStyle(fontWeight: fontWeight, color: CustomColors.continueButton),
-              textAlign: TextAlign.center,
-            ),
-            content: Text(
-              msg,
-//          textAlign: TextAlign.justify,
-            ),
-            actions: <Widget>[
-              Container(
-                decoration: BoxDecoration(),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text(
-                    _multiMsg.strOk,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          context: context,
-        ) ??
-        false;
+      context: context,
+        builder: (BuildContext context) {
+          return WarningNotice(title: title, msg: msg, btnMsg: _multiMsg.strOk,);
+
+//          builder: (context) => AlertDialog(
+//            title: Text(
+//              title,
+////          style: new TextStyle(fontWeight: fontWeight, color: CustomColors.continueButton),
+//              textAlign: TextAlign.center,
+//            ),
+//            content: Text(
+//              msg,
+////          textAlign: TextAlign.justify,
+//            ),
+//            actions: <Widget>[
+//              Container(
+//                decoration: BoxDecoration(),
+//                child: MaterialButton(
+//                  onPressed: () {
+//                    Navigator.of(context).pop(true);
+//                  },
+//                  child: Text(
+//                    _multiMsg.strOk,
+//                  ),
+//                ),
+//              ),
+//            ],
+//          ),
+        }
+    ) ?? false;
   }
 
 //    .collection(widget.document['teacher_uid']) //

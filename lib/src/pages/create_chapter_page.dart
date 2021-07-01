@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:huatang2/src/component/dialog_component.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -257,24 +258,26 @@ class _CreateChapterPageState extends State<CreateChapterPage> {
         context: context,
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(_multiMsg.strWarnMessage),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(_msg),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(_multiMsg.strOk),
-              ),
-            ],
-          );
+          return WarningNotice(title: _multiMsg.strWarnMessage, msg: _msg, btnMsg: _multiMsg.strOk, );
+//          return AlertDialog(
+//            title: Text(_multiMsg.strWarnMessage),
+//            content: SingleChildScrollView(
+//              child: ListBody(
+//                children: <Widget>[
+//                  Text(_msg),
+//                ],
+//              ),
+//            ),
+//            actions: <Widget>[
+//              TextButton(
+//                onPressed: () {
+////                  Navigator.of(context).pop(false);
+//                  Get.back(result: false);
+//                },
+//                child: Text(_multiMsg.strOk),
+//              ),
+//            ],
+//          );
         },
       );
     }
