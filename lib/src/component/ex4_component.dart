@@ -365,8 +365,10 @@ class RadioBoxExample extends StatelessWidget {
 
 }
 
+//     videoController = Get.find(tag: Get.parameters['videoId']);
 class RadioBoxExampleReadOnly extends StatelessWidget {
-  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
+//  final Ex4Controller _ex4Controller = Get.put(Ex4Controller(), tag: '_testresult');
+  final Ex4Controller _ex4Controller = Get.find(tag: '_testresult');
   final labelText;
 //  final hintText;
   final editable;

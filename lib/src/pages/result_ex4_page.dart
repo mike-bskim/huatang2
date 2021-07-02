@@ -14,10 +14,10 @@ import 'package:huatang2/src/model/multi_msg.dart';
 
 class ResultEx4Page extends StatefulWidget {
   final examList;
-//  final answerHistory;
+  final answerHistory;
   final studentInfo;
 //  final userInfo;
-  ResultEx4Page(this.examList, this.studentInfo); // this.answerHistory, this.userInfo,
+  ResultEx4Page(this.examList, this.answerHistory, this.studentInfo); // , this.userInfo,
 
   @override
   _ResultEx4PageState createState() => _ResultEx4PageState();
@@ -25,7 +25,7 @@ class ResultEx4Page extends StatefulWidget {
 
 class _ResultEx4PageState extends State<ResultEx4Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
-  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
+  final Ex4Controller _ex4Controller = Get.put(Ex4Controller(), tag: '_testresult');
   final _textController0 = TextEditingController();
   final _textController1 = TextEditingController();
   final _textController2 = TextEditingController();
@@ -97,8 +97,8 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
 
     for(var i=0; i < qTotal; i++) {
       _teacher.add(widget.examList[i]['teacher_answer']);
-      _student.add(_ex4Controller.answerHistory[i]);
-      if(widget.examList[i]['teacher_answer'] == _ex4Controller.answerHistory[i]) {
+      _student.add(widget.answerHistory[i]);
+      if(widget.examList[i]['teacher_answer'] == widget.answerHistory[i]) {
         _point.add(1);
       } else {
         _point.add(0);
@@ -195,39 +195,39 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
     _textController3.text = newItems[_currentPage]['ex3'];
     _textController4.text = newItems[_currentPage]['ex4'];
 
-    if (_ex4Controller.answerHistory.isNotEmpty) {
-      if (_ex4Controller.answerHistory[_currentPage] == 1) {
+    if (widget.answerHistory.isNotEmpty) {
+      if (widget.answerHistory[_currentPage] == 1) {
         _ex4Controller.studentSelectReadOnly = StudentSelect.one;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 2) {
+      } else if (widget.answerHistory[_currentPage] == 2) {
         _ex4Controller.studentSelectReadOnly = StudentSelect.two;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 3) {
+      } else if (widget.answerHistory[_currentPage] == 3) {
         _ex4Controller.studentSelectReadOnly = StudentSelect.three;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 4) {
+      } else if (widget.answerHistory[_currentPage] == 4) {
         _ex4Controller.studentSelectReadOnly = StudentSelect.four;
       } else {
         _ex4Controller.studentSelectReadOnly = StudentSelect.zero;
       }
     }
 
-    if (newItems[_currentPage]['teacher_answer'] == _ex4Controller.answerHistory[_currentPage]) {
-      if (_ex4Controller.answerHistory[_currentPage] == 1) {
+    if (newItems[_currentPage]['teacher_answer'] == widget.answerHistory[_currentPage]) {
+      if (widget.answerHistory[_currentPage] == 1) {
         _boxColor1 = Colors.lightGreen;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 2) {
+      } else if (widget.answerHistory[_currentPage] == 2) {
         _boxColor2 = Colors.lightGreen;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 3) {
+      } else if (widget.answerHistory[_currentPage] == 3) {
         _boxColor3 = Colors.lightGreen;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 4) {
+      } else if (widget.answerHistory[_currentPage] == 4) {
         _boxColor4 = Colors.lightGreen;
       }
 
     } else {
-      if (_ex4Controller.answerHistory[_currentPage] == 1) {
+      if (widget.answerHistory[_currentPage] == 1) {
         _boxColor1 = Colors.redAccent;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 2) {
+      } else if (widget.answerHistory[_currentPage] == 2) {
         _boxColor2 = Colors.redAccent;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 3) {
+      } else if (widget.answerHistory[_currentPage] == 3) {
         _boxColor3 = Colors.redAccent;
-      } else if (_ex4Controller.answerHistory[_currentPage] == 4) {
+      } else if (widget.answerHistory[_currentPage] == 4) {
         _boxColor4 = Colors.redAccent;
       }
 

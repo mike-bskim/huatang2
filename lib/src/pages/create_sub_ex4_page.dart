@@ -72,31 +72,6 @@ class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
     );
   }
 
-//  PreferredSizeWidget _buildAppBar() {
-//    return AppBar(
-//      centerTitle: true,
-//      backgroundColor: Color.fromRGBO(38, 100, 100, 1.0),
-//      iconTheme: IconThemeData(
-//        color: Colors.white,
-//      ),
-//      title: Text(
-//        _multiMsg.strAppBarTitle,
-//        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-//      ),
-//      actions: [
-//        IconButton(
-//          icon: iconColorFlag
-//              ? Icon(
-//                  Icons.file_upload,
-//                  color: Colors.white,
-//                )
-//              : Icon(Icons.file_upload, color: Color.fromRGBO(38, 100, 100, 1.0)),
-//          tooltip: 'upload Image',
-//          onPressed: iconColorFlag ? _checkUploadDialog : null, //_uploadImage,
-//        )
-//      ],
-//    );
-//  }
 
   Widget _buildBody() {
     if (_uploadFlag) {
@@ -208,24 +183,6 @@ class _CreateSubEx4PageState extends State<CreateSubEx4Page> {
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) {
           return WarningNotice(title: _multiMsg.strWarnMessage, msg: _msg, btnMsg: _multiMsg.strOk, );
-//          return AlertDialog(
-//            title: Text(_multiMsg.strWarnMessage),
-//            content: SingleChildScrollView(
-//              child: ListBody(
-//                children: <Widget>[
-//                  Text(_msg),
-//                ],
-//              ),
-//            ),
-//            actions: <Widget>[
-//              TextButton(
-//                onPressed: () {
-//                  Navigator.of(context).pop(false);
-//                },
-//                child: Text(_multiMsg.strOk),
-//              ),
-//            ],
-//          );
         },
       );
     } else {

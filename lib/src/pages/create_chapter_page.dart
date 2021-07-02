@@ -259,25 +259,6 @@ class _CreateChapterPageState extends State<CreateChapterPage> {
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) {
           return WarningNotice(title: _multiMsg.strWarnMessage, msg: _msg, btnMsg: _multiMsg.strOk, );
-//          return AlertDialog(
-//            title: Text(_multiMsg.strWarnMessage),
-//            content: SingleChildScrollView(
-//              child: ListBody(
-//                children: <Widget>[
-//                  Text(_msg),
-//                ],
-//              ),
-//            ),
-//            actions: <Widget>[
-//              TextButton(
-//                onPressed: () {
-////                  Navigator.of(context).pop(false);
-//                  Get.back(result: false);
-//                },
-//                child: Text(_multiMsg.strOk),
-//              ),
-//            ],
-//          );
         },
       );
     }

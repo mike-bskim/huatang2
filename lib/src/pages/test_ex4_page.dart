@@ -43,7 +43,6 @@ class _TestEx4PageState extends State<TestEx4Page> {
 
 //  String _appId;
   late String _adUnitId;
-
   /* ********************* adMob ********************* */
 
   @override
@@ -100,7 +99,6 @@ class _TestEx4PageState extends State<TestEx4Page> {
       },
     );
   }
-
   /* ********************* adMob ********************* */
 
   @override
@@ -221,24 +219,16 @@ class _TestEx4PageState extends State<TestEx4Page> {
         },
       );
     } else {
-      /* ********************* adMob ********************* */
+      /* ********************* adMob.load ********************* */
       _adMobInterstitial.load();
-      /* ********************* adMob ********************* */
+      /* ********************* adMob.load ********************* */
       await _showResult();
     }
   }
 
   Future _showResult() async {
-//    final result = await Navigator.push(
-//      context,
-//      MaterialPageRoute(
-//        builder: (context) => ResultEx4Page(newItems, _answerHistory, _studentInfo, widget.userInfo),
-//      ),
-//    );
-    await Get.to(()=> ResultEx4Page(newItems, _studentInfo));
-//    if (result) {
-//      setState(() {});
-//    }
+
+    await Get.to(()=> ResultEx4Page(newItems, _ex4Controller.answerHistory, _studentInfo));
   }
 
   Widget _buildCarouselSlider(List newItems) {

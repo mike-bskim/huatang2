@@ -175,9 +175,9 @@ class _TestMainPageState extends State<TestMainPage> {
         },
       );
     } else {
-      /* ********************* adMob ********************* */
+      /* ********************* adMob.load ********************* */
       _adMobInterstitial.load();
-      /* ********************* adMob ********************* */
+      /* ********************* adMob.load ********************* */
       await _loadQuestionType();
     }
   }

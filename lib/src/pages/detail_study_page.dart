@@ -71,6 +71,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
                 _showQuestion();
               } else {
                 deleteChapter();
+                print('deleted chapter');
               }
             },
             itemBuilder: (context) {
@@ -116,6 +117,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //          MaterialPageRoute(builder: (context) =>
 //              CreateSubEx2Page(widget.document, widget.userInfo)),
 //        );
+//        _resultAdd = await Get.to(() => CreateSubEx2Page(widget.chapterInfo)); //widget.user
       } else if (widget.chapterInfo['question_type'] == 'ex4') {
         // ex4
 //        _resultAdd = await Navigator.push(
@@ -160,6 +162,8 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //            ListEx2Page(widget.document['teacher_uid'], widget.document['id'],
 //              this._testResultCntStudent, widget.userInfo)),
 //      );
+//      _resultShow = await Get.to(() => ListEx2Page(
+//          widget.chapterInfo['teacher_uid'], widget.chapterInfo['id'], _testResultCntStudent));
     } else if (widget.chapterInfo['question_type'] == 'ex4') {
 //      _resultShow = await Navigator.push(
 //        context,
@@ -404,6 +408,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
       _msg = _multiMsg.strWarnAdd;
       var _dialogResult = await warningDialog(context, _multiMsg.strWarnMessage, _msg);
       if (_dialogResult.toString() == 'true') {
+        print('오케이 선택');
         //call setState here to rebuild your state.
       }
     } else {
@@ -461,31 +466,6 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
       context: context,
         builder: (BuildContext context) {
           return WarningNotice(title: title, msg: msg, btnMsg: _multiMsg.strOk,);
-
-//          builder: (context) => AlertDialog(
-//            title: Text(
-//              title,
-////          style: new TextStyle(fontWeight: fontWeight, color: CustomColors.continueButton),
-//              textAlign: TextAlign.center,
-//            ),
-//            content: Text(
-//              msg,
-////          textAlign: TextAlign.justify,
-//            ),
-//            actions: <Widget>[
-//              Container(
-//                decoration: BoxDecoration(),
-//                child: MaterialButton(
-//                  onPressed: () {
-//                    Navigator.of(context).pop(true);
-//                  },
-//                  child: Text(
-//                    _multiMsg.strOk,
-//                  ),
-//                ),
-//              ),
-//            ],
-//          ),
         }
     ) ?? false;
   }

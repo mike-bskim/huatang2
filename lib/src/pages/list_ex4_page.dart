@@ -278,7 +278,6 @@ class _ListEx4PageState extends State<ListEx4Page> {
     }
     _qCnt = _qCnt / _testResult.length.toDouble();
 
-//  if (_testResult.length == 0) {
     if (_testResult.isEmpty) {
       _score = _multiMsg.strNoOne;
     } else if (_qCnt < newItems.length.toDouble()) {
@@ -308,10 +307,6 @@ class _ListEx4PageState extends State<ListEx4Page> {
     _textController2.text = newItems[_currentPage]['ex2'];
     _textController3.text = newItems[_currentPage]['ex3'];
     _textController4.text = newItems[_currentPage]['ex4'];
-//    _checkboxValue1 = newItems[_currentPage]['correct1'];
-//    _checkboxValue2 = newItems[_currentPage]['correct2'];
-//    _checkboxValue3 = newItems[_currentPage]['correct3'];
-//    _checkboxValue4 = newItems[_currentPage]['correct4'];
     _ex4Controller.checkValue1.value = newItems[_currentPage]['correct1'];
     _ex4Controller.checkValue2.value = newItems[_currentPage]['correct2'];
     _ex4Controller.checkValue3.value = newItems[_currentPage]['correct3'];
