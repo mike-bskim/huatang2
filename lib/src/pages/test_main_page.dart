@@ -3,7 +3,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:huatang2/src/component/dialog_component.dart';
+import 'package:huatang2/src/component/common_component.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/admob_flutter_ads.dart';
 import 'package:huatang2/src/model/multi_msg.dart';

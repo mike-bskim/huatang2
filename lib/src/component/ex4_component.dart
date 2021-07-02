@@ -37,91 +37,44 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
 }
 
 
-class QuestionTitle extends StatelessWidget {
-  final titleHint;
-  final TextEditingController? controller;
-  final editable;
+//class QuestionTitleReadOnly extends StatelessWidget {
+//  final title;
+//
+//  QuestionTitleReadOnly({required this.title,});
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return Text(
+//      title,
+//      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//    );
+//  }
+//}
 
-  QuestionTitle({this.titleHint, this.controller, this.editable = false});
 
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      textAlign: TextAlign.center,
-      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-      enabled: editable,
-      decoration: InputDecoration(
-        hintText: titleHint,
-        enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black)
-        ),
-        disabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black)
-        ),
-      ),
-      controller: controller,
-    );
-  }
-}
-
-class QuestionTitleReadOnly extends StatelessWidget {
-  final title;
-
-  QuestionTitleReadOnly({required this.title,});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-    );
-  }
-}
-
-class QuestionImage extends StatelessWidget {
-  final image;
-  final msg;
-
-  QuestionImage({required this.image, this.msg});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 350,
-      height: 200,
-      child: image == null
-          ? Center(child: Text(msg))
-          : Image.file(
-        image!,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-}
-
-class QuestionImageReadOnly extends StatelessWidget {
-  final photoUrl;
-
-  QuestionImageReadOnly({required this.photoUrl});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: photoUrl == 'NoImage' ?
-      Container(
-          width: 350,
-          height: 20,
-          child: null
-      ) :
-      Container(
-          width: 350,
-          height: 200,
-          child: Image.network(photoUrl, fit: BoxFit.cover) //, width: 1000)
-      ),
-    );
-
-  }
-}
+//class QuestionImageReadOnly extends StatelessWidget {
+//  final photoUrl;
+//
+//  QuestionImageReadOnly({required this.photoUrl});
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return Container(
+//      child: photoUrl == 'NoImage' ?
+//      Container(
+//          width: 350,
+//          height: 20,
+//          child: null
+//      ) :
+//      Container(
+//          width: 350,
+//          height: 200,
+//          child: Image.network(photoUrl, fit: BoxFit.cover) //, width: 1000)
+//      ),
+//    );
+//
+//  }
+//}
 
 
 class CheckBoxExample extends StatelessWidget {

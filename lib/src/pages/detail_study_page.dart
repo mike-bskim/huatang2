@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:huatang2/src/component/dialog_component.dart';
+import 'package:huatang2/src/component/common_component.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
+import 'package:huatang2/src/pages/create_sub_ex2_page.dart';
 import 'package:huatang2/src/pages/create_sub_ex4_page.dart';
+import 'package:huatang2/src/pages/list_ex2_page.dart';
 
 import 'list_ex4_page.dart';
 
@@ -117,7 +119,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //          MaterialPageRoute(builder: (context) =>
 //              CreateSubEx2Page(widget.document, widget.userInfo)),
 //        );
-//        _resultAdd = await Get.to(() => CreateSubEx2Page(widget.chapterInfo)); //widget.user
+        _resultAdd = await Get.to(() => CreateSubEx2Page(widget.chapterInfo)); //widget.user
       } else if (widget.chapterInfo['question_type'] == 'ex4') {
         // ex4
 //        _resultAdd = await Navigator.push(
@@ -164,6 +166,8 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //      );
 //      _resultShow = await Get.to(() => ListEx2Page(
 //          widget.chapterInfo['teacher_uid'], widget.chapterInfo['id'], _testResultCntStudent));
+      _resultShow = await Get.to(() => ListEx2Page(
+          widget.chapterInfo['teacher_uid'], widget.chapterInfo['id'], _testResultCntStudent));
     } else if (widget.chapterInfo['question_type'] == 'ex4') {
 //      _resultShow = await Navigator.push(
 //        context,

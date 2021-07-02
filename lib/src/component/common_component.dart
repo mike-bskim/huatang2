@@ -77,3 +77,84 @@ class WarningNotice extends StatelessWidget {
     );
   }
 }
+
+
+class QuestionTitle extends StatelessWidget {
+  final titleHint;
+  final TextEditingController? controller;
+  final editable;
+
+  QuestionTitle({this.titleHint, this.controller, this.editable = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      textAlign: TextAlign.center,
+      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+      enabled: editable,
+      decoration: InputDecoration(
+        hintText: titleHint,
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 2.0)
+        ),
+        disabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black, width: 2.0)
+        ),
+//        border: UnderlineInputBorder(
+//            borderSide: BorderSide(color: Colors.black),
+//        ),
+      ),
+      controller: controller,
+    );
+  }
+}
+
+
+class QuestionImage extends StatelessWidget {
+  final image;
+  final msg;
+
+  QuestionImage({required this.image, this.msg});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 350,
+      height: 200,
+//      decoration: BoxDecoration(
+//          border: Border.all(color: Colors.black12)
+//      ),
+      child: image == null
+          ? Center(child: Text(msg))
+          : Image.file(
+        image!,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+}
+
+
+class QuestionImageReadOnly extends StatelessWidget {
+  final photoUrl;
+
+  QuestionImageReadOnly({required this.photoUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: photoUrl == 'NoImage' ?
+      Container(
+          width: 350,
+          height: 20,
+          child: null
+      ) :
+      Container(
+          width: 350,
+          height: 200,
+          child: Image.network(photoUrl, fit: BoxFit.cover) //, width: 1000)
+      ),
+    );
+
+  }
+}

@@ -1,53 +1,50 @@
+import 'dart:ui';
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
-import 'package:huatang2/src/component/ex4_component.dart';
 import 'package:huatang2/src/component/common_component.dart';
-import 'package:huatang2/src/controller/ex4_controller.dart';
+import 'package:huatang2/src/component/ex2_component.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
-import 'dart:async';
-
 import 'package:huatang2/src/model/multi_msg.dart';
-import 'package:huatang2/src/pages/modify_sub_ex4_page.dart';
 
 //
-class ListEx4Page extends StatefulWidget {
+class ListEx2Page extends StatefulWidget {
   final teacherUid;
   final code;
   final testResultCntStudent;
 
-  ListEx4Page(this.teacherUid, this.code, this.testResultCntStudent); //
+//  final userInfo;
+  ListEx2Page(this.teacherUid, this.code, this.testResultCntStudent); // , this.userInfo
 
   @override
-  _ListEx4PageState createState() => _ListEx4PageState();
+  _ListEx2PageState createState() => _ListEx2PageState();
 }
 
-class _ListEx4PageState extends State<ListEx4Page> {
+class _ListEx2PageState extends State<ListEx2Page> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
-  final Ex4Controller _ex4Controller = Get.put(Ex4Controller());
   final _textController0 = TextEditingController();
   final _textController1 = TextEditingController();
-  final _textController2 = TextEditingController();
-  final _textController3 = TextEditingController();
-  final _textController4 = TextEditingController();
-
-  bool questionFlag = false; // 질문이 있으면 popup 매뉴 보이고, 제목표시(문제인덱스/문항수)
-  bool _deleteFlag = false; // 삭제발생시, 슬라이드를 1번으로 자동 이동.
+  bool questionFlag = false;
+  bool _deleteFlag = false;
   int _currentPage = 0;
   var qTotal = 0;
-  final _multiMsg = MultiMessageListEx4();
-
+  final _multiMsg = MultiMessageListEx2();
   var newItems = [];
   final _testResult = [];
+
+  Color? _buttonColor1;
+  Color? _buttonColor2;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getSubCnt();
     _loadTestResult();
+    _getSubCnt();
   }
 
   @override
@@ -55,15 +52,11 @@ class _ListEx4PageState extends State<ListEx4Page> {
     // TODO: implement dispose
     _textController0.dispose();
     _textController1.dispose();
-    _textController2.dispose();
-    _textController3.dispose();
-    _textController4.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-//    print('list ex4 >> build');
     _multiMsg.convertDescription(_userInfoController.userInfo['userLangType']);
 
     return Scaffold(
@@ -104,18 +97,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
     );
   }
 
-//      child: StreamBuilder(
-//        stream: FirebaseFirestore.instance
-//            .snapshots(),
-
-//      child: FutureBuilder(
-//        future: FirebaseFirestore.instance
-//            .snapshots(),
-//  if (snapshot.connectionState == ConnectionState.done) {
-//  Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-//  return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-//  }
-
+//
   Widget _buildBody() {
     return WillPopScope(
       onWillPop: () {
@@ -123,20 +105,17 @@ class _ListEx4PageState extends State<ListEx4Page> {
         Get.back(result: true);
         return Future.value(true);
       },
-      child: StreamBuilder<QuerySnapshot>(
-        // StreamBuilder FutureBuilder
-        stream: FirebaseFirestore.instance // stream future
+      child: StreamBuilder(
+        stream: FirebaseFirestore.instance
             .collection(widget.teacherUid) //post
             .doc(widget.code)
             .collection('post_sub')
             .orderBy('datetime')
-            .snapshots(), // StreamBuilder
-//            .get(), // FutureBuilder
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-
           if (snapshot.data != null && !snapshot.hasError) {
             var items = snapshot.data.docs ?? [];
 
@@ -149,8 +128,10 @@ class _ListEx4PageState extends State<ListEx4Page> {
             for (var i = 0; i < items.length; i++) {
               newItems.add(items[i]);
             }
+
             return _buildCarouselSlider(newItems);
           }
+
           return Text(_multiMsg.strNoList);
         },
       ),
@@ -158,14 +139,17 @@ class _ListEx4PageState extends State<ListEx4Page> {
   }
 
   Future _modifyQuestion() async {
-    // streamBuilder 라서 데이터 수정후 자동으로 리로드함. setState 필요없음
-    await Get.to(() => ModifySubEx4Page(document: newItems[_currentPage]))!.then((value) => {
-//      Future.delayed(Duration(milliseconds: 300), () {
-//        setState(() {
-//          print('<List Ex4> return from _modifyQuestion()');
-//        });
-//      }),
-        });
+//    final result = await Navigator.push(
+//      context,
+//      MaterialPageRoute(
+//          builder: (context) =>
+//              ModifySubEx2Page(document: newItems[_currentPage],
+//                  userInfo: widget.userInfo)),
+//    );
+//    if (result) {
+//      setState(() {
+//      });
+//    }
   }
 
   void deleteData(idParent, idChild) {
@@ -201,13 +185,12 @@ class _ListEx4PageState extends State<ListEx4Page> {
   deleteQuestion() async {
     //handleClear, deleteChapter
     try {
-      var delete = await deleteWarningDialog(
+      var delete = await deleteLoanWarning(
         context,
         _multiMsg.strWarnMessage,
         _multiMsg.strWarnDelete,
       );
-
-      if (delete == true) {
+      if (delete.toString() == 'true') {
         //call setState here to rebuild your state.
         deleteData(newItems[_currentPage]['id_parent'], newItems[_currentPage]['id_child']);
       }
@@ -216,7 +199,7 @@ class _ListEx4PageState extends State<ListEx4Page> {
     }
   }
 
-  Future<bool> deleteWarningDialog(BuildContext context, String title, String msg) async {
+  Future<bool> deleteLoanWarning(BuildContext context, String title, String msg) async {
     return await showDialog<bool>(
           context: context,
           builder: (context) => WarningYesNo(
@@ -266,11 +249,8 @@ class _ListEx4PageState extends State<ListEx4Page> {
   }
 
   Widget _buildCarouselSlider(List newItems) {
-//    print(newItems[_currentPage]);
     var _num1 = 0.0;
     var _num2 = 0.0;
-    var _num3 = 0.0;
-    var _num4 = 0.0;
     String _score;
     var _qCnt = 0.0;
 
@@ -286,57 +266,51 @@ class _ListEx4PageState extends State<ListEx4Page> {
       _score = '${_multiMsg.strMissMatching} ' + _qCnt.toString() + ')';
     } else {
       for (var i = 0; i < _testResult.length; i++) {
-        //_testResult.length = how many students
         // i is students
-        if (_testResult[i]['student'][_currentPage] == 1) _num1 += 1;
-        if (_testResult[i]['student'][_currentPage] == 2) _num2 += 1;
-        if (_testResult[i]['student'][_currentPage] == 3) _num3 += 1;
-        if (_testResult[i]['student'][_currentPage] == 4) _num4 += 1;
+        if (_testResult[i]['student'][_currentPage] == true) _num1 += 1;
+        if (_testResult[i]['student'][_currentPage] == false) _num2 += 1;
       }
       _num1 = _num1 / _testResult.length * 100;
       _num2 = _num2 / _testResult.length * 100;
-      _num3 = _num3 / _testResult.length * 100;
-      _num4 = _num4 / _testResult.length * 100;
 
       _score = 'selection - ';
-      _score += '#1(' + _num1.toStringAsFixed(0) + '%)';
-      _score += '  #2(' + _num2.toStringAsFixed(0) + '%)';
-      _score += '  #3(' + _num3.toStringAsFixed(0) + '%)';
-      _score += '  #4(' + _num4.toStringAsFixed(0) + '%)';
+      _score += 'True(${_num1.toStringAsFixed(0)}%)';
+      _score += '    False(${_num2.toStringAsFixed(0)}%)';
+    }
+
+    if (newItems[_currentPage]['teacher_answer'] == true) {
+      _buttonColor1 = Colors.lightGreen;
+      _buttonColor2 = const Color(0xFFd2d2d2);
+    } else {
+      _buttonColor1 = const Color(0xFFd2d2d2);
+      _buttonColor2 = Colors.lightGreen;
     }
 
     _textController0.text = newItems[_currentPage]['contents'];
-    _textController1.text = newItems[_currentPage]['ex1'];
-    _textController2.text = newItems[_currentPage]['ex2'];
-    _textController3.text = newItems[_currentPage]['ex3'];
-    _textController4.text = newItems[_currentPage]['ex4'];
-    _ex4Controller.checkValue1.value = newItems[_currentPage]['correct1'];
-    _ex4Controller.checkValue2.value = newItems[_currentPage]['correct2'];
-    _ex4Controller.checkValue3.value = newItems[_currentPage]['correct3'];
-    _ex4Controller.checkValue4.value = newItems[_currentPage]['correct4'];
+    _textController1.text = newItems[_currentPage]['correct1'];
 
     return SingleChildScrollView(
       child: Container(
         child: Column(
           children: [
 // QuestionTitle
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-              child: QuestionTitle(
-                controller: _textController0,
-              ),
-            ),
+            Container(
+                padding: EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
+                child: QuestionTitle(
+                  controller: _textController0,
+                )),
             Padding(padding: EdgeInsets.all(4.0)),
 // image & select example
             CarouselSlider.builder(
               itemCount: newItems.length,
-              itemBuilder: (context, index, realIdx) {
+              itemBuilder: (context, index, readIdx) {
                 if (_deleteFlag == true) {
                   _deleteFlag = false;
                   index = 0;
                 }
                 return Container(
                   padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+//                  color: Colors.pinkAccent,
                   child: Column(
                     children: <Widget>[
 // image
@@ -346,15 +320,19 @@ class _ListEx4PageState extends State<ListEx4Page> {
                       Padding(padding: EdgeInsets.all(8.0)),
 // select example
                       Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
-                        child: CheckBoxExample(
-                          labelText: _multiMsg.strEx,
+                        padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                        child: TrueFalseBoxSetState(
+                          trueMsg: _multiMsg.strTrue,
+                          falseMsg: _multiMsg.strFalse,
                           editable: false,
-                          controller1: _textController1,
-                          controller2: _textController2,
-                          controller3: _textController3,
-                          controller4: _textController4,
+                          trueColor: _buttonColor1,
+                          falseColor: _buttonColor2,
                         ),
+                      ),
+                      Padding(padding: EdgeInsets.all(8.0)),
+                      Text(
+                        '${_multiMsg.strAnswer}: ' + newItems[_currentPage]['correct1'],
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Padding(padding: EdgeInsets.all(8.0)),
                       Text('${_multiMsg.strStudentCnt}: ${_testResult.length.toString()}'),

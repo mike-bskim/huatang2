@@ -4,7 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:huatang2/src/component/dialog_component.dart';
+import 'package:huatang2/src/component/common_component.dart';
 import 'package:huatang2/src/component/ex4_component.dart';
 import 'package:huatang2/src/controller/ex4_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
