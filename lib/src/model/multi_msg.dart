@@ -442,7 +442,7 @@ class MultiMessageDetail {
 }
 
 class MultiMessageHome {
-  static const version = '0.5.5';
+  static const version = '0.6.0';
   var strTeacher = '';
   var strParents = '';
   var strStudent = '';
