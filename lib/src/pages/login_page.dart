@@ -82,7 +82,7 @@ class LoginPage extends StatelessWidget {
               SignInButton(
                 Buttons.GoogleDark,
                 onPressed: () {
-                  _handleSignIn().then((user) {
+                  _handleSignIn().then((user) { // signInWithGoogleWeb / _handleSignIn
                     print('Google: login');
                   });
                 },
@@ -93,7 +93,7 @@ class LoginPage extends StatelessWidget {
               SignInButton(
                 Buttons.Facebook,
                 onPressed: () {
-                  signInWithFacebook().then((user) {
+                  signInWithFacebook().then((user) { //signInWithFacebookWeb / signInWithFacebook
                     print('Facebook: login');
                   });
                 },
@@ -146,6 +146,26 @@ class LoginPage extends StatelessWidget {
     return user;
   }
 
+  Future signInWithGoogleWeb() async {
+    // Create a new provider
+    var googleProvider = GoogleAuthProvider();
+
+    googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+    googleProvider.setCustomParameters({
+      'login_hint': 'user@example.com'
+    });
+
+    // Once signed in, return the UserCredential
+//    return
+    final authResult = await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    final user = authResult.user;
+
+    return user;
+
+    // Or use signInWithRedirect
+    // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+  }
+
   // <UserCredential>
   Future signInWithFacebook() async {
     // Trigger the sign-in flow
@@ -162,6 +182,26 @@ class LoginPage extends StatelessWidget {
     final user = authResult.user;
 
     return user;
+  }
+
+  Future signInWithFacebookWeb() async {
+    // Create a new provider
+    var facebookProvider = FacebookAuthProvider();
+
+    facebookProvider.addScope('email');
+    facebookProvider.setCustomParameters({
+      'display': 'popup',
+    });
+
+    // Once signed in, return the UserCredential
+//    return await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+    final authResult = await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+    final user = authResult.user;
+
+    return user;
+
+    // Or use signInWithRedirect
+    // return await FirebaseAuth.instance.signInWithRedirect(facebookProvider);
   }
 
   // <UserCredential>, ios 13 이상인 경우
