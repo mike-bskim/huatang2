@@ -82,7 +82,7 @@ class LoginPage extends StatelessWidget {
               SignInButton(
                 Buttons.GoogleDark,
                 onPressed: () {
-                  _handleSignIn().then((user) { // signInWithGoogleWeb / _handleSignIn
+                  signInWithGoogleWeb().then((user) { // signInWithGoogleWeb / _handleSignIn
                     print('Google: login');
                   });
                 },
