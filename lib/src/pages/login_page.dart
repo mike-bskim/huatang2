@@ -1,4 +1,5 @@
 import 'dart:async';
+//import 'dart:io' show Platform;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,15 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var _mobile = false;
+    var _isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    var _isAOS = Theme.of(context).platform == TargetPlatform.android;
+    if(_isAOS || _isIOS) {
+      _mobile = true;
+    }
+    print('isMobile: : ' + _mobile.toString());
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -82,8 +92,12 @@ class LoginPage extends StatelessWidget {
               SignInButton(
                 Buttons.GoogleDark,
                 onPressed: () {
-                  signInWithGoogleWeb().then((user) { // signInWithGoogleWeb / _handleSignIn
-                    print('Google: login');
+                  _isAOS
+                  ? _handleSignIn().then((user) { // signInWithGoogleWeb / _handleSignIn
+                    print('Google(AOS): login');
+                  })
+                  : signInWithGoogleWeb().then((user) { // signInWithGoogleWeb / _handleSignIn
+                  print('Google(NO AOS): login');
                   });
                 },
               ),
