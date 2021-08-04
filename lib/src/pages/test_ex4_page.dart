@@ -10,6 +10,7 @@ import 'package:huatang2/src/controller/ex4_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/admob_flutter_ads.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
+import 'package:huatang2/src/model/questions.dart';
 import 'package:huatang2/src/pages/result_ex4_page.dart';
 
 class TestEx4Page extends StatefulWidget {
@@ -26,7 +27,7 @@ class _TestEx4PageState extends State<TestEx4Page> {
   int _currentPage = 0;
 //  final Map _answerHistory = {};
   final Map _studentInfo = {};
-  var newItems = [];
+  var _questions;
   var qTotal = 0;
   var _multiMsg;
   final _textController0 = TextEditingController();
@@ -34,6 +35,7 @@ class _TestEx4PageState extends State<TestEx4Page> {
   final _textController2 = TextEditingController();
   final _textController3 = TextEditingController();
   final _textController4 = TextEditingController();
+  final _firebaseFirestore = FirebaseFirestore.instance;
 
 //  studentSelect? _studentSelect;
 
@@ -151,7 +153,7 @@ class _TestEx4PageState extends State<TestEx4Page> {
 //.whereEqualTo("email", widget.user.email)
   Widget _buildBody() {
     return FutureBuilder( // StreamBuilder FutureBuilder
-      future: FirebaseFirestore.instance // stream future
+      future: _firebaseFirestore // stream future
           .collection(widget._testUserInfo['teacherUid']) // post, teacher
           .doc(widget._testUserInfo['chapterCode']) // question id
           .collection('post_sub')
@@ -163,19 +165,18 @@ class _TestEx4PageState extends State<TestEx4Page> {
           return Center(child: CircularProgressIndicator());
         }
         if (snapshot.data != null && !snapshot.hasError) {
-          var items = snapshot.data.docs ?? [];
+          // model testing
+          _questions = snapshot.data!.docs.map((questions) {
+            return Ex4_Questions.fromDoc(questions);
+          }).toList();
 
-          newItems.clear();
-
-          if (items.length < 1) {
-            return Text(_multiMsg.strNoData);
+          if (_questions.length < 1) {
+            return Center(child: Text(_multiMsg.strNoData));
           }
 
-          for (var i = 0; i < items.length; i++) {
-            newItems.add(items[i]);
-          }
-
-          return _buildCarouselSlider(newItems);
+//            print(snapshot.data.docs.first.data().toString()); //cho@me.com
+          return _buildCarouselSlider(_questions);
+//          return _buildCarouselSlider(newItems);
         }
         return Text(_multiMsg.strNoTest);
       },
@@ -183,7 +184,7 @@ class _TestEx4PageState extends State<TestEx4Page> {
   }
 
   void _getSubCnt() {
-    FirebaseFirestore.instance
+    _firebaseFirestore
         .collection(widget._testUserInfo['teacherUid']) // post
         .doc(widget._testUserInfo['chapterCode'])
         .collection('post_sub')
@@ -228,15 +229,15 @@ class _TestEx4PageState extends State<TestEx4Page> {
 
   Future _showResult() async {
 
-    await Get.to(()=> ResultEx4Page(newItems, _ex4Controller.answerHistory, _studentInfo));
+    await Get.to(()=> ResultEx4Page(_questions, _ex4Controller.answerHistory, _studentInfo));
   }
 
   Widget _buildCarouselSlider(List newItems) {
-    _textController0.text = newItems[_currentPage]['contents'];
-    _textController1.text = newItems[_currentPage]['ex1'];
-    _textController2.text = newItems[_currentPage]['ex2'];
-    _textController3.text = newItems[_currentPage]['ex3'];
-    _textController4.text = newItems[_currentPage]['ex4'];
+    _textController0.text = newItems[_currentPage].question_title;
+    _textController1.text = newItems[_currentPage].ex1;
+    _textController2.text = newItems[_currentPage].ex2;
+    _textController3.text = newItems[_currentPage].ex3;
+    _textController4.text = newItems[_currentPage].ex4;
 
 //    print('_currentPage: ' + _currentPage.toString());
 //    print('answerHistory: ' + _ex4Controller.answerHistory.toString());
@@ -261,7 +262,7 @@ class _TestEx4PageState extends State<TestEx4Page> {
                 child: Column(
                   children: <Widget>[
 // image
-                    QuestionImageReadOnly(photoUrl: newItems[index]['photoUrl'],),
+                    QuestionImageReadOnly(photoUrl: newItems[index].photoUrl,),
                     Padding(padding: EdgeInsets.all(8.0)),
 // select example radio box
                     Container(

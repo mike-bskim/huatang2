@@ -31,7 +31,7 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
   final _textController2 = TextEditingController();
   final _textController3 = TextEditingController();
   final _textController4 = TextEditingController();
-
+  final _firebaseFirestore = FirebaseFirestore.instance;
 //  studentSelect _studentSelect;
 
   var _currentPage = 0;
@@ -96,9 +96,9 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
     var _resultMap = <String, dynamic>{};
 
     for(var i=0; i < qTotal; i++) {
-      _teacher.add(widget.examList[i]['teacher_answer']);
+      _teacher.add(widget.examList[i].teacher_answer);
       _student.add(widget.answerHistory[i]);
-      if(widget.examList[i]['teacher_answer'] == widget.answerHistory[i]) {
+      if(widget.examList[i].teacher_answer == widget.answerHistory[i]) {
         _point.add(1);
       } else {
         _point.add(0);
@@ -106,44 +106,44 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
     }
 
     _resultMap = {
-      'teacher_uid': widget.examList[0]['teacher_uid'],
-      'chapter_code': widget.examList[0]['id_parent'],
-      'student_uid': widget.studentInfo['studentUid'],
-      'chapter_title': widget.examList[0]['chapter_title'],
-      'id': widget.studentInfo['studentUid'],
-      'student_name': widget.studentInfo['studentName'],
-      'email': widget.studentInfo['studentEmail'],
+      'teacher_uid': widget.examList[0].teacher_uid,
+      'chapter_code': widget.examList[0].id_parent,
+      'student_uid': widget.studentInfo.studentUid,
+      'chapter_title': widget.examList[0].chapter_title,
+      'id': widget.studentInfo.studentUid,
+      'student_name': widget.studentInfo.studentName,
+      'email': widget.studentInfo.studentEmail,
       'datetime': DateTime.now().toString(),
       'question_cnt': qTotal,
-      'user_type': widget.studentInfo['userType'],
+      'user_type': widget.studentInfo.userType,
       'teacher': _teacher,
       'student': _student,
       'point': _point,
-      'question_type': widget.examList[0]['question_type'],
-      'chapterPhotoUrl': widget.studentInfo['chapterPhotoUrl'],
+      'question_type': widget.examList[0].question_type,
+      'chapterPhotoUrl': widget.studentInfo.chapterPhotoUrl,
     };
 
 // teacher >> Chapter >> student >> studentUid
-    var _testResult = FirebaseFirestore.instance
-      .collection(widget.examList[0]['teacher_uid']) // teacher uid
-      .doc(widget.examList[0]['id_parent']) // chapter_code
+    var _testResult = _firebaseFirestore
+      .collection(widget.examList[0].teacher_uid) // teacher uid
+      .doc(widget.examList[0].id_parent) // chapter_code
       .collection('student')
       .doc(widget.studentInfo['studentUid']); // student uid
 
     await _testResult.set(_resultMap).then((onValue) {
     });
 
-// teacher >> Chapter >> student >> studentUid
-    var _testResultStudent = FirebaseFirestore.instance
+// student >> studentUid >> studentUid >> chapter_code
+    var _testResultStudent = _firebaseFirestore
         .collection('student') // student
         .doc(widget.studentInfo['studentUid']) // student uid
         .collection(widget.studentInfo['studentUid']) // student uid
-        .doc(widget.examList[0]['id_parent']); // chapter_code
+        .doc(widget.examList[0].id_parent); // chapter_code
 
     await _testResultStudent.set(_resultMap).then((onValue) {
     });
 
-// student name under teacher_uid.
+// teacher >> student >> student >> studentUid
     var _studentMap = {
       'student_uid': widget.studentInfo['studentUid'],
       'user_type': widget.studentInfo['userType'],
@@ -151,8 +151,8 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
       'email': widget.studentInfo['studentEmail'],
       'datetime': DateTime.now().toString(),
     };
-    var _testResult1 = FirebaseFirestore.instance
-      .collection(widget.examList[0]['teacher_uid']) // teacher uid
+    var _testResult1 = _firebaseFirestore
+      .collection(widget.examList[0].teacher_uid) // teacher uid
       .doc('student')
       .collection('student')
       .doc(widget.studentInfo['studentUid']); // student uid
@@ -164,9 +164,9 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
 //widget.examList.length, widget.examList/newItems[_currentPage]['answer1'], studentUid
   Future _loadResult() async {
 
-    await FirebaseFirestore.instance
-      .collection(widget.examList[0]['teacher_uid'])
-      .doc(widget.examList[0]['id_parent']) // chapter_code
+    await _firebaseFirestore
+      .collection(widget.examList[0].teacher_uid)
+      .doc(widget.examList[0].id_parent) // chapter_code
       .collection('student')
       .doc(widget.studentInfo['studentUid'])
       .get()
@@ -189,11 +189,11 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
     _boxColor3 = Colors.white70;
     _boxColor4 = Colors.white70;
 
-    _textController0.text = newItems[_currentPage]['contents'];
-    _textController1.text = newItems[_currentPage]['ex1'];
-    _textController2.text = newItems[_currentPage]['ex2'];
-    _textController3.text = newItems[_currentPage]['ex3'];
-    _textController4.text = newItems[_currentPage]['ex4'];
+    _textController0.text = newItems[_currentPage].question_title;
+    _textController1.text = newItems[_currentPage].ex1;
+    _textController2.text = newItems[_currentPage].ex2;
+    _textController3.text = newItems[_currentPage].ex3;
+    _textController4.text = newItems[_currentPage].ex4;
 
     if (widget.answerHistory.isNotEmpty) {
       if (widget.answerHistory[_currentPage] == 1) {
@@ -209,7 +209,7 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
       }
     }
 
-    if (newItems[_currentPage]['teacher_answer'] == widget.answerHistory[_currentPage]) {
+    if (newItems[_currentPage].teacher_answer == widget.answerHistory[_currentPage]) {
       if (widget.answerHistory[_currentPage] == 1) {
         _boxColor1 = Colors.lightGreen;
       } else if (widget.answerHistory[_currentPage] == 2) {
@@ -231,13 +231,13 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
         _boxColor4 = Colors.redAccent;
       }
 
-      if (newItems[_currentPage]['teacher_answer'] == 1) {
+      if (newItems[_currentPage].teacher_answer == 1) {
         _boxColor1 = Colors.lightGreen;
-      } else if (newItems[_currentPage]['teacher_answer'] == 2) {
+      } else if (newItems[_currentPage].teacher_answer == 2) {
         _boxColor2 = Colors.lightGreen;
-      } else if (newItems[_currentPage]['teacher_answer'] == 3) {
+      } else if (newItems[_currentPage].teacher_answer == 3) {
         _boxColor3 = Colors.lightGreen;
-      } else if (newItems[_currentPage]['teacher_answer'] == 4) {
+      } else if (newItems[_currentPage].teacher_answer == 4) {
         _boxColor4 = Colors.lightGreen;
       }
     }
@@ -264,7 +264,7 @@ class _ResultEx4PageState extends State<ResultEx4Page> {
                   child: Column(
                     children: <Widget>[
 // image
-                      QuestionImageReadOnly(photoUrl: newItems[index]['photoUrl'],),
+                      QuestionImageReadOnly(photoUrl: newItems[index].photoUrl,),
                       Padding(padding: EdgeInsets.all(8.0)),
 // ReadOnly select example radio box
                       Container(

@@ -30,7 +30,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
   final _testResult = [];
   int _testResultCntStudent = 0;
   final _boxFit = BoxFit.cover;
-  var qTotal = 0;
+//  var qTotal = 0;
   final _multiMsg = MultiMessageDetail();
 
   @override
@@ -38,7 +38,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
     // TODO: implement initState
     super.initState();
     _loadTestResult();
-    _getSubQuestionCnt();
+//    _getSubQuestionCnt();
   }
 
   @override
@@ -148,7 +148,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
 //        );
       }
       if (_resultAdd) {
-        _getSubQuestionCnt();
+//        _getSubQuestionCnt();
       }
     }
   }
@@ -205,7 +205,7 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
     }
 
     if (_resultShow) {
-      _getSubQuestionCnt();
+//      _getSubQuestionCnt();
     }
   }
 
@@ -272,19 +272,19 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
                               fit: _boxFit,
                             )),
                       )),
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      width: 120.0,
-                      height: 20.0,
-                      alignment: Alignment.center,
-                      color: Colors.black54,
-                      child: Text(
-                        '${_multiMsg.strQCnt}: ' + qTotal.toString(),
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      ),
-                    ),
-                  ),
+//                  Container(
+//                    alignment: Alignment.bottomRight,
+//                    child: Container(
+//                      width: 120.0,
+//                      height: 20.0,
+//                      alignment: Alignment.center,
+//                      color: Colors.black54,
+//                      child: Text(
+//                        '${_multiMsg.strQCnt}: ' + qTotal.toString(),
+//                        style: TextStyle(fontSize: 15, color: Colors.white),
+//                      ),
+//                    ),
+//                  ),
                 ]),
               ),
             ),
@@ -334,18 +334,18 @@ class _DetailStudyPageState extends State<DetailStudyPage> {
     );
   }
 
-  void _getSubQuestionCnt() {
-    FirebaseFirestore.instance
-        .collection(widget.chapterInfo['teacher_uid'])
-        .doc(widget.chapterInfo['id'])
-        .collection('post_sub')
-        .get()
-        .then((snapShot) {
-      setState(() {
-        qTotal = snapShot.docs.length;
-      });
-    });
-  }
+//  void _getSubQuestionCnt() {
+//    FirebaseFirestore.instance
+//        .collection(widget.chapterInfo['teacher_uid'])
+//        .doc(widget.chapterInfo['id'])
+//        .collection('post_sub')
+//        .get()
+//        .then((snapShot) {
+//      setState(() {
+//        qTotal = snapShot.docs.length;
+//      });
+//    });
+//  }
 
   // ignore: always_declare_return_types
   deleteData(docId) {

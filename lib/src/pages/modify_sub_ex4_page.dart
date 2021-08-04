@@ -7,6 +7,7 @@ import 'package:huatang2/src/component/ex4_component.dart';
 import 'package:huatang2/src/controller/ex4_controller.dart';
 import 'package:huatang2/src/controller/user_info_controller.dart';
 import 'package:huatang2/src/model/multi_msg.dart';
+import 'package:huatang2/src/model/questions.dart';
 
 //
 class ModifySubEx4Page extends StatefulWidget {
@@ -26,6 +27,7 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
   final _textController2 = TextEditingController();
   final _textController3 = TextEditingController();
   final _textController4 = TextEditingController();
+  final _firebaseFirestore = FirebaseFirestore.instance;
 //  bool iconColorFlag = true;
   var _multiMsg;
 
@@ -34,16 +36,16 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
     // TODO: implement initState
     super.initState();
     _multiMsg = MultiMessageModifyEx4();
-    _textController0.text = widget.document['contents'];
-    _textController1.text = widget.document['ex1'];
-    _textController2.text = widget.document['ex2'];
-    _textController3.text = widget.document['ex3'];
-    _textController4.text = widget.document['ex4'];
-    _ex4Controller.checkValue1.value = widget.document['correct1'];
-    _ex4Controller.checkValue2.value = widget.document['correct2'];
-    _ex4Controller.checkValue3.value = widget.document['correct3'];
-    _ex4Controller.checkValue4.value = widget.document['correct4'];
-    _ex4Controller.teacherAnswer.value = widget.document['teacher_answer'];
+    _textController0.text = widget.document.question_title;
+    _textController1.text = widget.document.ex1;
+    _textController2.text = widget.document.ex2;
+    _textController3.text = widget.document.ex3;
+    _textController4.text = widget.document.ex4;
+    _ex4Controller.checkValue1.value = widget.document.correct1;
+    _ex4Controller.checkValue2.value = widget.document.correct2;
+    _ex4Controller.checkValue3.value = widget.document.correct3;
+    _ex4Controller.checkValue4.value = widget.document.correct4;
+    _ex4Controller.teacherAnswer.value = widget.document.teacher_answer;
     _ex4Controller.setIconFlag(true);
   }
 
@@ -117,7 +119,7 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
 // image
             Container(
               padding: EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 0.0),
-              child: QuestionImageReadOnly(photoUrl: widget.document['photoUrl'],),
+              child: QuestionImageReadOnly(photoUrl: widget.document.photoUrl,),
             ),
             Padding(padding: EdgeInsets.all(8.0)),
 // select example
@@ -175,32 +177,26 @@ class _ModifySubEx4PageState extends State<ModifySubEx4Page> {
   Future _uploadImage() async {
     _ex4Controller.setIconFlag(false);
 
-    var doc = FirebaseFirestore.instance
-        .collection(widget.document['teacher_uid']) // post
-        .doc(widget.document['id_parent'])
+    var doc = _firebaseFirestore
+        .collection(widget.document.teacher_uid) // post
+        .doc(widget.document.id_parent)
         .collection('post_sub')
-        .doc(widget.document['id_child']); // post collection 만들고, 하위에 문서를 만든다
+        .doc(widget.document.id_child); // post collection 만들고, 하위에 문서를 만든다
 
-    await doc.update({
-//        'id_parent': widget.document['id'],
-//        'id_child': doc.id,
-//        'photoUrl': downloadUrl.toString(),
-//        'email': widget.document['email'],
-//        'displayName': widget.document['displayName'],
-      'update_time': DateTime.now().toString(),
-      'contents': _textController0.text,
-      'ex1': _textController1.text,
-      'ex2': _textController2.text,
-      'ex3': _textController3.text,
-      'ex4': _textController4.text,
-      'correct1': _ex4Controller.checkValue1.value,
-      'correct2': _ex4Controller.checkValue2.value,
-      'correct3': _ex4Controller.checkValue3.value,
-      'correct4': _ex4Controller.checkValue4.value,
-      'idx': 0,
-      'teacher_answer' : _ex4Controller.teacherAnswer.value,
-    }).then((onValue) {
-//      print('수정완료후 상위로 이동 modify->list');
+    await doc.update(Ex4_Questions(
+      question_title: _textController0.text,
+      correct1: _ex4Controller.checkValue1.value,
+      correct2: _ex4Controller.checkValue2.value,
+      correct3: _ex4Controller.checkValue3.value,
+      correct4: _ex4Controller.checkValue4.value,
+      ex1: _textController1.text,
+      ex2: _textController2.text,
+      ex3: _textController3.text,
+      ex4: _textController4.text,
+      idx: 0,
+      teacher_answer: _ex4Controller.teacherAnswer.value,//
+      update_time: DateTime.now().toString(),
+    ).UpdateToMap()).then((onValue) {//      print('수정완료후 상위로 이동 modify->list');
       Get.back(result: true);
     });
   }

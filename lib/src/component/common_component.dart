@@ -152,7 +152,7 @@ class QuestionImageReadOnly extends StatelessWidget {
       Container(
           width: 350,
           height: 200,
-          child: Image.network(photoUrl, fit: BoxFit.cover) //, width: 1000)
+          child: photoUrl!=null ? Image.network(photoUrl, fit: BoxFit.cover) : Container()//, width: 1000)
       ),
     );
 

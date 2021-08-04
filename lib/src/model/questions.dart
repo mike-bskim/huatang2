@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Ex4_Questions {
   Ex4_Questions({
     this.chapter_title,
-    this.contents,
+    this.question_title,
     this.correct1,
     this.correct2,
     this.correct3,
@@ -25,7 +27,7 @@ class Ex4_Questions {
   });
 
   String? chapter_title;
-  String? contents;
+  String? question_title;
   bool? correct1;
   bool? correct2;
   bool? correct3;
@@ -47,36 +49,77 @@ class Ex4_Questions {
   String? teacher_uid;
   String? update_time;
 
-  factory Ex4_Questions.fromJson(Map<String, dynamic> json) => Ex4_Questions(
-    chapter_title : json["chapter_title"],
-    contents : json["contents"],
-    correct1 : json["correct1"],
-    correct2 : json["correct2"],
-    correct3 : json["correct3"],
-    correct4 : json["correct4"],
-    datetime : json["datetime"],
-    displayName : json["displayName"],
-    email : json["email"],
-    ex1 : json["ex1"],
-    ex2 : json["ex2"],
-    ex3 : json["ex3"],
-    ex4 : json["ex4"],
-    id_child : json["id_child"],
-    id_parent : json["id_parent"],
-    idx : json["idx"],
-    photoUrl : json["photoUrl"],
-    question_type : json["question_type"],
-    student_answer : json["student_answer"],
-    teacher_answer : json["teacher_answer"],
-    teacher_uid : json["teacher_uid"],
-    update_time : json["update_time"],
-  );
+  factory Ex4_Questions.fromDoc(QueryDocumentSnapshot data) {
+    var info = data.data() as Map<String, dynamic>;
+    return Ex4_Questions(
+      chapter_title: info["chapter_title"],
+      question_title: info["question_title"],
+      correct1: info["correct1"],
+      correct2: info["correct2"],
+      correct3: info["correct3"],
+      correct4: info["correct4"],
+      datetime: info["datetime"],
+      displayName: info["displayName"],
+      email: info["email"],
+      ex1: info["ex1"],
+      ex2: info["ex2"],
+      ex3: info["ex3"],
+      ex4: info["ex4"],
+      id_child: info["id_child"],
+      id_parent: info["id_parent"],
+      idx: info["idx"],
+      photoUrl: info["photoUrl"],
+      question_type: info["question_type"],
+      student_answer: info["student_answer"],
+      teacher_answer: info["teacher_answer"],
+      teacher_uid: info["teacher_uid"],
+      update_time: info["update_time"],
+    );
+  }
 
-//  Map<String, dynamic> toJson() => {
-//    "contents": title,
-//    "correct1": correct1,
-//    "correct2": correct2,
-//    "favoriteCount": favoriteCount,
-//    "commentCount": commentCount,
-//  };
+  Map<String, dynamic> CreateToMap() {
+    return {
+      'chapter_title': chapter_title,
+      'question_title': question_title,
+      'correct1': correct1,
+      'correct2': correct2,
+      'correct3': correct3,
+      'correct4': correct4,
+      'datetime': datetime,
+      'displayName': displayName,
+      'email': email,
+      'ex1': ex1,
+      'ex2': ex2,
+      'ex3': ex3,
+      'ex4': ex4,
+      'id_child': id_child,
+      'id_parent': id_parent,
+      'idx': idx,
+      'photoUrl': photoUrl,
+      'question_type': question_type,
+      'student_answer': student_answer,
+      'teacher_answer': teacher_answer,
+      'teacher_uid': teacher_uid,
+      'update_time': update_time,
+    };
+  }
+
+
+  Map<String, dynamic> UpdateToMap() {
+    return {
+      'question_title': question_title,
+      'correct1': correct1,
+      'correct2': correct2,
+      'correct3': correct3,
+      'correct4': correct4,
+      'ex1': ex1,
+      'ex2': ex2,
+      'ex3': ex3,
+      'ex4': ex4,
+      'idx': idx,
+      'teacher_answer': teacher_answer,
+      'update_time': update_time,
+    };
+  }
+
 }
