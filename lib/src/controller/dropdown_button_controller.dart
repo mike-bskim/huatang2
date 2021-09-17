@@ -69,6 +69,7 @@ class DropdownButtonController extends GetxController {
   String get selectedLangTypeForDB => _selectedLangTypeForDB;
 }
 
+// 언어 설정
 class DropdownButtonLangType extends StatelessWidget {
   final DropdownButtonController _dropdownButtonController = Get.put(DropdownButtonController());
 
@@ -96,6 +97,7 @@ class DropdownButtonLangType extends StatelessWidget {
   }
 }
 
+// 사용자 타입 설정
 class DropdownButtonUserType extends StatelessWidget {
   final DropdownButtonController _dropdownButtonController = Get.put(DropdownButtonController());
 
